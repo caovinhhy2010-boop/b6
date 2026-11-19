@@ -474,6 +474,59 @@
         <span id="onlineHudCount" class="text-emerald-300 ml-2">1 người</span>
     </div>
 
+
+    <!-- NVC PHONE -->
+    <button id="phoneOpenBtn" class="hidden fixed bottom-5 right-5 z-40 pointer-events-auto w-16 h-16 rounded-2xl border-4 border-white bg-gradient-to-br from-cyan-400 to-blue-700 text-3xl shadow-2xl" title="Điện thoại NVC">📱</button>
+    <div id="photoMapLayer" class="fixed inset-0 z-[15] pointer-events-none overflow-hidden"></div>
+    <div id="phoneModal" class="hidden fixed inset-0 z-[70] bg-black/80 p-2 sm:p-5 flex items-center justify-center">
+      <div class="w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-2xl border-4 border-cyan-300 bg-slate-950 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between px-4 py-3 bg-slate-900 border-b-2 border-slate-700">
+          <div><div class="pixel-font text-xs text-cyan-300">📱 NVC PHONE</div><div id="phoneUserLabel" class="text-sm text-slate-300 mt-1">Đang kết nối...</div></div>
+          <button id="phoneCloseBtn" class="text-2xl px-2 text-white">✕</button>
+        </div>
+        <div class="grid grid-cols-3 gap-2 p-3 bg-slate-900">
+          <button data-phone-tab="friends" class="phone-tab pixel-btn px-2 py-3 rounded-lg text-sm">👥 Bạn bè</button>
+          <button data-phone-tab="messages" class="phone-tab pixel-btn px-2 py-3 rounded-lg text-sm">💬 Tin nhắn</button>
+          <button data-phone-tab="locket" class="phone-tab pixel-btn pixel-btn-amber px-2 py-3 rounded-lg text-sm">📸 Locket</button>
+        </div>
+        <div class="p-3 overflow-y-auto min-h-0 flex-1">
+          <section id="phoneFriendsPanel" class="space-y-3">
+            <div class="text-cyan-200 font-bold text-xl">Hồ sơ học sinh</div>
+            <div class="flex gap-2"><input id="phoneDisplayName" maxlength="20" placeholder="Tên hiển thị" class="min-w-0 flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"><button id="savePhoneProfile" class="pixel-btn pixel-btn-green rounded-lg px-3">Lưu tên</button></div>
+            <div class="text-xs text-slate-400">Tên người dùng của bạn: <b id="myUsername" class="text-amber-300">Đang tạo...</b></div>
+            <div class="border-t border-slate-700 pt-3"><div class="font-bold text-lg text-cyan-200 mb-2">Kết bạn</div><div class="flex gap-2"><input id="friendUsernameInput" maxlength="20" placeholder="Nhập username bạn muốn kết bạn" class="min-w-0 flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"><button id="sendFriendRequest" class="pixel-btn rounded-lg px-3">Gửi</button></div><div id="friendRequestsList" class="space-y-2 mt-3"></div></div>
+            <div class="border-t border-slate-700 pt-3"><div class="font-bold text-lg text-cyan-200 mb-2">Danh sách bạn bè</div><div id="friendsList" class="space-y-2 text-slate-300">Chưa có bạn bè.</div></div>
+          </section>
+          <section id="phoneMessagesPanel" class="hidden space-y-3">
+            <div class="text-cyan-200 font-bold text-xl">Tin nhắn riêng</div><div id="chatFriendList" class="flex flex-wrap gap-2"></div>
+            <div id="chatTitle" class="text-amber-300">Chọn một người bạn để nhắn tin.</div>
+            <div id="chatMessages" class="h-64 overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 p-3 space-y-2"></div>
+            <div class="flex gap-2"><input id="chatInput" maxlength="500" placeholder="Viết tin nhắn..." class="min-w-0 flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"><button id="sendChatMessage" class="pixel-btn rounded-lg px-4">Gửi</button></div>
+          </section>
+          <section id="phoneLocketPanel" class="hidden space-y-3">
+            <div class="text-amber-300 font-bold text-xl">📸 Locket NVC</div>
+            <p class="text-sm text-slate-300">Chụp lại khung cảnh trong game ngay tại vị trí hiện tại, viết chú thích và đăng lên bản đồ. Ảnh sẽ hiện thành biểu tượng nhỏ để mọi người bấm xem.</p>
+            <div class="rounded-xl overflow-hidden border-2 border-slate-600 bg-slate-900">
+              <video id="locketCameraVideo" class="hidden w-full max-h-72 object-cover" autoplay playsinline muted></video>
+              <img id="locketPreview" class="hidden w-full max-h-56 object-contain" alt="Ảnh chụp từ camera thật">
+              <div id="locketEmpty" class="p-8 text-center text-slate-400">Camera chưa bật. Nhấn “Mở camera” để bắt đầu.</div>
+            </div>
+            <div class="grid grid-cols-2 gap-2"><button id="startLocketCamera" class="pixel-btn pixel-btn-green rounded-lg py-3">📷 Mở camera</button><button id="switchLocketCamera" class="pixel-btn rounded-lg py-3">🔄 Đổi camera</button></div>
+            <div class="flex gap-2"><button id="captureGamePhoto" class="pixel-btn pixel-btn-green flex-1 rounded-lg py-3" disabled>Chụp ảnh</button><button id="retakeGamePhoto" class="hidden pixel-btn rounded-lg px-3">Chụp lại</button></div>
+            <p class="text-xs text-slate-400">Camera chỉ bật sau khi bạn nhấn nút và cấp quyền. Đóng Locket sẽ tự tắt camera.</p>
+            <textarea id="locketCaption" maxlength="180" rows="2" placeholder="Viết vài dòng về khoảnh khắc này..." class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"></textarea>
+            <button id="publishGamePhoto" disabled class="pixel-btn pixel-btn-amber rounded-lg w-full py-3 opacity-50">🌍 Đăng lên bản đồ</button>
+            <div id="locketStatus" class="text-sm text-slate-300"></div>
+            <div class="border-t border-slate-700 pt-3"><div class="font-bold text-cyan-200 mb-2">Ảnh mới đăng</div><div id="myPhotoPosts" class="grid grid-cols-3 gap-2"></div></div>
+          </section>
+          <div id="phoneGlobalStatus" class="text-xs text-slate-400 mt-3"></div>
+        </div>
+      </div>
+    </div>
+    <div id="photoViewModal" class="hidden fixed inset-0 z-[90] bg-black/90 p-3 flex items-center justify-center">
+      <div class="w-full max-w-xl bg-slate-950 border-4 border-amber-300 rounded-2xl p-3"><div class="flex justify-between items-center mb-2"><b id="photoViewAuthor" class="text-cyan-200">Ảnh trên bản đồ</b><button id="photoViewClose" class="text-2xl px-2">✕</button></div><img id="photoViewImage" class="w-full max-h-[65vh] object-contain rounded-lg bg-slate-900" alt="Ảnh Locket"><p id="photoViewCaption" class="text-white mt-2"></p><div id="photoViewPlace" class="text-xs text-slate-400 mt-1"></div></div>
+    </div>
+
     <script>
         /**
          * ============================================================================
@@ -4912,6 +4965,172 @@
                 if (isTouch) e.preventDefault();
             });
         })();
+
+
+        // ================= NVC PHONE: FRIENDS / CHAT / LOCKET =================
+        const phoneApp = {
+            user: null, profile: null, username: '', displayName: '', activeFriend: null,
+            friends: [], pending: [], messagesChannel: null, photoChannel: null,
+            capturedBlob: null, capturedUrl: null, cameraStream: null, cameraFacing: 'environment', posts: [], markerEls: new Map()
+        };
+        const phoneEl = id => document.getElementById(id);
+        const phoneStatus = (msg, bad=false) => { const e=phoneEl('phoneGlobalStatus'); if(e){e.textContent=msg;e.className='text-xs mt-3 '+(bad?'text-rose-300':'text-slate-400');} };
+        const escText = v => String(v ?? '').slice(0,500);
+        function phoneOpen(tab='friends') { phoneEl('phoneModal').classList.remove('hidden'); phoneSwitchTab(tab); }
+        function phoneClose() { stopLocketCamera(); phoneEl('phoneModal').classList.add('hidden'); }
+        function phoneSwitchTab(tab) {
+            if(tab!=='locket') stopLocketCamera();
+            ['friends','messages','locket'].forEach(t=>{phoneEl('phone'+t[0].toUpperCase()+t.slice(1)+'Panel').classList.toggle('hidden',t!==tab);});
+            document.querySelectorAll('.phone-tab').forEach(b=>b.classList.toggle('ring-2',b.dataset.phoneTab===tab));
+            if(tab==='friends') loadPhoneFriends(); if(tab==='messages') loadChatFriendButtons(); if(tab==='locket') loadMyPhotoPosts();
+        }
+        function makeUsername(name,id) {
+            const base=(name||'hoc_sinh').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9_]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'').slice(0,12)||'hoc_sinh';
+            return base+'_'+String(id).replace(/-/g,'').slice(0,5).toLowerCase();
+        }
+        async function initPhoneBackend() {
+            try {
+                if(!multiplayer.client) return;
+                let {data:{session}}=await multiplayer.client.auth.getSession();
+                if(!session){const res=await multiplayer.client.auth.signInAnonymously(); if(res.error) throw res.error; session=res.data.session;}
+                phoneApp.user=session.user;
+                const fallback=safePlayerName();
+                let {data:profile,error}=await multiplayer.client.from('nvc_profiles').select('*').eq('id',phoneApp.user.id).maybeSingle();
+                if(error) throw error;
+                if(!profile){
+                    const username=makeUsername(fallback,phoneApp.user.id);
+                    const ins=await multiplayer.client.from('nvc_profiles').insert({id:phoneApp.user.id,username,display_name:fallback}).select().single();
+                    if(ins.error) throw ins.error; profile=ins.data;
+                }
+                phoneApp.profile=profile; phoneApp.username=profile.username; phoneApp.displayName=profile.display_name;
+                phoneEl('phoneUserLabel').textContent='@'+profile.username;
+                phoneEl('myUsername').textContent='@'+profile.username;
+                phoneEl('phoneDisplayName').value=profile.display_name;
+                await loadPhotoPosts();
+                phoneApp.photoChannel=multiplayer.client.channel('nvc-locket-posts').on('postgres_changes',{event:'INSERT',schema:'public',table:'nvc_photo_posts'},payload=>{addPhotoPost(payload.new);}).subscribe();
+                phoneStatus('Đã kết nối điện thoại NVC.');
+            } catch(e) { console.error('NVC phone init:',e); phoneStatus('Chưa khởi tạo được ứng dụng. Hãy chạy SQL thiết lập Supabase và bật Anonymous Sign-ins.',true); }
+        }
+        async function savePhoneProfile(){
+            if(!phoneApp.user)return;
+            const display_name=phoneEl('phoneDisplayName').value.trim().replace(/[<>]/g,'').slice(0,20)||'Học sinh NVC';
+            const {data,error}=await multiplayer.client.from('nvc_profiles').update({display_name}).eq('id',phoneApp.user.id).select().single();
+            if(error){phoneStatus('Không lưu được tên: '+error.message,true);return;}
+            phoneApp.profile=data; phoneApp.displayName=display_name; phoneEl('phoneUserLabel').textContent='@'+phoneApp.username+' • '+display_name; phoneStatus('Đã lưu tên hiển thị.');
+        }
+        async function sendFriendRequest(){
+            if(!phoneApp.user)return phoneStatus('Điện thoại chưa kết nối.',true);
+            const username=phoneEl('friendUsernameInput').value.trim().toLowerCase().replace(/^@/,'');
+            if(!username)return;
+            const {data:target,error:findErr}=await multiplayer.client.from('nvc_profiles').select('id,username,display_name').eq('username',username).maybeSingle();
+            if(findErr||!target){phoneStatus('Không tìm thấy username này.',true);return;}
+            if(target.id===phoneApp.user.id){phoneStatus('Bạn không thể tự kết bạn với mình.',true);return;}
+            const {error}=await multiplayer.client.from('nvc_friend_requests').insert({from_user:phoneApp.user.id,to_user:target.id,status:'pending'});
+            if(error){phoneStatus(error.code==='23505'?'Đã gửi lời mời hoặc hai bạn đã là bạn.':'Không gửi được: '+error.message,true);return;}
+            phoneEl('friendUsernameInput').value='';phoneStatus('Đã gửi lời mời kết bạn tới @'+target.username+'.');
+        }
+        async function loadPhoneFriends(){
+            if(!phoneApp.user)return;
+            const uid=phoneApp.user.id;
+            const {data:rows,error}=await multiplayer.client.from('nvc_friend_requests').select('id,from_user,to_user,status,created_at').or(`from_user.eq.${uid},to_user.eq.${uid}`).order('created_at',{ascending:false});
+            if(error){phoneStatus('Không tải được bạn bè: '+error.message,true);return;}
+            const ids=[...new Set((rows||[]).map(r=>r.from_user===uid?r.to_user:r.from_user))];
+            let profiles=[];if(ids.length){const res=await multiplayer.client.from('nvc_profiles').select('id,username,display_name').in('id',ids);profiles=res.data||[];}
+            const byId=new Map(profiles.map(p=>[p.id,p]));
+            phoneApp.friends=(rows||[]).filter(r=>r.status==='accepted').map(r=>byId.get(r.from_user===uid?r.to_user:r.from_user)).filter(Boolean);
+            phoneApp.pending=(rows||[]).filter(r=>r.status==='pending'&&r.to_user===uid).map(r=>({request:r,profile:byId.get(r.from_user)})).filter(x=>x.profile);
+            const req=phoneEl('friendRequestsList');req.replaceChildren();
+            if(!phoneApp.pending.length)req.textContent='Không có lời mời mới.';
+            phoneApp.pending.forEach(x=>{const d=document.createElement('div');d.className='flex items-center justify-between gap-2 bg-slate-800 p-2 rounded';const t=document.createElement('span');t.textContent='@'+x.profile.username+' • '+x.profile.display_name;const b=document.createElement('button');b.className='pixel-btn pixel-btn-green rounded px-3 py-1';b.textContent='Chấp nhận';b.onclick=()=>acceptFriendRequest(x.request.id);d.append(t,b);req.append(d);});
+            const list=phoneEl('friendsList');list.replaceChildren();if(!phoneApp.friends.length)list.textContent='Chưa có bạn bè.';
+            phoneApp.friends.forEach(f=>{const d=document.createElement('div');d.className='flex items-center justify-between bg-slate-800 p-2 rounded';const t=document.createElement('span');t.textContent='👤 @'+f.username+' • '+f.display_name;const b=document.createElement('button');b.className='pixel-btn rounded px-3 py-1';b.textContent='Nhắn tin';b.onclick=()=>{phoneApp.activeFriend=f;phoneSwitchTab('messages');};d.append(t,b);list.append(d);});
+        }
+        async function acceptFriendRequest(id){const {error}=await multiplayer.client.from('nvc_friend_requests').update({status:'accepted'}).eq('id',id);if(error)phoneStatus('Không chấp nhận được: '+error.message,true);else{phoneStatus('Đã kết bạn!');loadPhoneFriends();}}
+        async function loadChatFriendButtons(){
+            await loadPhoneFriends();const box=phoneEl('chatFriendList');box.replaceChildren();
+            phoneApp.friends.forEach(f=>{const b=document.createElement('button');b.className='pixel-btn rounded px-3 py-1';b.textContent=f.display_name+' (@'+f.username+')';b.onclick=()=>selectChatFriend(f);box.append(b);});
+            if(phoneApp.activeFriend)selectChatFriend(phoneApp.activeFriend);
+        }
+        async function selectChatFriend(friend){
+            phoneApp.activeFriend=friend;phoneEl('chatTitle').textContent='Đang trò chuyện với '+friend.display_name+' (@'+friend.username+')';
+            const uid=phoneApp.user.id, fid=friend.id;
+            const {data,error}=await multiplayer.client.from('nvc_messages').select('*').or(`and(sender_id.eq.${uid},receiver_id.eq.${fid}),and(sender_id.eq.${fid},receiver_id.eq.${uid})`).order('created_at',{ascending:true}).limit(100);
+            if(error){phoneStatus('Không tải được tin nhắn: '+error.message,true);return;}
+            renderChatMessages(data||[]);
+            if(phoneApp.messagesChannel)multiplayer.client.removeChannel(phoneApp.messagesChannel);
+            phoneApp.messagesChannel=multiplayer.client.channel('nvc-chat-'+[uid,fid].sort().join('-')).on('postgres_changes',{event:'INSERT',schema:'public',table:'nvc_messages'},payload=>{const m=payload.new;if((m.sender_id===uid&&m.receiver_id===fid)||(m.sender_id===fid&&m.receiver_id===uid)){appendChatMessage(m);}}).subscribe();
+        }
+        function renderChatMessages(rows){const box=phoneEl('chatMessages');box.replaceChildren();rows.forEach(appendChatMessage);box.scrollTop=box.scrollHeight;}
+        function appendChatMessage(m){const box=phoneEl('chatMessages');const d=document.createElement('div');d.className='max-w-[85%] rounded-lg px-3 py-2 '+(m.sender_id===phoneApp.user.id?'ml-auto bg-blue-700':'mr-auto bg-slate-700');const p=document.createElement('p');p.textContent=escText(m.content);const time=document.createElement('div');time.className='text-[10px] opacity-70 mt-1';time.textContent=new Date(m.created_at).toLocaleString('vi-VN');d.append(p,time);box.append(d);box.scrollTop=box.scrollHeight;}
+        async function sendChatMessage(){const friend=phoneApp.activeFriend,content=phoneEl('chatInput').value.trim();if(!friend||!content||!phoneApp.user)return;const {error}=await multiplayer.client.from('nvc_messages').insert({sender_id:phoneApp.user.id,receiver_id:friend.id,content});if(error){phoneStatus('Không gửi được tin nhắn: '+error.message,true);return;}phoneEl('chatInput').value='';}
+        function stopLocketCamera(){
+            if(phoneApp.cameraStream){phoneApp.cameraStream.getTracks().forEach(track=>track.stop());phoneApp.cameraStream=null;}
+            const video=phoneEl('locketCameraVideo');if(video){video.srcObject=null;video.classList.add('hidden');}
+            const capture=phoneEl('captureGamePhoto');if(capture)capture.disabled=true;
+            const start=phoneEl('startLocketCamera');if(start)start.textContent='📷 Mở camera';
+        }
+        async function startLocketCamera(){
+            if(!navigator.mediaDevices?.getUserMedia){phoneStatus('Trình duyệt không hỗ trợ camera hoặc game chưa chạy bằng HTTPS.',true);return;}
+            stopLocketCamera();
+            try{
+                const stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:phoneApp.cameraFacing},width:{ideal:1280},height:{ideal:720}}});
+                phoneApp.cameraStream=stream;const video=phoneEl('locketCameraVideo');video.srcObject=stream;video.classList.remove('hidden');phoneEl('locketPreview').classList.add('hidden');phoneEl('locketEmpty').classList.add('hidden');
+                await video.play();phoneEl('captureGamePhoto').disabled=false;phoneEl('startLocketCamera').textContent='⏹ Bật lại camera';phoneStatus('Camera đã bật. Hãy căn chỉnh rồi nhấn Chụp ảnh.');
+            }catch(e){console.error(e);phoneStatus(e.name==='NotAllowedError'?'Bạn chưa cấp quyền camera. Hãy cho phép camera trong trình duyệt.':'Không mở được camera: '+(e.message||e.name),true);}
+        }
+        async function switchLocketCamera(){phoneApp.cameraFacing=phoneApp.cameraFacing==='environment'?'user':'environment';await startLocketCamera();}
+        function captureGamePhoto(){
+            const video=phoneEl('locketCameraVideo');if(!phoneApp.cameraStream||!video||!video.videoWidth){phoneStatus('Hãy mở camera trước khi chụp.',true);return;}
+            const c=document.createElement('canvas');c.width=video.videoWidth;c.height=video.videoHeight;const ctx=c.getContext('2d');
+            if(phoneApp.cameraFacing==='user'){ctx.translate(c.width,0);ctx.scale(-1,1);}ctx.drawImage(video,0,0,c.width,c.height);
+            c.toBlob(blob=>{if(!blob){phoneStatus('Không chụp được ảnh.',true);return;}phoneApp.capturedBlob=blob;if(phoneApp.capturedUrl)URL.revokeObjectURL(phoneApp.capturedUrl);phoneApp.capturedUrl=URL.createObjectURL(blob);phoneEl('locketPreview').src=phoneApp.capturedUrl;phoneEl('locketPreview').classList.remove('hidden');video.classList.add('hidden');phoneEl('publishGamePhoto').disabled=false;phoneEl('publishGamePhoto').classList.remove('opacity-50');phoneEl('retakeGamePhoto').classList.remove('hidden');stopLocketCamera();phoneStatus('Đã chụp ảnh bằng camera thật!');},'image/webp',0.86);
+        }
+        async function publishGamePhoto(){
+            if(!phoneApp.user||!phoneApp.capturedBlob)return;
+            const btn=phoneEl('publishGamePhoto');btn.disabled=true;phoneEl('locketStatus').textContent='Đang tải ảnh lên...';
+            try{
+                const path=phoneApp.user.id+'/'+Date.now()+'.webp';
+                const up=await multiplayer.client.storage.from('nvc-locket').upload(path,phoneApp.capturedBlob,{contentType:'image/webp',upsert:false});if(up.error)throw up.error;
+                const {data:{publicUrl}}=multiplayer.client.storage.from('nvc-locket').getPublicUrl(path);
+                const ins=await multiplayer.client.from('nvc_photo_posts').insert({user_id:phoneApp.user.id,image_path:path,image_url:publicUrl,caption:phoneEl('locketCaption').value.trim().slice(0,180),x:Math.round(state.player.x),y:Math.round(state.player.y),floor:state.currentFloor}).select().single();if(ins.error)throw ins.error;
+                addPhotoPost(ins.data);phoneEl('locketStatus').textContent='Đã đăng ảnh! Biểu tượng ảnh đã xuất hiện trên bản đồ.';phoneApp.capturedBlob=null;phoneEl('publishGamePhoto').disabled=true;phoneEl('publishGamePhoto').classList.add('opacity-50');loadMyPhotoPosts();
+            }catch(e){console.error(e);phoneEl('locketStatus').textContent='Đăng ảnh thất bại: '+(e.message||'Kiểm tra Storage và SQL.');btn.disabled=false;}
+        }
+        async function loadPhotoPosts(){if(!multiplayer.client)return;const {data,error}=await multiplayer.client.from('nvc_photo_posts').select('id,user_id,image_url,caption,x,y,floor,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.warn('Photo posts:',error.message);return;}phoneApp.posts=[];(data||[]).forEach(addPhotoPost);}
+        function addPhotoPost(post){if(!post||phoneApp.posts.some(p=>p.id===post.id))return;phoneApp.posts.push(post);renderPhotoMapMarkers();}
+        function renderPhotoMapMarkers(){
+            const layer=phoneEl('photoMapLayer');if(!layer)return;
+            phoneApp.posts.forEach(post=>{
+                let b=phoneApp.markerEls.get(post.id);if(!b){b=document.createElement('button');b.className='absolute pointer-events-auto w-8 h-8 rounded-full border-2 border-white bg-amber-300 shadow-lg text-lg flex items-center justify-center';b.textContent='🖼️';b.title='Xem ảnh Locket';b.onclick=()=>showPhotoPost(post);layer.append(b);phoneApp.markerEls.set(post.id,b);}
+                const visible=state.mode==='PLAYING'&&!state.interiorScene&&Number(post.floor)===Number(state.currentFloor);
+                b.style.display=visible?'flex':'none';if(visible){const r=canvas.getBoundingClientRect();const x=(Number(post.x)-state.camera.x+canvas.width/2)*(r.width/canvas.width)+r.left;const y=(Number(post.y)-state.camera.y+canvas.height/2)*(r.height/canvas.height)+r.top;b.style.left=(x-16)+'px';b.style.top=(y-16)+'px';}
+            });
+        }
+        async function showPhotoPost(post){phoneEl('photoViewImage').src=post.image_url;phoneEl('photoViewCaption').textContent=post.caption||' ';phoneEl('photoViewPlace').textContent='Tầng '+post.floor+' • '+new Date(post.created_at).toLocaleString('vi-VN');phoneEl('photoViewAuthor').textContent='Khoảnh khắc NVC';const {data}=await multiplayer.client.from('nvc_profiles').select('display_name,username').eq('id',post.user_id).maybeSingle();if(data)phoneEl('photoViewAuthor').textContent=data.display_name+' (@'+data.username+')';phoneEl('photoViewModal').classList.remove('hidden');}
+        async function loadMyPhotoPosts(){if(!phoneApp.user)return;const {data}=await multiplayer.client.from('nvc_photo_posts').select('*').eq('user_id',phoneApp.user.id).order('created_at',{ascending:false}).limit(12);const box=phoneEl('myPhotoPosts');box.replaceChildren();(data||[]).forEach(p=>{const im=document.createElement('img');im.src=p.image_url;im.alt='Ảnh đã đăng';im.className='w-full aspect-square object-cover rounded border border-slate-600 cursor-pointer';im.onclick=()=>showPhotoPost(p);box.append(im);});if(!data?.length)box.textContent='Chưa có ảnh nào.';}
+        phoneEl('phoneOpenBtn').addEventListener('click',()=>phoneOpen('friends'));
+        phoneEl('phoneCloseBtn').addEventListener('click',phoneClose);
+        phoneEl('photoViewClose').addEventListener('click',()=>phoneEl('photoViewModal').classList.add('hidden'));
+        document.querySelectorAll('.phone-tab').forEach(b=>b.addEventListener('click',()=>phoneSwitchTab(b.dataset.phoneTab)));
+        phoneEl('savePhoneProfile').addEventListener('click',savePhoneProfile);
+        phoneEl('sendFriendRequest').addEventListener('click',sendFriendRequest);
+        phoneEl('sendChatMessage').addEventListener('click',sendChatMessage);
+        phoneEl('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage();}});
+        phoneEl('startLocketCamera').addEventListener('click',startLocketCamera);
+        phoneEl('switchLocketCamera').addEventListener('click',switchLocketCamera);
+        phoneEl('captureGamePhoto').addEventListener('click',captureGamePhoto);
+        phoneEl('retakeGamePhoto').addEventListener('click',startLocketCamera);
+        phoneEl('publishGamePhoto').addEventListener('click',publishGamePhoto);
+        window.addEventListener('pagehide',stopLocketCamera);
+        // Phone becomes available after joining the shared world.
+        const originalShowPublicWorldConnected=showPublicWorldConnected;
+        showPublicWorldConnected=function(){originalShowPublicWorldConnected();phoneEl('phoneOpenBtn').classList.remove('hidden');initPhoneBackend();};
+        const originalDisconnectMultiplayer=disconnectMultiplayer;
+        disconnectMultiplayer=function(showMessage=true){originalDisconnectMultiplayer(showMessage);phoneEl('phoneOpenBtn').classList.add('hidden');phoneClose();};
+        // Keep photo pins anchored to their world coordinates as the camera moves.
+        const originalGameLoop=gameLoop;
+        gameLoop=function(now){originalGameLoop(now);renderPhotoMapMarkers();};
+        // ================= END NVC PHONE =================
 
         window.onload = function () {
             updateCustomizerLabels();
