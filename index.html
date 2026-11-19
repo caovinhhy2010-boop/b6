@@ -1932,9 +1932,8 @@
                     fillRect(58, 46, 62, 51, T.MONUMENT);
                     fillRect(58, 52, 62, 54, T.PARK_PLAZA);
 
-                    // Hai sân thể thao mới ở khoảng đất trống phía Đông Nam.
-                    fillRect(65, 43, 74, 48, T.BADMINTON_COURT);
-                    fillRect(65, 49, 74, 54, T.PICKLEBALL_COURT);
+                    // Khuôn viên tượng Nguyễn Văn Cừ giữ nguyên khoảng sân trống và ghế đá.
+                    // Sân cầu lông và Pickleball được bố trí bên trong nhà thi đấu.
                 }
 
                 // =========================================================================
@@ -2588,6 +2587,10 @@
                     standUpSafely();
                     return;
                 }
+                if (state.nearbyInteractable && state.nearbyInteractable.kind === 'sports_game') {
+                    openSportsMiniGame(state.nearbyInteractable.sport);
+                    return;
+                }
                 if (state.nearbyInteractable && state.nearbyInteractable.kind === 'seat') {
                     state.sitReturnPos = { x: state.interiorScene.px, y: state.interiorScene.py };
                     state.isSitting = true;
@@ -3202,19 +3205,41 @@
             sc.fadeAlpha = Math.min(1, sc.fadeAlpha + dt * 5);
 
             let foundSeat = null;
-            for (const s of bp.seats) {
-                if (Math.hypot(sc.px - s.sx, sc.py - s.sy) < 38) {
-                    foundSeat = { kind: 'seat', ...s };
+            for (const seat of bp.seats) {
+                if (Math.hypot(sc.px - seat.sx, sc.py - seat.sy) < 38) {
+                    foundSeat = { kind: 'seat', ...seat };
                     break;
                 }
             }
-            state.nearbyInteractable = foundSeat;
+            let foundCourt = null;
+            if (sc.room.roomType === 'sports_hall') {
+                // Khu tương tác đặt dọc theo mép dưới mỗi sân để người chơi có thể bước tới và nhấn E.
+                const courts = [
+                    { sport: 'pickleball', x: 56, y: 70, w: 170, h: 360, label: 'Sân Pickleball 1' },
+                    { sport: 'pickleball', x: 264, y: 70, w: 170, h: 360, label: 'Sân Pickleball 2' },
+                    { sport: 'badminton', x: 486, y: 70, w: 170, h: 360, label: 'Sân cầu lông 1' },
+                    { sport: 'badminton', x: 694, y: 70, w: 170, h: 360, label: 'Sân cầu lông 2' }
+                ];
+                for (const court of courts) {
+                    const nearX = Math.max(court.x, Math.min(sc.px, court.x + court.w));
+                    const nearY = Math.max(court.y, Math.min(sc.py, court.y + court.h));
+                    if (Math.hypot(sc.px - nearX, sc.py - nearY) < 58) {
+                        foundCourt = { kind: 'sports_game', sport: court.sport, label: court.label };
+                        break;
+                    }
+                }
+            }
+            state.nearbyInteractable = foundCourt || foundSeat;
 
             const promptEl = document.getElementById('contextPrompt');
             if (state.isSitting) {
                 promptEl.classList.remove('hidden');
                 document.getElementById('contextPromptText').textContent = '🍽️ Đang ngồi nghỉ tại ghế';
                 document.getElementById('contextActionBtn').textContent = '🧍 Đứng dậy (E)';
+            } else if (foundCourt) {
+                promptEl.classList.remove('hidden');
+                document.getElementById('contextPromptText').textContent = `🎮 ${foundCourt.label} – nhấn E để chơi`;
+                document.getElementById('contextActionBtn').textContent = '🎮 Chơi mini game (E)';
             } else if (foundSeat) {
                 promptEl.classList.remove('hidden');
                 document.getElementById('contextPromptText').textContent = '🪑 Ghế trống tại bàn ăn';
@@ -3942,9 +3967,7 @@
                 ctx.strokeRect(fx + 8, fy + fh/2 - 76, 86, 152); ctx.strokeRect(fx + fw - 94, fy + fh/2 - 76, 86, 152);
                 ctx.fillStyle='#f8fafc'; ctx.fillRect(fx + 2, fy + fh/2 - 34, 8, 68); ctx.fillRect(fx + fw - 10, fy + fh/2 - 34, 8, 68);
                 ctx.restore();
-                // Vạch sân cầu lông và pickleball.
-                drawSmallRacketCourt(ctx, 65, 43, 74, 48, '#ffffff', 'badminton');
-                drawSmallRacketCourt(ctx, 65, 49, 74, 54, '#ffffff', 'pickleball');
+                // Sân cầu lông và Pickleball chỉ xuất hiện bên trong nhà thi đấu.
             }
 
             // Vẽ tán cây lớn đè lên trên mặt sân
@@ -4486,12 +4509,6 @@
                 }
                 if (!foundInteractable && ptx >= 2 && ptx <= 16 && pty >= 38 && pty <= 50) {
                     foundInteractable = { kind: 'sports_game', sport: 'football' };
-                }
-                if (!foundInteractable && ptx >= 65 && ptx <= 74 && pty >= 43 && pty <= 48) {
-                    foundInteractable = { kind: 'sports_game', sport: 'badminton' };
-                }
-                if (!foundInteractable && ptx >= 65 && ptx <= 74 && pty >= 49 && pty <= 54) {
-                    foundInteractable = { kind: 'sports_game', sport: 'pickleball' };
                 }
                 if (!foundInteractable) {
                     for (const veh of state.vehicles) {
