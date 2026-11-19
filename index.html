@@ -108,6 +108,16 @@
         ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+
+        #minecraftHotbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:55;display:none;gap:6px;padding:7px;background:rgba(15,23,42,.94);border:3px solid #94a3b8;box-shadow:0 5px 0 #334155,0 12px 28px #0009;border-radius:10px;pointer-events:auto}
+        .hotbar-slot{width:58px;height:58px;border:3px solid #64748b;background:linear-gradient(145deg,#334155,#0f172a);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;color:white;font-size:25px;image-rendering:pixelated}
+        .hotbar-slot small{font:10px monospace;color:#cbd5e1;margin-top:2px}.hotbar-slot.active{border-color:#fde047;box-shadow:0 0 0 2px #fef08a,0 0 18px #facc15;background:linear-gradient(145deg,#475569,#1e293b)}
+        .hotbar-slot .hotbar-badge{position:absolute;right:-5px;top:-7px;background:#e11d48;border:1px solid white;border-radius:99px;min-width:17px;height:17px;font:10px sans-serif;display:none;align-items:center;justify-content:center}
+        #phoneModal{background:transparent!important;align-items:flex-end!important;justify-content:center!important;padding-bottom:88px!important;pointer-events:none}
+        #phoneModal>div{pointer-events:auto;width:min( min(92vw,650px), 650px)!important;max-height:min(72vh,680px)!important;box-shadow:0 12px 45px #000b}
+        #phoneModal:not(.hidden){display:flex!important}
+        #photoViewModal{z-index:90}
+        @media(max-width:600px){.hotbar-slot{width:52px;height:52px}.hotbar-slot:nth-child(3){display:flex}#minecraftHotbar{bottom:8px;gap:4px;padding:5px}#phoneModal{padding-bottom:76px!important}}
     </style>
 </head>
 <body class="relative w-screen h-screen overflow-hidden text-white">
@@ -158,8 +168,7 @@
             <!-- ONLINE MULTIPLAYER -->
             <div class="mt-4 w-full bg-slate-950/90 border-2 border-cyan-400 rounded-xl p-3 shadow-2xl pointer-events-auto">
                 <div class="pixel-font text-[10px] sm:text-xs text-cyan-300 mb-2">🌐 CHẾ ĐỘ CHƠI ONLINE</div>
-                <input id="onlineName" maxlength="16" value="Học sinh NVC" placeholder="Tên hiển thị"
-                    class="w-full bg-slate-800 border-2 border-slate-500 rounded px-3 py-2 text-white text-lg mb-2 outline-none focus:border-cyan-300">
+                <input id="onlineName" maxlength="20" value="Học sinh NVC" placeholder="Tên hiển thị" class="hidden">
                 <div class="rounded-lg border border-cyan-700 bg-slate-900/80 p-3 text-center">
                     <div class="text-emerald-300 font-bold">🌍 THẾ GIỚI CHUNG NVC</div>
                     <div class="text-xs text-slate-300 mt-1">Mọi người mở link là tự động vào cùng thế giới</div>
@@ -475,10 +484,23 @@
     </div>
 
 
+    <div id="playerIdentityModal" class="hidden fixed inset-0 z-[80] bg-black/85 p-4 flex items-center justify-center">
+      <div class="w-full max-w-sm bg-slate-950 border-4 border-cyan-300 rounded-2xl p-5 shadow-2xl">
+        <div class="pixel-font text-cyan-300 text-center text-sm mb-2">🎒 HỒ SƠ HỌC SINH NVC</div>
+        <p class="text-slate-300 text-sm text-center mb-4">Nhập thông tin để bắt đầu chuyến khám phá trường.</p>
+        <label class="block text-amber-200 text-sm mb-1">Tên người chơi</label><input id="joinPlayerName" maxlength="20" autocomplete="nickname" placeholder="Ví dụ: Minh Anh" class="w-full bg-slate-800 border-2 border-slate-500 rounded-lg px-3 py-3 text-white mb-3">
+        <label class="block text-amber-200 text-sm mb-1">Lớp</label><input id="joinPlayerClass" maxlength="12" placeholder="Ví dụ: 11A1" class="w-full bg-slate-800 border-2 border-slate-500 rounded-lg px-3 py-3 text-white mb-4">
+        <div id="identityError" class="text-rose-300 text-xs mb-2"></div>
+        <div class="flex gap-2"><button id="cancelIdentityBtn" class="pixel-btn flex-1 rounded-lg py-3">HỦY</button><button id="confirmIdentityBtn" class="pixel-btn pixel-btn-green flex-1 rounded-lg py-3">VÀO TRƯỜNG ▶</button></div>
+      </div>
+    </div>
+    <div id="studentCardModal" class="hidden fixed inset-0 z-[75] bg-black/80 p-4 flex items-center justify-center"><div class="w-full max-w-xs bg-slate-950 border-4 border-amber-300 rounded-xl p-3"><div class="flex justify-between items-center mb-2"><b class="pixel-font text-[10px] text-amber-300">THẺ HỌC SINH NVC</b><button id="studentCardClose" class="text-xl">✕</button></div><div class="flex gap-3 items-center"><canvas id="studentCardPreview" width="90" height="110" class="bg-slate-800 border-2 border-white rounded"></canvas><div class="min-w-0"><div id="studentCardName" class="font-bold text-white break-words"></div><div id="studentCardClass" class="text-cyan-300 mt-2"></div><div class="text-[10px] text-slate-400 mt-2">THPT NGUYỄN VĂN CỪ</div></div></div></div></div>
+    <div id="minecraftHotbar" aria-label="Thanh công cụ"><button id="hotbarPhone" class="hotbar-slot active" title="Điện thoại NVC (P)">📱<small>1 • P</small><span id="phoneHotbarBadge" class="hotbar-badge">!</span></button><button id="hotbarStudentCard" class="hotbar-slot" title="Thẻ học sinh">🪪<small>2</small></button><button id="hotbarLuckyCharm" class="hotbar-slot" title="Bùa may mắn - nhấn để tung hiệu ứng">🍀<small>3 • G</small></button></div>
+
     <!-- NVC PHONE -->
     <button id="phoneOpenBtn" class="hidden fixed bottom-5 right-5 z-40 pointer-events-auto w-16 h-16 rounded-2xl border-4 border-white bg-gradient-to-br from-cyan-400 to-blue-700 text-3xl shadow-2xl" title="Điện thoại NVC">📱</button>
     <div id="photoMapLayer" class="fixed inset-0 z-[15] pointer-events-none overflow-hidden"></div>
-    <div id="phoneModal" class="hidden fixed inset-0 z-[70] bg-black/80 p-2 sm:p-5 flex items-center justify-center">
+    <div id="phoneModal" class="hidden fixed inset-0 z-[70] p-2 sm:p-5 flex items-center justify-center">
       <div class="w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-2xl border-4 border-cyan-300 bg-slate-950 shadow-2xl flex flex-col">
         <div class="flex items-center justify-between px-4 py-3 bg-slate-900 border-b-2 border-slate-700">
           <div><div class="pixel-font text-xs text-cyan-300">📱 NVC PHONE</div><div id="phoneUserLabel" class="text-sm text-slate-300 mt-1">Đang kết nối...</div></div>
@@ -505,15 +527,9 @@
           </section>
           <section id="phoneLocketPanel" class="hidden space-y-3">
             <div class="text-amber-300 font-bold text-xl">📸 Locket NVC</div>
-            <p class="text-sm text-slate-300">Chụp lại khung cảnh trong game ngay tại vị trí hiện tại, viết chú thích và đăng lên bản đồ. Ảnh sẽ hiện thành biểu tượng nhỏ để mọi người bấm xem.</p>
-            <div class="rounded-xl overflow-hidden border-2 border-slate-600 bg-slate-900">
-              <video id="locketCameraVideo" class="hidden w-full max-h-72 object-cover" autoplay playsinline muted></video>
-              <img id="locketPreview" class="hidden w-full max-h-56 object-contain" alt="Ảnh chụp từ camera thật">
-              <div id="locketEmpty" class="p-8 text-center text-slate-400">Camera chưa bật. Nhấn “Mở camera” để bắt đầu.</div>
-            </div>
-            <div class="grid grid-cols-2 gap-2"><button id="startLocketCamera" class="pixel-btn pixel-btn-green rounded-lg py-3">📷 Mở camera</button><button id="switchLocketCamera" class="pixel-btn rounded-lg py-3">🔄 Đổi camera</button></div>
-            <div class="flex gap-2"><button id="captureGamePhoto" class="pixel-btn pixel-btn-green flex-1 rounded-lg py-3" disabled>Chụp ảnh</button><button id="retakeGamePhoto" class="hidden pixel-btn rounded-lg px-3">Chụp lại</button></div>
-            <p class="text-xs text-slate-400">Camera chỉ bật sau khi bạn nhấn nút và cấp quyền. Đóng Locket sẽ tự tắt camera.</p>
+            <p class="text-sm text-slate-300">Dùng camera thật của điện thoại hoặc máy tính để chụp khoảnh khắc. Ảnh được xem trước trước khi đăng lên bản đồ NVC.</p>
+            <div class="rounded-xl overflow-hidden border-2 border-slate-600 bg-slate-900"><img id="locketPreview" class="hidden w-full max-h-56 object-contain" alt="Ảnh camera đã chụp"><div id="locketEmpty" class="p-8 text-center text-slate-400">Chưa chụp ảnh</div></div>
+            <div class="flex gap-2"><button id="captureGamePhoto" class="pixel-btn pixel-btn-green flex-1 rounded-lg py-3">📷 Mở camera thật</button><button id="retakeGamePhoto" class="hidden pixel-btn rounded-lg px-3">Chụp lại</button></div>
             <textarea id="locketCaption" maxlength="180" rows="2" placeholder="Viết vài dòng về khoảnh khắc này..." class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"></textarea>
             <button id="publishGamePhoto" disabled class="pixel-btn pixel-btn-amber rounded-lg w-full py-3 opacity-50">🌍 Đăng lên bản đồ</button>
             <div id="locketStatus" class="text-sm text-slate-300"></div>
@@ -523,8 +539,16 @@
         </div>
       </div>
     </div>
+    <div id="nvcCameraModal" class="hidden fixed inset-0 z-[95] bg-black/95 p-3 flex items-center justify-center" role="dialog" aria-modal="true" aria-label="Camera Locket NVC">
+      <div class="w-full max-w-xl bg-slate-950 border-4 border-cyan-300 rounded-2xl p-3 shadow-2xl">
+        <div class="flex items-center justify-between mb-3"><div><b class="text-cyan-200 text-lg">📸 CAMERA LOCKET</b><p id="nvcCameraStatus" class="text-xs text-slate-400 mt-1">Camera chỉ bật khi bạn cho phép.</p></div><button id="nvcCameraClose" class="text-2xl text-white px-2" aria-label="Đóng camera">✕</button></div>
+        <div class="relative overflow-hidden rounded-xl bg-black border border-slate-700"><video id="nvcCameraVideo" class="w-full max-h-[58vh] object-contain" autoplay playsinline muted></video><div id="nvcCameraPlaceholder" class="hidden text-center text-slate-400 p-12">Camera chưa hoạt động</div></div>
+        <div class="grid grid-cols-2 gap-2 mt-3"><button id="nvcCameraSwitch" class="pixel-btn rounded-lg py-3">🔄 Đổi camera</button><button id="nvcCameraCapture" class="pixel-btn pixel-btn-green rounded-lg py-3">⚪ Chụp ảnh</button></div>
+        <p class="text-[11px] text-slate-500 mt-2">Trình duyệt sẽ hỏi quyền camera. Hãy dùng HTTPS (GitHub Pages) và cho phép truy cập camera.</p>
+      </div>
+    </div>
     <div id="photoViewModal" class="hidden fixed inset-0 z-[90] bg-black/90 p-3 flex items-center justify-center">
-      <div class="w-full max-w-xl bg-slate-950 border-4 border-amber-300 rounded-2xl p-3"><div class="flex justify-between items-center mb-2"><b id="photoViewAuthor" class="text-cyan-200">Ảnh trên bản đồ</b><button id="photoViewClose" class="text-2xl px-2">✕</button></div><img id="photoViewImage" class="w-full max-h-[65vh] object-contain rounded-lg bg-slate-900" alt="Ảnh Locket"><p id="photoViewCaption" class="text-white mt-2"></p><div id="photoViewPlace" class="text-xs text-slate-400 mt-1"></div></div>
+      <div class="w-full max-w-xl bg-slate-950 border-4 border-amber-300 rounded-2xl p-3"><div class="flex justify-between items-center mb-2"><b id="photoViewAuthor" class="text-cyan-200">Ảnh trên bản đồ</b><button id="photoViewClose" class="text-2xl px-2">✕</button></div><img id="photoViewImage" class="w-full max-h-[65vh] object-contain rounded-lg bg-slate-900" alt="Ảnh Locket"><p id="photoViewCaption" class="text-white mt-2"></p><div id="photoViewPlace" class="text-xs text-slate-400 mt-1"></div><div id="photoViewFriendNote" class="hidden text-xs text-cyan-300 mt-2">👁️ Chế độ xem ảnh của bạn bè</div><button id="deleteMyPhotoBtn" class="hidden pixel-btn bg-rose-700 border-2 border-rose-300 rounded-lg px-4 py-2 mt-3">🗑️ Gỡ ảnh của mình</button></div>
     </div>
 
     <script>
@@ -4450,8 +4474,8 @@
         }
 
         function safePlayerName() {
-            const raw = document.getElementById('onlineName').value.trim();
-            return (raw || 'Học sinh NVC').replace(/[<>]/g, '').slice(0, 16);
+            const raw = (nvcStudentName || document.getElementById('onlineName').value).trim();
+            return (raw || 'Học sinh NVC').replace(/[<>]/g, '').slice(0, 20);
         }
 
         function localPlayerPacket() {
@@ -4830,7 +4854,28 @@
             });
         });
 
-        document.getElementById('startBtn').addEventListener('click', enterGame);
+        document.getElementById('startBtn').addEventListener('click', () => {
+            document.getElementById('joinPlayerName').value=nvcStudentName;
+            document.getElementById('joinPlayerClass').value=nvcStudentClass;
+            document.getElementById('identityError').textContent='';
+            document.getElementById('playerIdentityModal').classList.remove('hidden');
+        });
+        document.getElementById('cancelIdentityBtn').addEventListener('click',()=>document.getElementById('playerIdentityModal').classList.add('hidden'));
+        document.getElementById('confirmIdentityBtn').addEventListener('click',()=>{
+            const name=document.getElementById('joinPlayerName').value.trim().replace(/[<>]/g,'').slice(0,20);
+            const cls=document.getElementById('joinPlayerClass').value.trim().replace(/[<>]/g,'').slice(0,12);
+            if(!name||!cls){document.getElementById('identityError').textContent='Vui lòng nhập cả tên người chơi và lớp.';return;}
+            nvcStudentName=name;nvcStudentClass=cls;document.getElementById('onlineName').value=name;
+            document.getElementById('playerIdentityModal').classList.add('hidden');enterGame();
+            document.getElementById('minecraftHotbar').style.display='flex';
+            document.getElementById('studentCardName').textContent=name;document.getElementById('studentCardClass').textContent='Lớp: '+cls;
+            setTimeout(()=>{const c=document.getElementById('studentCardPreview');if(c){const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);renderActivePlayerSprite(x,45,88,2.1,'down',0,0);}},100);
+        });
+        document.getElementById('studentCardClose').addEventListener('click',()=>document.getElementById('studentCardModal').classList.add('hidden'));
+        document.getElementById('hotbarPhone').addEventListener('click',()=>phoneOpen('friends'));
+        document.getElementById('hotbarStudentCard').addEventListener('click',()=>document.getElementById('studentCardModal').classList.remove('hidden'));
+        document.getElementById('hotbarLuckyCharm').addEventListener('click',()=>{const b=document.getElementById('hotbarLuckyCharm');b.style.filter='brightness(1.8)';b.style.transform='translateY(-9px) rotate(-8deg)';setTimeout(()=>{b.style.filter='';b.style.transform='';},450);phoneStatus('🍀 Bạn vừa kích hoạt bùa may mắn! Chúc bạn có một ngày vui ở NVC.');});
+        document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key.toLowerCase()==='p'&&state.mode==='PLAYING'){e.preventDefault();phoneOpen('friends');}if(e.key==='2'&&state.mode==='PLAYING')document.getElementById('studentCardModal').classList.remove('hidden');if(e.key.toLowerCase()==='g'&&state.mode==='PLAYING')document.getElementById('hotbarLuckyCharm').click();});
 
         document.getElementById('backToMenuBtn').addEventListener('click', () => {
             audio.playClick();
@@ -4843,6 +4888,7 @@
             state.sitReturnPos = null;
             document.getElementById('gameHud').classList.add('hidden');
             document.getElementById('menuOverlay').classList.remove('hidden');
+            document.getElementById('minecraftHotbar').style.display='none';
         });
 
         document.getElementById('btnFloorUp').addEventListener('click', () => changeFloor(1));
@@ -4968,18 +5014,19 @@
 
 
         // ================= NVC PHONE: FRIENDS / CHAT / LOCKET =================
+        const deviceOwnerKey = (()=>{let k=localStorage.getItem('nvc_owner_key');if(!k){k=(crypto.randomUUID?crypto.randomUUID():('nvc-'+Date.now()+'-'+Math.random().toString(36).slice(2)));localStorage.setItem('nvc_owner_key',k);}return k;})();
+        let nvcStudentName='', nvcStudentClass='';
         const phoneApp = {
             user: null, profile: null, username: '', displayName: '', activeFriend: null,
             friends: [], pending: [], messagesChannel: null, photoChannel: null,
-            capturedBlob: null, capturedUrl: null, cameraStream: null, cameraFacing: 'environment', posts: [], markerEls: new Map()
+            capturedBlob: null, capturedUrl: null, cameraStream: null, cameraFacing: 'environment', cameraBusy: false, posts: [], markerEls: new Map()
         };
         const phoneEl = id => document.getElementById(id);
         const phoneStatus = (msg, bad=false) => { const e=phoneEl('phoneGlobalStatus'); if(e){e.textContent=msg;e.className='text-xs mt-3 '+(bad?'text-rose-300':'text-slate-400');} };
         const escText = v => String(v ?? '').slice(0,500);
         function phoneOpen(tab='friends') { phoneEl('phoneModal').classList.remove('hidden'); phoneSwitchTab(tab); }
-        function phoneClose() { stopLocketCamera(); phoneEl('phoneModal').classList.add('hidden'); }
+        function phoneClose() { phoneEl('phoneModal').classList.add('hidden'); closeRealCamera(); }
         function phoneSwitchTab(tab) {
-            if(tab!=='locket') stopLocketCamera();
             ['friends','messages','locket'].forEach(t=>{phoneEl('phone'+t[0].toUpperCase()+t.slice(1)+'Panel').classList.toggle('hidden',t!==tab);});
             document.querySelectorAll('.phone-tab').forEach(b=>b.classList.toggle('ring-2',b.dataset.phoneTab===tab));
             if(tab==='friends') loadPhoneFriends(); if(tab==='messages') loadChatFriendButtons(); if(tab==='locket') loadMyPhotoPosts();
@@ -5038,7 +5085,7 @@
             let profiles=[];if(ids.length){const res=await multiplayer.client.from('nvc_profiles').select('id,username,display_name').in('id',ids);profiles=res.data||[];}
             const byId=new Map(profiles.map(p=>[p.id,p]));
             phoneApp.friends=(rows||[]).filter(r=>r.status==='accepted').map(r=>byId.get(r.from_user===uid?r.to_user:r.from_user)).filter(Boolean);
-            phoneApp.pending=(rows||[]).filter(r=>r.status==='pending'&&r.to_user===uid).map(r=>({request:r,profile:byId.get(r.from_user)})).filter(x=>x.profile);
+            phoneApp.pending=(rows||[]).filter(r=>r.status==='pending'&&r.to_user===uid).map(r=>({request:r,profile:byId.get(r.from_user)})).filter(x=>x.profile);const badge=phoneEl('phoneHotbarBadge');if(badge){const n=phoneApp.pending.length;badge.textContent=n>9?'9+':String(n);badge.style.display=n?'flex':'none';}
             const req=phoneEl('friendRequestsList');req.replaceChildren();
             if(!phoneApp.pending.length)req.textContent='Không có lời mời mới.';
             phoneApp.pending.forEach(x=>{const d=document.createElement('div');d.className='flex items-center justify-between gap-2 bg-slate-800 p-2 rounded';const t=document.createElement('span');t.textContent='@'+x.profile.username+' • '+x.profile.display_name;const b=document.createElement('button');b.className='pixel-btn pixel-btn-green rounded px-3 py-1';b.textContent='Chấp nhận';b.onclick=()=>acceptFriendRequest(x.request.id);d.append(t,b);req.append(d);});
@@ -5063,28 +5110,34 @@
         function renderChatMessages(rows){const box=phoneEl('chatMessages');box.replaceChildren();rows.forEach(appendChatMessage);box.scrollTop=box.scrollHeight;}
         function appendChatMessage(m){const box=phoneEl('chatMessages');const d=document.createElement('div');d.className='max-w-[85%] rounded-lg px-3 py-2 '+(m.sender_id===phoneApp.user.id?'ml-auto bg-blue-700':'mr-auto bg-slate-700');const p=document.createElement('p');p.textContent=escText(m.content);const time=document.createElement('div');time.className='text-[10px] opacity-70 mt-1';time.textContent=new Date(m.created_at).toLocaleString('vi-VN');d.append(p,time);box.append(d);box.scrollTop=box.scrollHeight;}
         async function sendChatMessage(){const friend=phoneApp.activeFriend,content=phoneEl('chatInput').value.trim();if(!friend||!content||!phoneApp.user)return;const {error}=await multiplayer.client.from('nvc_messages').insert({sender_id:phoneApp.user.id,receiver_id:friend.id,content});if(error){phoneStatus('Không gửi được tin nhắn: '+error.message,true);return;}phoneEl('chatInput').value='';}
-        function stopLocketCamera(){
-            if(phoneApp.cameraStream){phoneApp.cameraStream.getTracks().forEach(track=>track.stop());phoneApp.cameraStream=null;}
-            const video=phoneEl('locketCameraVideo');if(video){video.srcObject=null;video.classList.add('hidden');}
-            const capture=phoneEl('captureGamePhoto');if(capture)capture.disabled=true;
-            const start=phoneEl('startLocketCamera');if(start)start.textContent='📷 Mở camera';
-        }
-        async function startLocketCamera(){
-            if(!navigator.mediaDevices?.getUserMedia){phoneStatus('Trình duyệt không hỗ trợ camera hoặc game chưa chạy bằng HTTPS.',true);return;}
-            stopLocketCamera();
+        function setCameraStatus(message, bad=false){const el=phoneEl('nvcCameraStatus');if(el){el.textContent=message;el.className='text-xs mt-1 '+(bad?'text-rose-300':'text-slate-400');}}
+        async function openRealCamera(){
+            if(phoneApp.cameraBusy)return; phoneApp.cameraBusy=true;
             try{
-                const stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:phoneApp.cameraFacing},width:{ideal:1280},height:{ideal:720}}});
-                phoneApp.cameraStream=stream;const video=phoneEl('locketCameraVideo');video.srcObject=stream;video.classList.remove('hidden');phoneEl('locketPreview').classList.add('hidden');phoneEl('locketEmpty').classList.add('hidden');
-                await video.play();phoneEl('captureGamePhoto').disabled=false;phoneEl('startLocketCamera').textContent='⏹ Bật lại camera';phoneStatus('Camera đã bật. Hãy căn chỉnh rồi nhấn Chụp ảnh.');
-            }catch(e){console.error(e);phoneStatus(e.name==='NotAllowedError'?'Bạn chưa cấp quyền camera. Hãy cho phép camera trong trình duyệt.':'Không mở được camera: '+(e.message||e.name),true);}
+                if(!navigator.mediaDevices?.getUserMedia)throw new Error('Trình duyệt không hỗ trợ camera. Hãy mở game bằng Chrome/Safari trên HTTPS.');
+                if(!window.isSecureContext)throw new Error('Camera cần kết nối HTTPS. Hãy mở game bằng đường dẫn GitHub Pages.');
+                closeRealCamera(); phoneEl('nvcCameraModal').classList.remove('hidden');
+                setCameraStatus('Đang xin quyền truy cập camera...');
+                const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:phoneApp.cameraFacing},width:{ideal:1920},height:{ideal:1080}},audio:false});
+                phoneApp.cameraStream=stream;
+                const video=phoneEl('nvcCameraVideo');video.srcObject=stream;video.classList.remove('hidden');phoneEl('nvcCameraPlaceholder').classList.add('hidden');
+                await video.play();setCameraStatus(phoneApp.cameraFacing==='user'?'Camera trước đang bật.':'Camera sau đang bật.');
+            }catch(err){console.error('NVC camera:',err);setCameraStatus(err.name==='NotAllowedError'?'Bạn chưa cấp quyền camera. Hãy cho phép trong cài đặt trình duyệt.':(err.message||'Không thể mở camera.'),true);phoneEl('nvcCameraPlaceholder').classList.remove('hidden');}
+            finally{phoneApp.cameraBusy=false;}
         }
-        async function switchLocketCamera(){phoneApp.cameraFacing=phoneApp.cameraFacing==='environment'?'user':'environment';await startLocketCamera();}
-        function captureGamePhoto(){
-            const video=phoneEl('locketCameraVideo');if(!phoneApp.cameraStream||!video||!video.videoWidth){phoneStatus('Hãy mở camera trước khi chụp.',true);return;}
-            const c=document.createElement('canvas');c.width=video.videoWidth;c.height=video.videoHeight;const ctx=c.getContext('2d');
-            if(phoneApp.cameraFacing==='user'){ctx.translate(c.width,0);ctx.scale(-1,1);}ctx.drawImage(video,0,0,c.width,c.height);
-            c.toBlob(blob=>{if(!blob){phoneStatus('Không chụp được ảnh.',true);return;}phoneApp.capturedBlob=blob;if(phoneApp.capturedUrl)URL.revokeObjectURL(phoneApp.capturedUrl);phoneApp.capturedUrl=URL.createObjectURL(blob);phoneEl('locketPreview').src=phoneApp.capturedUrl;phoneEl('locketPreview').classList.remove('hidden');video.classList.add('hidden');phoneEl('publishGamePhoto').disabled=false;phoneEl('publishGamePhoto').classList.remove('opacity-50');phoneEl('retakeGamePhoto').classList.remove('hidden');stopLocketCamera();phoneStatus('Đã chụp ảnh bằng camera thật!');},'image/webp',0.86);
+        function closeRealCamera(){
+            const stream=phoneApp.cameraStream;if(stream){stream.getTracks().forEach(track=>track.stop());phoneApp.cameraStream=null;}
+            const video=phoneEl('nvcCameraVideo');if(video){video.pause();video.srcObject=null;}
+            const modal=phoneEl('nvcCameraModal');if(modal)modal.classList.add('hidden');
         }
+        async function switchRealCamera(){phoneApp.cameraFacing=phoneApp.cameraFacing==='environment'?'user':'environment';await openRealCamera();}
+        function captureRealPhoto(){
+            const video=phoneEl('nvcCameraVideo');if(!phoneApp.cameraStream||!video.videoWidth){setCameraStatus('Camera chưa sẵn sàng. Hãy đợi một chút.',true);return;}
+            const c=document.createElement('canvas');const scale=Math.min(1,1600/video.videoWidth);c.width=Math.round(video.videoWidth*scale);c.height=Math.round(video.videoHeight*scale);
+            const ctx=c.getContext('2d');if(phoneApp.cameraFacing==='user'){ctx.translate(c.width,0);ctx.scale(-1,1);}ctx.drawImage(video,0,0,c.width,c.height);
+            c.toBlob(blob=>{if(!blob){setCameraStatus('Không tạo được ảnh. Hãy thử lại.',true);return;}phoneApp.capturedBlob=blob;if(phoneApp.capturedUrl)URL.revokeObjectURL(phoneApp.capturedUrl);phoneApp.capturedUrl=URL.createObjectURL(blob);phoneEl('locketPreview').src=phoneApp.capturedUrl;phoneEl('locketPreview').classList.remove('hidden');phoneEl('locketEmpty').classList.add('hidden');phoneEl('publishGamePhoto').disabled=false;phoneEl('publishGamePhoto').classList.remove('opacity-50');phoneEl('retakeGamePhoto').classList.remove('hidden');closeRealCamera();phoneEl('locketStatus').textContent='Đã chụp ảnh thật! Xem trước rồi nhấn Đăng lên bản đồ.';},'image/webp',0.88);
+        }
+        function captureGamePhoto(){openRealCamera();}
         async function publishGamePhoto(){
             if(!phoneApp.user||!phoneApp.capturedBlob)return;
             const btn=phoneEl('publishGamePhoto');btn.disabled=true;phoneEl('locketStatus').textContent='Đang tải ảnh lên...';
@@ -5092,11 +5145,11 @@
                 const path=phoneApp.user.id+'/'+Date.now()+'.webp';
                 const up=await multiplayer.client.storage.from('nvc-locket').upload(path,phoneApp.capturedBlob,{contentType:'image/webp',upsert:false});if(up.error)throw up.error;
                 const {data:{publicUrl}}=multiplayer.client.storage.from('nvc-locket').getPublicUrl(path);
-                const ins=await multiplayer.client.from('nvc_photo_posts').insert({user_id:phoneApp.user.id,image_path:path,image_url:publicUrl,caption:phoneEl('locketCaption').value.trim().slice(0,180),x:Math.round(state.player.x),y:Math.round(state.player.y),floor:state.currentFloor}).select().single();if(ins.error)throw ins.error;
+                const ins=await multiplayer.client.from('nvc_photo_posts').insert({user_id:phoneApp.user.id,author_id:phoneApp.user.id,owner_key:deviceOwnerKey,image_path:path,image_url:publicUrl,caption:phoneEl('locketCaption').value.trim().slice(0,180),x:Math.round(state.player.x),y:Math.round(state.player.y),floor:state.currentFloor}).select().single();if(ins.error)throw ins.error;
                 addPhotoPost(ins.data);phoneEl('locketStatus').textContent='Đã đăng ảnh! Biểu tượng ảnh đã xuất hiện trên bản đồ.';phoneApp.capturedBlob=null;phoneEl('publishGamePhoto').disabled=true;phoneEl('publishGamePhoto').classList.add('opacity-50');loadMyPhotoPosts();
             }catch(e){console.error(e);phoneEl('locketStatus').textContent='Đăng ảnh thất bại: '+(e.message||'Kiểm tra Storage và SQL.');btn.disabled=false;}
         }
-        async function loadPhotoPosts(){if(!multiplayer.client)return;const {data,error}=await multiplayer.client.from('nvc_photo_posts').select('id,user_id,image_url,caption,x,y,floor,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.warn('Photo posts:',error.message);return;}phoneApp.posts=[];(data||[]).forEach(addPhotoPost);}
+        async function loadPhotoPosts(){if(!multiplayer.client)return;const {data,error}=await multiplayer.client.from('nvc_photo_posts').select('id,user_id,author_id,owner_key,image_path,image_url,caption,x,y,floor,created_at').order('created_at',{ascending:false}).limit(100);if(error){console.warn('Photo posts:',error.message);return;}phoneApp.posts=[];(data||[]).forEach(addPhotoPost);}
         function addPhotoPost(post){if(!post||phoneApp.posts.some(p=>p.id===post.id))return;phoneApp.posts.push(post);renderPhotoMapMarkers();}
         function renderPhotoMapMarkers(){
             const layer=phoneEl('photoMapLayer');if(!layer)return;
@@ -5106,7 +5159,21 @@
                 b.style.display=visible?'flex':'none';if(visible){const r=canvas.getBoundingClientRect();const x=(Number(post.x)-state.camera.x+canvas.width/2)*(r.width/canvas.width)+r.left;const y=(Number(post.y)-state.camera.y+canvas.height/2)*(r.height/canvas.height)+r.top;b.style.left=(x-16)+'px';b.style.top=(y-16)+'px';}
             });
         }
-        async function showPhotoPost(post){phoneEl('photoViewImage').src=post.image_url;phoneEl('photoViewCaption').textContent=post.caption||' ';phoneEl('photoViewPlace').textContent='Tầng '+post.floor+' • '+new Date(post.created_at).toLocaleString('vi-VN');phoneEl('photoViewAuthor').textContent='Khoảnh khắc NVC';const {data}=await multiplayer.client.from('nvc_profiles').select('display_name,username').eq('id',post.user_id).maybeSingle();if(data)phoneEl('photoViewAuthor').textContent=data.display_name+' (@'+data.username+')';phoneEl('photoViewModal').classList.remove('hidden');}
+        async function showPhotoPost(post){
+            phoneApp.activePhotoPost=post;phoneEl('photoViewImage').src=post.image_url;phoneEl('photoViewCaption').textContent=post.caption||' ';phoneEl('photoViewPlace').textContent='Tầng '+post.floor+' • '+new Date(post.created_at).toLocaleString('vi-VN');phoneEl('photoViewAuthor').textContent='Khoảnh khắc NVC';
+            const {data}=await multiplayer.client.from('nvc_profiles').select('display_name,username').eq('id',post.user_id).maybeSingle();if(data)phoneEl('photoViewAuthor').textContent=data.display_name+' (@'+data.username+')';
+            const mine=Boolean(phoneApp.user&&post.user_id===phoneApp.user.id&&post.author_id===phoneApp.user.id&&post.owner_key===deviceOwnerKey);
+            phoneEl('deleteMyPhotoBtn').classList.toggle('hidden',!mine);phoneEl('photoViewFriendNote').classList.toggle('hidden',mine);
+            phoneEl('photoViewModal').classList.remove('hidden');
+        }
+        async function deleteMyPhotoPost(){
+            const post=phoneApp.activePhotoPost;if(!post||!phoneApp.user||post.user_id!==phoneApp.user.id||post.author_id!==phoneApp.user.id||post.owner_key!==deviceOwnerKey){phoneStatus('Không có quyền gỡ ảnh này.',true);return;}
+            if(!confirm('Gỡ ảnh này khỏi Locket và bản đồ?'))return;
+            const del=await multiplayer.client.from('nvc_photo_posts').delete().eq('id',post.id).eq('user_id',phoneApp.user.id).eq('author_id',phoneApp.user.id).eq('owner_key',deviceOwnerKey);
+            if(del.error){phoneStatus('Không gỡ được ảnh: '+del.error.message,true);return;}
+            await multiplayer.client.storage.from('nvc-locket').remove([post.image_path]);phoneApp.posts=phoneApp.posts.filter(p=>p.id!==post.id);const marker=phoneApp.markerEls.get(post.id);if(marker)marker.remove();phoneApp.markerEls.delete(post.id);phoneEl('photoViewModal').classList.add('hidden');loadMyPhotoPosts();
+        }
+        phoneEl('deleteMyPhotoBtn').addEventListener('click',deleteMyPhotoPost);
         async function loadMyPhotoPosts(){if(!phoneApp.user)return;const {data}=await multiplayer.client.from('nvc_photo_posts').select('*').eq('user_id',phoneApp.user.id).order('created_at',{ascending:false}).limit(12);const box=phoneEl('myPhotoPosts');box.replaceChildren();(data||[]).forEach(p=>{const im=document.createElement('img');im.src=p.image_url;im.alt='Ảnh đã đăng';im.className='w-full aspect-square object-cover rounded border border-slate-600 cursor-pointer';im.onclick=()=>showPhotoPost(p);box.append(im);});if(!data?.length)box.textContent='Chưa có ảnh nào.';}
         phoneEl('phoneOpenBtn').addEventListener('click',()=>phoneOpen('friends'));
         phoneEl('phoneCloseBtn').addEventListener('click',phoneClose);
@@ -5116,15 +5183,18 @@
         phoneEl('sendFriendRequest').addEventListener('click',sendFriendRequest);
         phoneEl('sendChatMessage').addEventListener('click',sendChatMessage);
         phoneEl('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage();}});
-        phoneEl('startLocketCamera').addEventListener('click',startLocketCamera);
-        phoneEl('switchLocketCamera').addEventListener('click',switchLocketCamera);
         phoneEl('captureGamePhoto').addEventListener('click',captureGamePhoto);
-        phoneEl('retakeGamePhoto').addEventListener('click',startLocketCamera);
+        phoneEl('retakeGamePhoto').addEventListener('click',captureGamePhoto);
+        phoneEl('nvcCameraClose').addEventListener('click',closeRealCamera);
+        phoneEl('nvcCameraSwitch').addEventListener('click',switchRealCamera);
+        phoneEl('nvcCameraCapture').addEventListener('click',captureRealPhoto);
+        phoneEl('nvcCameraModal').addEventListener('click',e=>{if(e.target===phoneEl('nvcCameraModal'))closeRealCamera();});
+        document.addEventListener('visibilitychange',()=>{if(document.hidden)closeRealCamera();});
+        window.addEventListener('pagehide',closeRealCamera);
         phoneEl('publishGamePhoto').addEventListener('click',publishGamePhoto);
-        window.addEventListener('pagehide',stopLocketCamera);
         // Phone becomes available after joining the shared world.
         const originalShowPublicWorldConnected=showPublicWorldConnected;
-        showPublicWorldConnected=function(){originalShowPublicWorldConnected();phoneEl('phoneOpenBtn').classList.remove('hidden');initPhoneBackend();};
+        showPublicWorldConnected=function(){originalShowPublicWorldConnected();phoneEl('phoneOpenBtn').classList.remove('hidden');initPhoneBackend();loadPhotoPosts();};
         const originalDisconnectMultiplayer=disconnectMultiplayer;
         disconnectMultiplayer=function(showMessage=true){originalDisconnectMultiplayer(showMessage);phoneEl('phoneOpenBtn').classList.add('hidden');phoneClose();};
         // Keep photo pins anchored to their world coordinates as the camera moves.
