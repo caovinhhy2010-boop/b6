@@ -191,6 +191,41 @@
             .pixel-btn:hover { transform: none; }
         }
 
+
+        /* ================= REALISTIC NVC SMARTPHONE SHELL ================= */
+        .mini-phone-back{width:25px;height:35px;display:block;position:relative;border-radius:6px;background:linear-gradient(135deg,#f8fafc,#cbd5e1 55%,#94a3b8);border:1px solid #64748b;box-shadow:inset -2px 0 2px #64748b;}
+        .mini-phone-back i,.phone-back-device i{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#64748b 0 12%,#080b12 35% 75%,#334155 100%);border:1px solid #475569;}
+        .mini-phone-back i:nth-child(1){top:4px;left:4px}.mini-phone-back i:nth-child(2){top:12px;left:4px}.mini-phone-back i:nth-child(3){top:8px;left:12px}
+        .mini-phone-back b{position:absolute;width:5px;height:5px;border-radius:50%;background:#dbeafe;right:4px;top:5px;box-shadow:0 0 2px white}
+        #hotbarPhone{gap:2px}.hotbar-slot .mini-phone-back{flex:none}
+        #phoneOpenBtn{width:66px;height:112px;padding:0;background:transparent;border:0;filter:drop-shadow(0 8px 8px #0009)}
+        .phone-back-device{display:block;position:relative;width:58px;height:106px;margin:auto;border-radius:13px;background:linear-gradient(105deg,#f8fafc 0%,#dce1e7 38%,#aeb6c1 100%);border:2px solid #7d8794;box-shadow:inset -4px 0 5px #64748b,inset 3px 0 4px #fff,0 0 0 2px #e2e8f0;transform:rotate(-7deg)}
+        .phone-back-device:before{content:"";position:absolute;top:5px;left:5px;width:28px;height:30px;border-radius:8px;background:linear-gradient(145deg,#e5e7eb,#aeb6c1);box-shadow:inset 0 1px 2px #fff,0 1px 2px #64748b}
+        .phone-back-device i{width:10px;height:10px}.phone-back-device i:nth-child(1){top:8px;left:8px}.phone-back-device i:nth-child(2){top:19px;left:8px}.phone-back-device i:nth-child(3){top:13px;left:20px}
+        .phone-back-device b{position:absolute;top:9px;right:8px;width:5px;height:5px;border-radius:50%;background:#fef3c7;box-shadow:0 0 2px #fff}
+        .phone-back-device:after{content:"✦";position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);font-size:14px;color:#94a3b8;text-shadow:0 1px #fff}
+        #phoneModal{z-index:70!important;background:rgba(2,6,23,.68)!important;align-items:center!important;justify-content:center!important;padding:12px!important;pointer-events:auto!important;backdrop-filter:blur(8px)}
+        #phoneModal>div#phoneDeviceShell{width:min(390px,94vw)!important;height:min(780px,92vh)!important;max-height:92vh!important;max-width:94vw!important;padding:7px!important;border:3px solid #9ca3af!important;border-radius:44px!important;background:linear-gradient(135deg,#f8fafc,#64748b 18%,#d1d5db 48%,#475569 100%)!important;box-shadow:0 30px 90px #000c,inset 0 0 0 2px #f8fafc!important;gap:0!important;position:relative;}
+        .phone-statusbar{height:29px;flex:0 0 29px;display:flex;align-items:center;justify-content:space-between;padding:0 17px;color:#f8fafc;background:#05070c;border-radius:35px 35px 0 0;font:600 10px/1 system-ui;position:relative;}
+        .phone-dynamic-island{position:absolute;left:50%;top:6px;transform:translateX(-50%);width:76px;height:17px;border-radius:20px;background:#000;box-shadow:inset 0 1px 2px #222;}
+        .phone-status-icons{font-size:9px;letter-spacing:.2px}
+        #phoneDeviceShell>div:nth-child(2){background:#101722!important;border-color:#334155!important;min-height:56px}
+        #phoneDeviceShell>div:nth-child(3){background:#0b111c!important;border-color:#263445!important}
+        #phoneDeviceShell .phone-tab{border-radius:13px!important;box-shadow:0 2px 5px #0006}
+        #phoneDeviceShell>div:nth-child(4){background:linear-gradient(180deg,#101b2b,#0b1220)!important;border-radius:0 0 28px 28px}
+        .phone-home-area{height:23px;flex:0 0 23px;background:#080b11;display:flex;align-items:center;justify-content:center;border-radius:0 0 34px 34px}
+        .phone-home-indicator{display:block;width:92px;height:4px;border-radius:9px;background:#e2e8f0;opacity:.9}
+        @media(max-width:700px){
+          #phoneModal{padding:5px!important;background:rgba(0,0,0,.78)!important}
+          #phoneModal>div#phoneDeviceShell{width:min(430px,96vw)!important;height:min(860px,96dvh)!important;max-height:96dvh!important;border-radius:34px!important;padding:5px!important}
+          .phone-statusbar{border-radius:28px 28px 0 0;padding:0 13px}
+          #phoneDeviceShell>div:nth-child(4){min-height:0}
+          #phoneOpenBtn{width:50px;height:86px;right:12px!important;bottom:calc(74px + var(--nvc-safe-bottom))!important}
+          .phone-back-device{width:45px;height:82px;border-radius:10px;transform:rotate(-7deg) scale(.94)}
+          .phone-back-device:before{width:23px;height:24px;top:4px;left:4px}
+          .phone-back-device i{width:8px;height:8px}.phone-back-device i:nth-child(1){top:6px;left:6px}.phone-back-device i:nth-child(2){top:15px;left:6px}.phone-back-device i:nth-child(3){top:10px;left:16px}
+        }
+        @media(max-height:520px) and (orientation:landscape){#phoneModal>div#phoneDeviceShell{height:96dvh!important;width:min(420px,75vw)!important}}
     </style>
 </head>
 <body class="relative w-screen h-screen overflow-hidden text-white">
@@ -568,13 +603,14 @@
       </div>
     </div>
     <div id="studentCardModal" class="hidden fixed inset-0 z-[75] bg-black/80 p-4 flex items-center justify-center"><div class="w-full max-w-xs bg-slate-950 border-4 border-amber-300 rounded-xl p-3"><div class="flex justify-between items-center mb-2"><b class="pixel-font text-[10px] text-amber-300">THẺ HỌC SINH NVC</b><button id="studentCardClose" class="text-xl">✕</button></div><div class="flex gap-3 items-center"><canvas id="studentCardPreview" width="90" height="110" class="bg-slate-800 border-2 border-white rounded"></canvas><div class="min-w-0"><div id="studentCardName" class="font-bold text-white break-words"></div><div id="studentCardClass" class="text-cyan-300 mt-2"></div><div class="text-[10px] text-slate-400 mt-2">THPT NGUYỄN VĂN CỪ</div></div></div></div></div>
-    <div id="minecraftHotbar" aria-label="Thanh công cụ"><button id="hotbarPhone" class="hotbar-slot active" title="Điện thoại NVC (P)">📱<small>1 • P</small><span id="phoneHotbarBadge" class="hotbar-badge">!</span></button><button id="hotbarStudentCard" class="hotbar-slot" title="Thẻ học sinh">🪪<small>2</small></button><button id="hotbarLuckyCharm" class="hotbar-slot" title="Bùa may mắn - nhấn để tung hiệu ứng">🍀<small>3 • G</small></button></div>
+    <div id="minecraftHotbar" aria-label="Thanh công cụ"><button id="hotbarPhone" class="hotbar-slot active" title="Điện thoại NVC (P)"><span class="mini-phone-back" aria-hidden="true"><i></i><i></i><i></i><b></b></span><small>1 • P</small><span id="phoneHotbarBadge" class="hotbar-badge">!</span></button><button id="hotbarStudentCard" class="hotbar-slot" title="Thẻ học sinh">🪪<small>2</small></button><button id="hotbarLuckyCharm" class="hotbar-slot" title="Bùa may mắn - nhấn để tung hiệu ứng">🍀<small>3 • G</small></button></div>
 
     <!-- NVC PHONE -->
-    <button id="phoneOpenBtn" class="hidden fixed bottom-5 right-5 z-40 pointer-events-auto w-16 h-16 rounded-2xl border-4 border-white bg-gradient-to-br from-cyan-400 to-blue-700 text-3xl shadow-2xl" title="Điện thoại NVC">📱</button>
+    <button id="phoneOpenBtn" class="hidden fixed bottom-5 right-5 z-40 pointer-events-auto" title="Mở điện thoại NVC"><span class="phone-back-device" aria-hidden="true"><i></i><i></i><i></i><b></b></span></button>
     <div id="photoMapLayer" class="fixed inset-0 z-[15] pointer-events-none overflow-hidden"></div>
     <div id="phoneModal" class="hidden fixed inset-0 z-[70] p-2 sm:p-5 flex items-center justify-center">
-      <div class="w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-2xl border-4 border-cyan-300 bg-slate-950 shadow-2xl flex flex-col">
+      <div id="phoneDeviceShell" class="w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-2xl border-4 border-cyan-300 bg-slate-950 shadow-2xl flex flex-col">
+        <div class="phone-statusbar"><span id="phoneClock">9:41</span><span class="phone-dynamic-island"></span><span class="phone-status-icons">NVC&nbsp; ▮▮▮&nbsp; Wi-Fi&nbsp; ▰</span></div>
         <div class="flex items-center justify-between px-4 py-3 bg-slate-900 border-b-2 border-slate-700">
           <div><div class="pixel-font text-xs text-cyan-300">📱 NVC PHONE</div><div id="phoneUserLabel" class="text-sm text-slate-300 mt-1">Đang kết nối...</div></div>
           <button id="phoneCloseBtn" class="text-2xl px-2 text-white">✕</button>
@@ -610,6 +646,7 @@
           </section>
           <div id="phoneGlobalStatus" class="text-xs text-slate-400 mt-3"></div>
         </div>
+        <div class="phone-home-area"><span class="phone-home-indicator"></span></div>
       </div>
     </div>
     <div id="nvcCameraModal" class="hidden fixed inset-0 z-[95] bg-black/95 p-3 flex items-center justify-center" role="dialog" aria-modal="true" aria-label="Camera Locket NVC">
@@ -1700,7 +1737,9 @@
             GATE: 25,
             CARD_BOOTH: 26,
             VOLLEYBALL_COURT: 27,
-            TEACHER_SET: 28
+            TEACHER_SET: 28,
+            BADMINTON_COURT: 29,
+            PICKLEBALL_COURT: 30
         };
 
         const floorsData = {
@@ -1888,6 +1927,14 @@
                     fillRect(49, 44, 55, 52, T.FLOWER_GARDEN);
                     grid[46][51] = T.BIG_TREE;
                     grid[50][53] = T.BIG_TREE;
+
+                    // Khu tưởng niệm Nguyễn Văn Cừ: bệ tượng và khoảng sân thắp hương.
+                    fillRect(58, 46, 62, 51, T.MONUMENT);
+                    fillRect(58, 52, 62, 54, T.PARK_PLAZA);
+
+                    // Hai sân thể thao mới ở khoảng đất trống phía Đông Nam.
+                    fillRect(65, 43, 74, 48, T.BADMINTON_COURT);
+                    fillRect(65, 49, 74, 54, T.PICKLEBALL_COURT);
                 }
 
                 // =========================================================================
@@ -2420,6 +2467,8 @@
             return (
                 tile === T.COURTYARD ||
                 tile === T.VOLLEYBALL_COURT ||
+                tile === T.BADMINTON_COURT ||
+                tile === T.PICKLEBALL_COURT ||
                 tile === T.STAGE ||
                 tile === T.LOGO_PLAZA ||
                 tile === T.CORRIDOR ||
@@ -2552,6 +2601,15 @@
 
             if (state.isSitting) {
                 standUpSafely();
+                return;
+            }
+
+            if (state.nearbyInteractable && state.nearbyInteractable.kind === 'sports_game') {
+                openSportsMiniGame(state.nearbyInteractable.sport);
+                return;
+            }
+            if (state.nearbyInteractable && state.nearbyInteractable.kind === 'memorial') {
+                openMemorialPanel();
                 return;
             }
 
@@ -3437,6 +3495,18 @@
                     ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#e8d8a6' : '#dfd09a';
                     ctx.fillRect(x, y, TILE, TILE);
                     break;
+                case T.BADMINTON_COURT:
+                    ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#7dd3fc' : '#38bdf8';
+                    ctx.fillRect(x, y, TILE, TILE);
+                    ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 1;
+                    ctx.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
+                    break;
+                case T.PICKLEBALL_COURT:
+                    ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#86c96b' : '#72b957';
+                    ctx.fillRect(x, y, TILE, TILE);
+                    ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 1;
+                    ctx.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
+                    break;
 
                 case T.TEACHER_SET:
                     ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#ebe3be' : '#e6ddb4';
@@ -3786,6 +3856,44 @@
             ctx.restore();
         }
 
+        function drawSmallRacketCourt(ctx, x1, y1, x2, y2, color, kind) {
+            const x=x1*TILE+8, y=y1*TILE+8, w=(x2-x1+1)*TILE-16, h=(y2-y1+1)*TILE-16;
+            ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=3; ctx.strokeRect(x,y,w,h);
+            ctx.beginPath(); ctx.moveTo(x+w/2,y); ctx.lineTo(x+w/2,y+h); ctx.stroke();
+            if(kind==='badminton'){
+                ctx.beginPath(); ctx.moveTo(x+w*.22,y); ctx.lineTo(x+w*.22,y+h); ctx.moveTo(x+w*.78,y); ctx.lineTo(x+w*.78,y+h); ctx.stroke();
+                ctx.fillStyle='#334155'; ctx.fillRect(x+w/2-3,y-5,6,h+10);
+                ctx.strokeStyle='rgba(255,255,255,.75)'; ctx.lineWidth=1;
+                for(let yy=y;yy<y+h;yy+=8){ctx.beginPath();ctx.moveTo(x+w/2-8,yy);ctx.lineTo(x+w/2+8,yy);ctx.stroke();}
+            } else {
+                ctx.beginPath(); ctx.moveTo(x+w*.18,y+h*.25); ctx.lineTo(x+w*.82,y+h*.25); ctx.moveTo(x+w*.18,y+h*.75); ctx.lineTo(x+w*.82,y+h*.75); ctx.stroke();
+                ctx.fillStyle='#334155'; ctx.fillRect(x+w/2-3,y-5,6,h+10);
+            }
+            ctx.restore();
+        }
+
+        function drawNVCMonument(ctx, timeSec) {
+            const cx=60.5*TILE, baseY=51.5*TILE;
+            ctx.save();
+            // Bệ tượng nhiều tầng theo phong cách pixel.
+            ctx.fillStyle='#64748b'; ctx.fillRect(cx-78,baseY-34,156,34);
+            ctx.fillStyle='#cbd5e1'; ctx.fillRect(cx-70,baseY-42,140,12);
+            ctx.fillStyle='#475569'; ctx.fillRect(cx-58,baseY-92,116,50);
+            ctx.fillStyle='#94a3b8'; ctx.fillRect(cx-52,baseY-88,104,42);
+            ctx.fillStyle='#f8fafc'; ctx.font='bold 13px "VT323", monospace'; ctx.textAlign='center';
+            ctx.fillText('TƯỢNG NGUYỄN VĂN CỪ',cx,baseY-63);
+            // Tượng nhân vật pixel đặt giữa bệ.
+            drawStudentSprite(ctx,cx,baseY-112,2.45,'male','down',0,timeSec,{hairIdx:0,colorIdx:0,glassesIdx:0,accIdx:0});
+            // Bàn thắp hương phía trước bệ.
+            ctx.fillStyle='#7c2d12'; ctx.fillRect(cx-34,baseY+5,68,12);
+            ctx.fillStyle='#b45309'; ctx.fillRect(cx-29,baseY+2,58,6);
+            ctx.fillStyle='#475569'; ctx.fillRect(cx-25,baseY+17,7,14); ctx.fillRect(cx+18,baseY+17,7,14);
+            ctx.fillStyle='#dc2626'; ctx.fillRect(cx-4,baseY-3,8,7);
+            ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(cx,baseY-8,4+Math.sin(timeSec*5)*1.2,0,Math.PI*2); ctx.fill();
+            ctx.globalAlpha=.45; ctx.fillStyle='#e2e8f0'; ctx.beginPath(); ctx.arc(cx+Math.sin(timeSec*1.8)*4,baseY-22-(timeSec%2)*8,4,0,Math.PI*2); ctx.fill();
+            ctx.restore();
+        }
+
         function renderSingleFloorLayer(floorNum, camX, camY, dt, timeSec, options = {}) {
             const {
                 isAerialLower = false,
@@ -3825,6 +3933,18 @@
             // Vẽ vạch sân & lưới bóng chuyền theo chiều Bắc - Nam tại sân phía Tây (x: 17..34, y: 13..32)
             if (floorNum === 1) {
                 drawVolleyballCourtMarkings(ctx, 17, 13, 34, 32);
+                // Sân bóng đá mini: khung thành, vòng giữa sân và đường biên.
+                const fx = 2 * TILE, fy = 38 * TILE, fw = 15 * TILE, fh = 13 * TILE;
+                ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 4;
+                ctx.strokeRect(fx + 8, fy + 8, fw - 16, fh - 16);
+                ctx.beginPath(); ctx.moveTo(fx + fw/2, fy + 8); ctx.lineTo(fx + fw/2, fy + fh - 8); ctx.stroke();
+                ctx.beginPath(); ctx.arc(fx + fw/2, fy + fh/2, 54, 0, Math.PI*2); ctx.stroke();
+                ctx.strokeRect(fx + 8, fy + fh/2 - 76, 86, 152); ctx.strokeRect(fx + fw - 94, fy + fh/2 - 76, 86, 152);
+                ctx.fillStyle='#f8fafc'; ctx.fillRect(fx + 2, fy + fh/2 - 34, 8, 68); ctx.fillRect(fx + fw - 10, fy + fh/2 - 34, 8, 68);
+                ctx.restore();
+                // Vạch sân cầu lông và pickleball.
+                drawSmallRacketCourt(ctx, 65, 43, 74, 48, '#ffffff', 'badminton');
+                drawSmallRacketCourt(ctx, 65, 49, 74, 54, '#ffffff', 'pickleball');
             }
 
             // Vẽ tán cây lớn đè lên trên mặt sân
@@ -3852,6 +3972,10 @@
                         }
                     });
                 });
+            }
+
+            if (floorNum === 1) {
+                entities.push({ y: 51.5*TILE, draw: () => drawNVCMonument(ctx, timeSec) });
             }
 
             state.npcs.forEach((npc, idx) => {
@@ -4127,6 +4251,9 @@
                     } else if (t === T.VOLLEYBALL_COURT) {
                         miniCtx.fillStyle = '#e5d49c';
                         miniCtx.fillRect(x * sx, y * sy, sx + 0.5, sy + 0.5);
+                    } else if (t === T.BADMINTON_COURT || t === T.PICKLEBALL_COURT) {
+                        miniCtx.fillStyle = t === T.BADMINTON_COURT ? '#38bdf8' : '#72b957';
+                        miniCtx.fillRect(x * sx, y * sy, sx + 0.5, sy + 0.5);
                     } else if (t === T.TEACHER_SET) {
                         miniCtx.fillStyle = '#92400e';
                         miniCtx.fillRect(x * sx, y * sy, sx + 0.5, sy + 0.5);
@@ -4354,6 +4481,18 @@
                     foundInteractable = { kind: 'card_booth' };
                 }
 
+                if (!foundInteractable && ptx >= 58 && ptx <= 62 && pty >= 51 && pty <= 54 && Math.hypot(state.player.x-60.5*TILE,state.player.y-52.5*TILE)<105) {
+                    foundInteractable = { kind: 'memorial' };
+                }
+                if (!foundInteractable && ptx >= 2 && ptx <= 16 && pty >= 38 && pty <= 50) {
+                    foundInteractable = { kind: 'sports_game', sport: 'football' };
+                }
+                if (!foundInteractable && ptx >= 65 && ptx <= 74 && pty >= 43 && pty <= 48) {
+                    foundInteractable = { kind: 'sports_game', sport: 'badminton' };
+                }
+                if (!foundInteractable && ptx >= 65 && ptx <= 74 && pty >= 49 && pty <= 54) {
+                    foundInteractable = { kind: 'sports_game', sport: 'pickleball' };
+                }
                 if (!foundInteractable) {
                     for (const veh of state.vehicles) {
                         if (Math.hypot(state.player.x - veh.x, state.player.y - veh.y) < 52) {
@@ -4386,11 +4525,8 @@
                 }
                 if (!foundInteractable) {
                     const benchTiles = [
-                        { tx: 65, ty: 46, dir: 'left' }, { tx: 65, ty: 47, dir: 'left' },
-                        { tx: 65, ty: 50, dir: 'left' }, { tx: 65, ty: 51, dir: 'left' },
                         { tx: 58, ty: 53, dir: 'up' }, { tx: 59, ty: 53, dir: 'up' }, { tx: 60, ty: 53, dir: 'up' },
                         { tx: 62, ty: 53, dir: 'up' }, { tx: 63, ty: 53, dir: 'up' }, { tx: 64, ty: 53, dir: 'up' },
-                        { tx: 68, ty: 53, dir: 'up' }, { tx: 69, ty: 53, dir: 'up' }, { tx: 70, ty: 53, dir: 'up' },
                         { tx: 39, ty: 44, dir: 'down' }, { tx: 39, ty: 48, dir: 'up' },
                         { tx: 37, ty: 46, dir: 'right' }, { tx: 41, ty: 46, dir: 'left' }
                     ];
@@ -4412,6 +4548,15 @@
                 ctxPrompt.classList.remove('hidden');
                 document.getElementById('contextPromptText').textContent = `${spec.icon} Đang lái: ${spec.name}`;
                 document.getElementById('contextActionBtn').textContent = '🛑 Xuống xe (E)';
+            } else if (foundInteractable && foundInteractable.kind === 'memorial') {
+                ctxPrompt.classList.remove('hidden');
+                document.getElementById('contextPromptText').textContent = '🕯️ Khu tưởng niệm đồng chí Nguyễn Văn Cừ';
+                document.getElementById('contextActionBtn').textContent = '🙏 Thắp hương / Tìm hiểu (E)';
+            } else if (foundInteractable && foundInteractable.kind === 'sports_game') {
+                ctxPrompt.classList.remove('hidden');
+                const names={football:'⚽ Sân bóng đá mini',badminton:'🏸 Sân cầu lông',pickleball:'🥒 Sân Pickleball'};
+                document.getElementById('contextPromptText').textContent = names[foundInteractable.sport];
+                document.getElementById('contextActionBtn').textContent = '🎮 Chơi mini game (E)';
             } else if (foundInteractable && foundInteractable.kind === 'card_booth') {
                 ctxPrompt.classList.remove('hidden');
                 document.getElementById('contextPromptText').textContent = state.hasParkingCard
@@ -5110,7 +5255,9 @@
         const phoneEl = id => document.getElementById(id);
         const phoneStatus = (msg, bad=false) => { const e=phoneEl('phoneGlobalStatus'); if(e){e.textContent=msg;e.className='text-xs mt-3 '+(bad?'text-rose-300':'text-slate-400');} };
         const escText = v => String(v ?? '').slice(0,500);
-        function phoneOpen(tab='friends') { phoneEl('phoneModal').classList.remove('hidden'); phoneSwitchTab(tab); }
+        function updatePhoneClock(){const e=phoneEl('phoneClock');if(e)e.textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});}
+        updatePhoneClock();setInterval(updatePhoneClock,30000);
+        function phoneOpen(tab='friends') { phoneEl('phoneModal').classList.remove('hidden'); updatePhoneClock(); phoneSwitchTab(tab); }
         function phoneClose() { phoneEl('phoneModal').classList.add('hidden'); closeRealCamera(); }
         function phoneSwitchTab(tab) {
             ['friends','messages','locket'].forEach(t=>{phoneEl('phone'+t[0].toUpperCase()+t.slice(1)+'Panel').classList.toggle('hidden',t!==tab);});
@@ -5287,6 +5434,49 @@
         const originalGameLoop=gameLoop;
         gameLoop=function(now){originalGameLoop(now);renderPhotoMapMarkers();};
         // ================= END NVC PHONE =================
+
+        // ================= NVC MEMORIAL + SPORTS MINI GAMES =================
+        (function buildNvcActivityUI(){
+            const style=document.createElement('style');
+            style.textContent=`#nvcActivityOverlay{position:fixed;inset:0;z-index:10050;background:rgba(2,6,23,.78);display:none;align-items:center;justify-content:center;padding:16px;font-family:'VT323',monospace}#nvcActivityCard{width:min(520px,96vw);background:#0f172a;color:#e2e8f0;border:4px solid #e2e8f0;box-shadow:0 0 0 5px #020617;padding:20px;text-align:center}#nvcActivityCard h2{font-family:'Press Start 2P',monospace;font-size:13px;line-height:1.8;color:#67e8f9;margin:4px 0 14px}#nvcActivityCard p{font-size:22px;margin:8px 0}#nvcActivityTrack{height:28px;background:#334155;border:3px solid #e2e8f0;position:relative;margin:22px 0;overflow:hidden}#nvcActivityTarget{position:absolute;left:42%;width:16%;height:100%;background:#22c55e;opacity:.8}#nvcActivityMarker{position:absolute;left:0;top:0;width:10px;height:100%;background:#facc15;animation:nvcSweep 1.65s linear infinite}@keyframes nvcSweep{0%{left:0}100%{left:calc(100% - 10px)}}.nvc-act-btn{background:#0891b2;color:white;border:3px solid white;padding:10px 18px;font-size:22px;margin:6px;cursor:pointer}.nvc-act-btn:active{transform:translateY(2px)}#nvcActivityClose{background:#475569}#nvcMemorialText{font-size:21px;line-height:1.5;text-align:left;background:#1e293b;padding:14px;margin:12px 0}`;
+            document.head.appendChild(style);
+            const overlay=document.createElement('div');overlay.id='nvcActivityOverlay';
+            overlay.innerHTML=`<div id="nvcActivityCard"><h2 id="nvcActivityTitle">HOẠT ĐỘNG NVC</h2><div id="nvcActivityBody"></div><button class="nvc-act-btn" id="nvcActivityClose">Đóng</button></div>`;
+            document.body.appendChild(overlay);
+            document.getElementById('nvcActivityClose').onclick=()=>overlay.style.display='none';
+            overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.style.display='none'});
+        })();
+        function showNvcActivity(title,html){document.getElementById('nvcActivityTitle').textContent=title;document.getElementById('nvcActivityBody').innerHTML=html;document.getElementById('nvcActivityOverlay').style.display='flex';}
+        function openMemorialPanel(){
+            showNvcActivity('TƯỞNG NIỆM NGUYỄN VĂN CỪ',`<div id="nvcMemorialText"><b>Đồng chí Nguyễn Văn Cừ</b> là Tổng Bí thư của Đảng, một nhà lãnh đạo cách mạng tiêu biểu. Khu vực này được xây dựng để học sinh dừng chân, tưởng nhớ và tìm hiểu về cuộc đời, sự nghiệp cách mạng của đồng chí.<br><br>🕯️ <b>Nghi thức:</b> Dành một phút tưởng niệm, sau đó nhấn nút bên dưới để thắp hương tại bàn tưởng niệm.</div><button class="nvc-act-btn" id="nvcIncenseBtn">🕯️ Thắp hương tưởng niệm</button><div id="nvcIncenseStatus" style="font-size:20px;color:#86efac"></div>`);
+            document.getElementById('nvcIncenseBtn').onclick=()=>{document.getElementById('nvcIncenseStatus').textContent='🙏 Bạn đã dành một phút tưởng niệm đồng chí Nguyễn Văn Cừ.';};
+        }
+        function openSportsMiniGame(sport){
+            const config={football:{title:'⚽ SÚT BÓNG VÀO GÔN',desc:'Nhấn SÚT khi vạch vàng nằm trong vùng xanh để ghi bàn.',button:'⚽ SÚT BÓNG',goal:'Ghi bàn'},badminton:{title:'🏸 CẦU LÔNG',desc:'Canh lúc cầu bay vào vùng xanh rồi nhấn ĐÁNH CẦU. Cố gắng đạt 5 lần chính xác.',button:'🏸 ĐÁNH CẦU',goal:'Pha cầu chính xác'},pickleball:{title:'🥒 PICKLEBALL RALLY',desc:'Giữ nhịp và nhấn ĐÁNH để trả bóng qua lưới 5 lần liên tiếp.',button:'🥒 ĐÁNH BÓNG',goal:'Lượt trả bóng'}}[sport];
+            let score=0,tries=0,finished=false;
+            showNvcActivity(config.title,`<p>${config.desc}</p><div id="nvcActivityTrack"><div id="nvcActivityTarget"></div><div id="nvcActivityMarker"></div></div><p id="nvcActivityScore">${sport==='football'?'Số bàn: 0/3':'Điểm: 0/5'}</p><button class="nvc-act-btn" id="nvcSportAction">${config.button}</button><p id="nvcSportFeedback" style="color:#fde68a"></p>`);
+            const action=document.getElementById('nvcSportAction');
+            action.onclick=()=>{
+                if(finished)return;
+                if(sport==='pickleball'){
+                    score++; document.getElementById('nvcSportFeedback').textContent=score<5?'Đỡ bóng thành công! Tiếp tục giữ nhịp.':'Tuyệt vời! Bạn hoàn thành một rally 5 lượt.';
+                } else {
+                    const track=document.getElementById('nvcActivityTrack').getBoundingClientRect();
+                    const marker=document.getElementById('nvcActivityMarker').getBoundingClientRect();
+                    const pos=(marker.left+marker.width/2-track.left)/track.width;
+                    const good=pos>=.40&&pos<=.60;
+                    tries++;
+                    if(good)score++;
+                    document.getElementById('nvcSportFeedback').textContent=good?(sport==='football'?'⚽ VÀO GÔN!':'🏸 Đánh trúng cầu!'):'Chưa đúng nhịp, thử lại nhé!';
+                }
+                document.getElementById('nvcActivityScore').textContent=sport==='football'?`Số bàn: ${score}/3 · Lượt sút: ${tries}`:`Điểm: ${score}/5`;
+                if((sport==='football'&&score>=3)||(sport==='badminton'&&score>=5)||(sport==='pickleball'&&score>=5)){
+                    finished=true;document.getElementById('nvcSportFeedback').textContent+=' 🏆 Bạn đã hoàn thành mini game!';action.disabled=true;action.style.opacity='.5';
+                }
+                if(sport==='football'&&tries>=8&&score<3){finished=true;document.getElementById('nvcSportFeedback').textContent+=' Hết lượt! Hãy thử lại lần sau.';action.disabled=true;}
+            };
+        }
+        // ================= END NVC ACTIVITIES =================
 
         window.onload = function () {
             updateCustomizerLabels();
