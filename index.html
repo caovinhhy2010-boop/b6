@@ -5455,7 +5455,7 @@
         // ================= NVC MEMORIAL + SPORTS MINI GAMES =================
         (function buildNvcActivityUI(){
             const style=document.createElement('style');
-            style.textContent=`#nvcActivityOverlay{position:fixed;inset:0;z-index:10050;background:rgba(2,6,23,.78);display:none;align-items:center;justify-content:center;padding:16px;font-family:'VT323',monospace}#nvcActivityCard{width:min(520px,96vw);background:#0f172a;color:#e2e8f0;border:4px solid #e2e8f0;box-shadow:0 0 0 5px #020617;padding:20px;text-align:center}#nvcActivityCard h2{font-family:'Press Start 2P',monospace;font-size:13px;line-height:1.8;color:#67e8f9;margin:4px 0 14px}#nvcActivityCard p{font-size:22px;margin:8px 0}#nvcActivityTrack{height:28px;background:#334155;border:3px solid #e2e8f0;position:relative;margin:22px 0;overflow:hidden}#nvcActivityTarget{position:absolute;left:42%;width:16%;height:100%;background:#22c55e;opacity:.8}#nvcActivityMarker{position:absolute;left:0;top:0;width:10px;height:100%;background:#facc15;animation:nvcSweep 1.65s linear infinite}@keyframes nvcSweep{0%{left:0}100%{left:calc(100% - 10px)}}.nvc-act-btn{background:#0891b2;color:white;border:3px solid white;padding:10px 18px;font-size:22px;margin:6px;cursor:pointer}.nvc-act-btn:active{transform:translateY(2px)}#nvcActivityClose{background:#475569}#nvcMemorialText{font-size:21px;line-height:1.5;text-align:left;background:#1e293b;padding:14px;margin:12px 0}`;
+            style.textContent=`#nvcActivityOverlay{position:fixed;inset:0;z-index:10050;background:rgba(2,6,23,.78);display:none;align-items:center;justify-content:center;padding:16px;font-family:'VT323',monospace}#nvcActivityCard{width:min(520px,96vw);background:#0f172a;color:#e2e8f0;border:4px solid #e2e8f0;box-shadow:0 0 0 5px #020617;padding:20px;text-align:center}#nvcActivityCard h2{font-family:'Press Start 2P',monospace;font-size:13px;line-height:1.8;color:#67e8f9;margin:4px 0 14px}#nvcActivityCard p{font-size:22px;margin:8px 0}#nvcActivityTrack{height:28px;background:#334155;border:3px solid #e2e8f0;position:relative;margin:22px 0;overflow:hidden}#nvcActivityTarget{position:absolute;left:42%;width:16%;height:100%;background:#22c55e;opacity:.8}#nvcActivityMarker{position:absolute;left:0;top:0;width:10px;height:100%;background:#facc15;animation:nvcSweep 1.65s linear infinite}@keyframes nvcSweep{0%{left:0}100%{left:calc(100% - 10px)}}.nvc-act-btn{background:#0891b2;color:white;border:3px solid white;padding:10px 18px;font-size:22px;margin:6px;cursor:pointer}.nvc-act-btn:active{transform:translateY(2px)}#nvcActivityClose{background:#475569}#nvcMemorialText{font-size:21px;line-height:1.5;text-align:left;background:#1e293b;padding:14px;margin:12px 0}#nvcSportHud{display:flex;justify-content:space-between;font: bold 18px sans-serif;color:#f8fafc;background:#1e293b;padding:9px;border-radius:8px}#nvcSportCanvas{display:block;width:100%;height:auto;max-height:42vh;background:#14532d;border:3px solid #cbd5e1;border-radius:8px;margin:10px auto;image-rendering:pixelated}#nvcSportControls{display:flex;flex-direction:column;align-items:center;gap:6px}.nvc-sport-row{display:flex;flex-wrap:wrap;justify-content:center}.nvc-sport-row .nvc-act-btn{font-size:17px;padding:7px 10px}#nvcPowerWrap{display:flex;align-items:center;gap:8px;width:100%;justify-content:center;font: bold 15px sans-serif}#nvcPower{width:48%;accent-color:#22c55e}`;
             document.head.appendChild(style);
             const overlay=document.createElement('div');overlay.id='nvcActivityOverlay';
             overlay.innerHTML=`<div id="nvcActivityCard"><h2 id="nvcActivityTitle">HOẠT ĐỘNG NVC</h2><div id="nvcActivityBody"></div><button class="nvc-act-btn" id="nvcActivityClose">Đóng</button></div>`;
@@ -5468,30 +5468,52 @@
             showNvcActivity('TƯỞNG NIỆM NGUYỄN VĂN CỪ',`<div id="nvcMemorialText"><b>Đồng chí Nguyễn Văn Cừ</b> là Tổng Bí thư của Đảng, một nhà lãnh đạo cách mạng tiêu biểu. Khu vực này được xây dựng để học sinh dừng chân, tưởng nhớ và tìm hiểu về cuộc đời, sự nghiệp cách mạng của đồng chí.<br><br>🕯️ <b>Nghi thức:</b> Dành một phút tưởng niệm, sau đó nhấn nút bên dưới để thắp hương tại bàn tưởng niệm.</div><button class="nvc-act-btn" id="nvcIncenseBtn">🕯️ Thắp hương tưởng niệm</button><div id="nvcIncenseStatus" style="font-size:20px;color:#86efac"></div>`);
             document.getElementById('nvcIncenseBtn').onclick=()=>{document.getElementById('nvcIncenseStatus').textContent='🙏 Bạn đã dành một phút tưởng niệm đồng chí Nguyễn Văn Cừ.';};
         }
+        let nvcSportFrame = 0;
         function openSportsMiniGame(sport){
-            const config={football:{title:'⚽ SÚT BÓNG VÀO GÔN',desc:'Nhấn SÚT khi vạch vàng nằm trong vùng xanh để ghi bàn.',button:'⚽ SÚT BÓNG',goal:'Ghi bàn'},badminton:{title:'🏸 CẦU LÔNG',desc:'Canh lúc cầu bay vào vùng xanh rồi nhấn ĐÁNH CẦU. Cố gắng đạt 5 lần chính xác.',button:'🏸 ĐÁNH CẦU',goal:'Pha cầu chính xác'},pickleball:{title:'🥒 PICKLEBALL RALLY',desc:'Giữ nhịp và nhấn ĐÁNH để trả bóng qua lưới 5 lần liên tiếp.',button:'🥒 ĐÁNH BÓNG',goal:'Lượt trả bóng'}}[sport];
-            let score=0,tries=0,finished=false;
-            showNvcActivity(config.title,`<p>${config.desc}</p><div id="nvcActivityTrack"><div id="nvcActivityTarget"></div><div id="nvcActivityMarker"></div></div><p id="nvcActivityScore">${sport==='football'?'Số bàn: 0/3':'Điểm: 0/5'}</p><button class="nvc-act-btn" id="nvcSportAction">${config.button}</button><p id="nvcSportFeedback" style="color:#fde68a"></p>`);
-            const action=document.getElementById('nvcSportAction');
-            action.onclick=()=>{
-                if(finished)return;
-                if(sport==='pickleball'){
-                    score++; document.getElementById('nvcSportFeedback').textContent=score<5?'Đỡ bóng thành công! Tiếp tục giữ nhịp.':'Tuyệt vời! Bạn hoàn thành một rally 5 lượt.';
-                } else {
-                    const track=document.getElementById('nvcActivityTrack').getBoundingClientRect();
-                    const marker=document.getElementById('nvcActivityMarker').getBoundingClientRect();
-                    const pos=(marker.left+marker.width/2-track.left)/track.width;
-                    const good=pos>=.40&&pos<=.60;
-                    tries++;
-                    if(good)score++;
-                    document.getElementById('nvcSportFeedback').textContent=good?(sport==='football'?'⚽ VÀO GÔN!':'🏸 Đánh trúng cầu!'):'Chưa đúng nhịp, thử lại nhé!';
-                }
-                document.getElementById('nvcActivityScore').textContent=sport==='football'?`Số bàn: ${score}/3 · Lượt sút: ${tries}`:`Điểm: ${score}/5`;
-                if((sport==='football'&&score>=3)||(sport==='badminton'&&score>=5)||(sport==='pickleball'&&score>=5)){
-                    finished=true;document.getElementById('nvcSportFeedback').textContent+=' 🏆 Bạn đã hoàn thành mini game!';action.disabled=true;action.style.opacity='.5';
-                }
-                if(sport==='football'&&tries>=8&&score<3){finished=true;document.getElementById('nvcSportFeedback').textContent+=' Hết lượt! Hãy thử lại lần sau.';action.disabled=true;}
-            };
+            if(nvcSportFrame) cancelAnimationFrame(nvcSportFrame);
+            const cfg={
+              football:{title:'⚽ THỬ THÁCH SÚT PHẠT',sub:'Chọn góc sút, canh lực và đánh bại thủ môn. Ghi 3 bàn trong 5 lượt!',action:'SÚT BÓNG'},
+              badminton:{title:'🏸 TRẬN CẦU LÔNG',sub:'Di chuyển trái/phải để đón cầu. Nhấn ĐÁNH khi cầu vào vùng xanh. Ghi 5 điểm trước khi mất 3 lượt!',action:'ĐÁNH CẦU'},
+              pickleball:{title:'🥒 PICKLEBALL RALLY',sub:'Chọn vị trí đón bóng, canh nhịp trả bóng qua lưới. Ghi 7 điểm trước khi mất 3 lượt!',action:'ĐÁNH BÓNG'}
+            }[sport];
+            let score=0, misses=0, shots=0, lane=1, power=65, phase=0, ballX=0, ballY=0, last=0, running=true, feedback='Sẵn sàng vào trận!';
+            showNvcActivity(cfg.title,`<p>${cfg.sub}</p><div id="nvcSportHud"><b id="nvcSportScore">TỈ SỐ 0</b><span id="nvcSportLives">❤️ ❤️ ❤️</span></div><canvas id="nvcSportCanvas" width="640" height="340" aria-label="Sân chơi mini game"></canvas><div id="nvcSportControls"><div class="nvc-sport-row"><button class="nvc-act-btn" id="nvcLaneLeft">◀ TRÁI</button><button class="nvc-act-btn" id="nvcLaneMid">GIỮA</button><button class="nvc-act-btn" id="nvcLaneRight">PHẢI ▶</button></div><div id="nvcPowerWrap"><label for="nvcPower">LỰC SÚT</label><input id="nvcPower" type="range" min="25" max="100" value="65"><b id="nvcPowerValue">65%</b></div><button class="nvc-act-btn" id="nvcSportAction">${cfg.action}</button></div><p id="nvcSportFeedback" style="color:#fde68a;min-height:30px">${feedback}</p><p style="font-size:16px;color:#94a3b8">Dùng ← → hoặc các nút để chọn hướng • Space để thực hiện</p>`);
+            const $=id=>document.getElementById(id), cv=$('nvcSportCanvas'), cx=cv.getContext('2d');
+            const isFootball=sport==='football';
+            $('nvcPowerWrap').style.display=isFootball?'flex':'none';
+            const setLane=n=>{lane=Math.max(0,Math.min(2,n));['nvcLaneLeft','nvcLaneMid','nvcLaneRight'].forEach((id,i)=>$(id).style.background=i===lane?'#0e7490':'#334155');};
+            setLane(1);
+            $('nvcPower').oninput=e=>{$('nvcPowerValue').textContent=e.target.value+'%';power=+e.target.value;};
+            $('nvcLaneLeft').onclick=()=>setLane(0);$('nvcLaneMid').onclick=()=>setLane(1);$('nvcLaneRight').onclick=()=>setLane(2);
+            function updateHud(){ $('nvcSportScore').textContent=isFootball?`BÀN ${score}/3 · LƯỢT ${shots}/5`:`ĐIỂM ${score}/${sport==='badminton'?5:7}`; $('nvcSportLives').textContent='❤️ '.repeat(Math.max(0,3-misses))+'🖤 '.repeat(misses); }
+            function draw(){
+              const w=cv.width,h=cv.height;cx.clearRect(0,0,w,h);
+              if(isFootball){
+                cx.fillStyle='#166534';cx.fillRect(0,0,w,h);cx.strokeStyle='rgba(255,255,255,.8)';cx.lineWidth=4;cx.strokeRect(36,24,w-72,h-48);cx.strokeRect(190,24,260,90);cx.strokeRect(245,24,150,48);
+                cx.fillStyle='#e2e8f0';cx.fillRect(225,28,190,12);cx.fillStyle='#ef4444';let gx=320+Math.sin(phase*.035)*125;cx.fillRect(gx-25,80,50,18);cx.fillStyle='#facc15';cx.beginPath();cx.arc(320+(lane-1)*95,250,12,0,Math.PI*2);cx.fill();
+                cx.fillStyle='#fff';cx.font='bold 20px sans-serif';cx.textAlign='center';cx.fillText('CHỌN GÓC: '+['TRÁI','GIỮA','PHẢI'][lane]+'  •  THỦ MÔN ĐANG DI CHUYỂN',320,315);
+              }else{
+                cx.fillStyle=sport==='badminton'?'#075985':'#15803d';cx.fillRect(0,0,w,h);cx.strokeStyle='#fff';cx.lineWidth=3;cx.strokeRect(30,20,w-60,h-40);cx.beginPath();cx.moveTo(320,20);cx.lineTo(320,h-20);cx.stroke();
+                cx.fillStyle='#e2e8f0';cx.fillRect(315,55,10,230);cx.fillStyle='#0f172a';cx.fillRect(35,160,570,5);
+                const moving=(phase%240)/240;ballX=sport==='badminton'?70+moving*500:70+moving*500;ballY=160+Math.sin(phase*.08)*85;
+                cx.fillStyle='#facc15';cx.beginPath();cx.arc(ballX,ballY,sport==='badminton'?9:12,0,Math.PI*2);cx.fill();
+                cx.fillStyle='#f8fafc';cx.font='bold 19px sans-serif';cx.textAlign='center';cx.fillText('VỊ TRÍ ĐÓN: '+['TRÁI','GIỮA','PHẢI'][lane],320,320);
+                cx.fillStyle='#38bdf8';cx.fillRect(70+lane*230,265,70,12);
+              }
+              phase++; if(running)nvcSportFrame=requestAnimationFrame(draw);
+            }
+            function finishCheck(){updateHud();if((isFootball&&score>=3)||(!isFootball&&score>=(sport==='badminton'?5:7))){running=false;$('nvcSportFeedback').textContent='🏆 XUẤT SẮC! Bạn đã thắng thử thách. Nhấn Đóng để trở lại sân.';$('nvcSportAction').disabled=true;return true;}if(misses>=3||(isFootball&&shots>=5)){running=false;$('nvcSportFeedback').textContent='Hết lượt! Bạn có thể đóng và thử lại để phá kỷ lục.';$('nvcSportAction').disabled=true;return true;}return false;}
+            function play(){if(!running)return;
+              if(isFootball){shots++;const goalie=320+Math.sin(phase*.035)*125;const target=320+(lane-1)*95;const distance=Math.abs(target-goalie);const powerBonus=power>=48&&power<=82;const goal=distance>42&&powerBonus;if(goal){score++;$('nvcSportFeedback').textContent='⚽ VÀO!!! Cú sút hiểm hóc, thủ môn không kịp cản!';}else{misses++;$('nvcSportFeedback').textContent=distance<=42?'🧤 Thủ môn đoán đúng hướng! Hãy đổi góc sút.':'Bóng đi thiếu lực hoặc quá mạnh! Canh lực 48–82%.';}}
+              else {const windowCenter=lane===0?155:lane===1?320:485;const timing=Math.abs(ballX-windowCenter);const inWindow=timing<65;const rightSide=(sport==='badminton'?ballX<330:ballX>300);if(inWindow&&rightSide){score++;$('nvcSportFeedback').textContent=sport==='badminton'?'🏸 PHA ĐẬP CẦU CHUẨN XÁC!':'🥒 TRẢ BÓNG GỌN! Đối thủ chưa kịp phản công.';}else{misses++;$('nvcSportFeedback').textContent='Trượt nhịp rồi! Đổi vị trí và đợi bóng/cầu đến gần.';}}
+              finishCheck();
+            }
+            $('nvcSportAction').onclick=play;
+            const keyHandler=e=>{if($('nvcActivityOverlay').style.display!=='flex')return;if(e.key==='ArrowLeft'){e.preventDefault();setLane(lane-1);}if(e.key==='ArrowRight'){e.preventDefault();setLane(lane+1);}if(e.code==='Space'){e.preventDefault();play();}};
+            window.addEventListener('keydown',keyHandler);
+            const oldClose=$('nvcActivityClose').onclick;
+            $('nvcActivityClose').onclick=()=>{running=false;cancelAnimationFrame(nvcSportFrame);window.removeEventListener('keydown',keyHandler);$('nvcActivityOverlay').style.display='none';};
+            draw();updateHud();
         }
         // ================= END NVC ACTIVITIES =================
 
