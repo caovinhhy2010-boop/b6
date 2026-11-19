@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>THPT Nguyễn Văn Cừ - Pixel Adventure 2D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -119,6 +118,79 @@
         #phoneModal:not(.hidden){display:flex!important}
         #photoViewModal{z-index:90}
         @media(max-width:600px){.hotbar-slot{width:52px;height:52px}.hotbar-slot:nth-child(3){display:flex}#minecraftHotbar{bottom:8px;gap:4px;padding:5px}#phoneModal{padding-bottom:76px!important}}
+
+
+        /* ================= NVC MOBILE-FIRST UI ================= */
+        :root { --nvc-safe-top: env(safe-area-inset-top, 0px); --nvc-safe-bottom: env(safe-area-inset-bottom, 0px); }
+        html, body { min-height: 100%; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+        button, input, textarea, select { font: inherit; }
+        button { touch-action: manipulation; }
+        @media (max-width: 700px) {
+            body { font-size: 16px; }
+            #menuOverlay { padding: calc(10px + var(--nvc-safe-top)) 10px calc(12px + var(--nvc-safe-bottom)); }
+            #menuOverlay > div:first-child { gap: 8px; align-items: flex-start; }
+            #menuOverlay > div:first-child > div { max-width: calc(100vw - 92px); font-size: 13px; line-height: 1.35; }
+            #menuOverlay > div:first-child button { min-height: 42px; padding: 7px 9px; font-size: 13px; }
+            #mobileControls { bottom: calc(82px + var(--nvc-safe-bottom)) !important; left: 12px !important; right: 12px !important; }
+            #joystickBase { width: clamp(104px, 29vw, 132px) !important; height: clamp(104px, 29vw, 132px) !important; }
+            #joystickKnob { width: 48px !important; height: 48px !important; left: calc(50% - 24px) !important; top: calc(50% - 24px) !important; }
+            #mobileInteractBtn { width: 62px !important; height: 62px !important; font-size: 15px !important; }
+            #mobileStairBtns button { width: 50px !important; height: 50px !important; }
+            #minecraftHotbar { bottom: calc(8px + var(--nvc-safe-bottom)); gap: 4px; padding: 5px; border-width: 2px; }
+            .hotbar-slot { width: 48px; height: 48px; font-size: 22px; border-width: 2px; }
+            .hotbar-slot small { font-size: 9px; }
+            #onlineHudBadge { top: calc(8px + var(--nvc-safe-top)); bottom: auto; left: 8px; padding: 5px 8px; font-size: 11px; }
+            #phoneOpenBtn { right: 12px; bottom: calc(76px + var(--nvc-safe-bottom)); width: 52px; height: 52px; font-size: 25px; border-width: 3px; }
+            /* Phone becomes a near-fullscreen app, with a fixed header and tabs. */
+            #phoneModal { padding: 0 !important; align-items: stretch !important; justify-content: stretch !important; background: rgba(2,6,23,.78) !important; pointer-events: auto !important; }
+            #phoneModal > div { width: 100% !important; max-width: none !important; height: 100dvh !important; max-height: 100dvh !important; border: 0 !important; border-radius: 0 !important; padding-bottom: var(--nvc-safe-bottom); box-shadow: none !important; }
+            #phoneModal > div > div:first-child { flex: 0 0 auto; padding: calc(10px + var(--nvc-safe-top)) 14px 10px !important; }
+            #phoneModal > div > div:nth-child(2) { position: sticky; top: 0; z-index: 2; flex: 0 0 auto; gap: 6px; padding: 8px 10px !important; }
+            .phone-tab { min-height: 46px; padding: 9px 4px !important; font-size: 13px !important; border-width: 2px !important; }
+            #phoneModal > div > div:nth-child(3) { padding: 12px !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+            #phoneModal input, #phoneModal textarea { min-height: 46px; font-size: 16px !important; }
+            #phoneModal textarea { min-height: 76px; }
+            #phoneModal button { min-height: 44px; }
+            #chatMessages { height: min(42vh, 360px) !important; }
+            #locketPreview { max-height: 34vh !important; }
+            #myPhotoPosts { grid-template-columns: repeat(3,minmax(0,1fr)); }
+            #nvcCameraModal { padding: calc(8px + var(--nvc-safe-top)) 8px calc(8px + var(--nvc-safe-bottom)) !important; align-items: stretch !important; }
+            #nvcCameraModal > div { width: 100% !important; max-width: none !important; height: 100% !important; max-height: none !important; display: flex; flex-direction: column; justify-content: space-between; padding: 12px !important; border-width: 2px !important; border-radius: 16px !important; }
+            #nvcCameraModal > div > div:nth-child(2) { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+            #nvcCameraVideo { width: 100%; max-height: 100% !important; height: auto; object-fit: contain; border-radius: 12px; }
+            #nvcCameraSwitch, #nvcCameraCapture { min-height: 54px; font-size: 16px; }
+            #nvcCameraModal p:last-child { font-size: 11px; line-height: 1.35; }
+            #photoViewModal { padding: 8px !important; padding-top: calc(8px + var(--nvc-safe-top)) !important; padding-bottom: calc(8px + var(--nvc-safe-bottom)) !important; }
+            #photoViewModal > div { max-height: 100%; overflow-y: auto; padding: 12px !important; border-width: 2px !important; }
+            #photoViewImage { max-height: 58dvh !important; }
+            #studentCardModal { padding: 12px !important; padding-top: calc(12px + var(--nvc-safe-top)) !important; }
+            #playerIdentityModal { padding: 12px !important; padding-top: calc(12px + var(--nvc-safe-top)) !important; }
+            #playerIdentityModal > div { max-height: 92dvh; overflow-y: auto; padding: 16px !important; }
+            .pixel-btn { min-height: 44px; }
+        }
+        @media (max-width: 380px) {
+            .hotbar-slot { width: 43px; height: 45px; }
+            #minecraftHotbar { gap: 3px; }
+            .phone-tab { font-size: 11px !important; }
+            #menuOverlay > div:first-child > div { font-size: 11px; padding: 6px 7px; }
+        }
+        @media (max-height: 520px) and (orientation: landscape) {
+            #mobileControls { bottom: calc(54px + var(--nvc-safe-bottom)) !important; }
+            #joystickBase { width: 88px !important; height: 88px !important; }
+            #joystickKnob { width: 40px !important; height: 40px !important; left: calc(50% - 20px) !important; top: calc(50% - 20px) !important; }
+            #mobileInteractBtn { width: 52px !important; height: 52px !important; }
+            #minecraftHotbar { bottom: calc(4px + var(--nvc-safe-bottom)); }
+            .hotbar-slot { width: 40px; height: 40px; font-size: 18px; }
+            #phoneModal > div > div:nth-child(3) { padding: 8px !important; }
+            #nvcCameraModal > div { padding: 8px !important; }
+            #nvcCameraStatus { font-size: 10px; }
+            #nvcCameraModal p:last-child { display: none; }
+        }
+        @media (hover: none) and (pointer: coarse) {
+            button, .phone-tab, .hotbar-slot { -webkit-touch-callout: none; }
+            .pixel-btn:hover { transform: none; }
+        }
+
     </style>
 </head>
 <body class="relative w-screen h-screen overflow-hidden text-white">
@@ -4659,7 +4731,11 @@
             updateHudInfo();
         }
 
-        document.getElementById('leaveOnlineBtn').addEventListener('click', () => disconnectMultiplayer(true));
+        document.getElementById('leaveOnlineBtn').addEventListener('click', () => {
+            // Nút rời thế giới chung đưa người chơi về menu; có thể vào lại bất cứ lúc nào.
+            if (state.mode === 'PLAYING') document.getElementById('backToMenuBtn').click();
+            else disconnectMultiplayer(true);
+        });
         // Tự động tham gia thế giới chung ngay khi mở game.
         window.addEventListener('load', () => setTimeout(connectToPublicWorld, 700));
 
@@ -4867,7 +4943,15 @@
             const cls=document.getElementById('joinPlayerClass').value.trim().replace(/[<>]/g,'').slice(0,12);
             if(!name||!cls){document.getElementById('identityError').textContent='Vui lòng nhập cả tên người chơi và lớp.';return;}
             nvcStudentName=name;nvcStudentClass=cls;document.getElementById('onlineName').value=name;
-            document.getElementById('playerIdentityModal').classList.add('hidden');enterGame();
+            document.getElementById('playerIdentityModal').classList.add('hidden');
+            // Mỗi lần xác nhận vào game: nếu đã rời thế giới chung thì kết nối lại.
+            // connectToPublicWorld() sẽ gọi enterGame() sau khi Supabase báo SUBSCRIBED.
+            if (multiplayer.connected && multiplayer.channel) {
+                enterGame();
+            } else {
+                onlineStatus('Đang quay lại thế giới chung NVC...', 'text-amber-300');
+                connectToPublicWorld();
+            }
             document.getElementById('minecraftHotbar').style.display='flex';
             document.getElementById('studentCardName').textContent=name;document.getElementById('studentCardClass').textContent='Lớp: '+cls;
             setTimeout(()=>{const c=document.getElementById('studentCardPreview');if(c){const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);renderActivePlayerSprite(x,45,88,2.1,'down',0,0);}},100);
@@ -4881,6 +4965,7 @@
         document.getElementById('backToMenuBtn').addEventListener('click', () => {
             audio.playClick();
             state.mode = 'MENU';
+            // Thoát về menu để đổi skin; lần nhấn Bắt đầu tiếp theo sẽ tự kết nối lại.
             disconnectMultiplayer(true);
             ['TouchUp','TouchDown','TouchLeft','TouchRight'].forEach(k => state.keys[k] = false);
             state.interiorScene = null;
