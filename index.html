@@ -226,6 +226,104 @@
           .phone-back-device i{width:8px;height:8px}.phone-back-device i:nth-child(1){top:6px;left:6px}.phone-back-device i:nth-child(2){top:15px;left:6px}.phone-back-device i:nth-child(3){top:10px;left:16px}
         }
         @media(max-height:520px) and (orientation:landscape){#phoneModal>div#phoneDeviceShell{height:96dvh!important;width:min(420px,75vw)!important}}
+
+        /* ================= MOBILE / IPHONE USABILITY PASS ================= */
+        @media (max-width: 700px) {
+            html, body { width:100%; height:100%; height:100dvh; overflow:hidden; }
+            body { padding:0; }
+            canvas#gameCanvas { width:100vw; height:100dvh; display:block; touch-action:none; }
+
+            /* Menu: allow scrolling instead of clipping controls on short screens. */
+            #menuOverlay {
+                position:fixed; inset:0; height:100dvh; min-height:100dvh;
+                overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain;
+                justify-content:flex-start; gap:12px;
+                padding:calc(10px + var(--nvc-safe-top)) 10px calc(12px + var(--nvc-safe-bottom));
+            }
+            #menuOverlay > div:first-child { width:100%; flex-wrap:wrap; align-items:center; }
+            #menuOverlay > div:first-child > div { max-width:calc(100% - 112px); font-size:clamp(10px, 3vw, 13px); }
+            #menuOverlay > div:first-child button { flex:0 0 auto; }
+            #menuOverlay > div:nth-child(2) { width:100%; max-width:440px; margin: auto 0 !important; padding-left:0; padding-right:0; }
+            #menuOverlay > div:nth-child(2) > div:first-child { margin-bottom:12px; padding:10px 12px; }
+            #menuOverlay > div:nth-child(2) > div:first-child h1 { font-size:clamp(10px, 3vw, 13px); }
+            #menuOverlay > div:nth-child(2) > button { min-height:56px; }
+            #menuOverlay > div:last-child { margin-top:auto; max-width:100%; text-align:center; font-size:14px; line-height:1.35; }
+
+            /* Game HUD: reserve separate zones so the map never covers the location panel. */
+            #gameHud > div:first-child { top:calc(7px + var(--nvc-safe-top)); left:7px; gap:6px; width:calc(100vw - 132px); max-width:calc(100vw - 132px); }
+            #gameHud > div:first-child > div:first-child { padding:7px 8px; gap:4px; border-width:1px; }
+            #hudFloorBadge { font-size:9px; padding:5px 6px; }
+            #hudLocationName { font-size:15px; }
+            #hudWingTag, #hudFloorDesc { font-size:10px; line-height:1.2; }
+            #gameHud > div:first-child > div:nth-child(2) { gap:5px; }
+            #backToMenuBtn, #inGameSettingsBtn { min-height:38px; padding:5px 8px; font-size:13px; }
+            #gameHud > div.fixed.top-3.right-3 { top:calc(7px + var(--nvc-safe-top)); right:7px; width:116px; padding:5px; border-width:1px; }
+            #gameHud > div.fixed.top-3.right-3 > div:first-child span:first-child { font-size:7px; }
+            #minimapCanvas { width:104px !important; height:64px !important; }
+            #gameHud > div.fixed.top-3.right-3 > div:last-child { font-size:10px; margin-top:3px; }
+
+            /* One clear control zone at the bottom. The phone is opened from the hotbar. */
+            #mobileControls {
+                left:10px !important; right:10px !important;
+                bottom:calc(78px + var(--nvc-safe-bottom)) !important;
+                align-items:flex-end; z-index:45;
+            }
+            #joystickBase { width:clamp(94px, 27vw, 116px) !important; height:clamp(94px, 27vw, 116px) !important; border-width:3px; }
+            #joystickKnob { width:44px !important; height:44px !important; left:calc(50% - 22px) !important; top:calc(50% - 22px) !important; border-width:3px; }
+            #mobileControls > div:last-child { gap:8px; }
+            #mobileInteractBtn { width:60px !important; height:60px !important; min-height:60px; font-size:14px !important; border-width:3px; }
+            #mobileStairBtns { gap:6px; }
+            #mobileStairBtns button { width:44px !important; height:44px !important; min-height:44px; border-width:2px; }
+            body.touch #contextPrompt { bottom:calc(194px + var(--nvc-safe-bottom)) !important; max-width:calc(100vw - 24px); padding:7px 10px; z-index:35; }
+            body.touch #contextPromptText { font-size:14px; line-height:1.25; }
+            body.touch #contextActionBtn { display:none !important; }
+            body.touch #stairPrompt { bottom:calc(194px + var(--nvc-safe-bottom)) !important; max-width:calc(100vw - 24px); padding:8px; z-index:35; }
+            body.touch #stairPromptSub { font-size:11px; line-height:1.25; }
+            body.touch #stairPrompt button { min-height:38px; padding:5px 8px; font-size:12px; }
+
+            #minecraftHotbar {
+                display:none; left:50%; bottom:calc(6px + var(--nvc-safe-bottom));
+                transform:translateX(-50%); gap:4px; padding:4px;
+                z-index:60; max-width:calc(100vw - 18px);
+            }
+            .hotbar-slot { width:46px; height:46px; min-width:46px; min-height:46px; font-size:20px; }
+            .hotbar-slot small { font-size:8px; }
+            /* Avoid a second floating phone button covering the action button. */
+            body.touch #phoneOpenBtn { display:none !important; }
+            #onlineHudBadge { left:7px; bottom:calc(7px + var(--nvc-safe-bottom)); max-width:calc(100vw - 180px); white-space:normal; font-size:10px; padding:4px 6px; }
+
+            /* All dialogs stay inside the visible iPhone area and remain scrollable. */
+            #skinModal, #settingsModal { align-items:flex-start !important; overflow-y:auto !important; padding:calc(10px + var(--nvc-safe-top)) 10px calc(12px + var(--nvc-safe-bottom)) !important; }
+            #skinModal > div, #settingsModal > div { max-height:none !important; width:100% !important; margin:auto 0; }
+            #playerIdentityModal, #studentCardModal { overflow-y:auto; }
+            input, textarea, select { font-size:16px !important; }
+            button { -webkit-tap-highlight-color:transparent; }
+        }
+        @media (max-width:380px) {
+            #gameHud > div:first-child { width:calc(100vw - 118px); max-width:calc(100vw - 118px); }
+            #gameHud > div.fixed.top-3.right-3 { width:106px; }
+            #minimapCanvas { width:94px !important; height:57px !important; }
+            #joystickBase { width:92px !important; height:92px !important; }
+            #mobileInteractBtn { width:54px !important; height:54px !important; min-height:54px; }
+            .hotbar-slot { width:42px; min-width:42px; height:44px; min-height:44px; }
+            #onlineHudBadge { max-width:calc(100vw - 158px); }
+        }
+        @media (max-height:520px) and (orientation:landscape) and (max-width:900px) {
+            #menuOverlay { gap:6px; padding-top:calc(5px + var(--nvc-safe-top)); padding-bottom:calc(5px + var(--nvc-safe-bottom)); }
+            #menuOverlay > div:nth-child(2) { margin:4px 0 !important; max-width:520px; }
+            #menuOverlay > div:nth-child(2) > div:first-child { margin-bottom:6px; padding:6px; }
+            #menuOverlay > div:nth-child(2) > button { min-height:42px; padding:8px 16px; }
+            #menuOverlay > div:last-child { display:none; }
+            #gameHud > div:first-child { width:calc(100vw - 150px); max-width:calc(100vw - 150px); }
+            #gameHud > div.fixed.top-3.right-3 { width:124px; }
+            #minimapCanvas { width:112px !important; height:68px !important; }
+            #mobileControls { bottom:calc(58px + var(--nvc-safe-bottom)) !important; }
+            #joystickBase { width:78px !important; height:78px !important; }
+            #joystickKnob { width:36px !important; height:36px !important; left:calc(50% - 18px) !important; top:calc(50% - 18px) !important; }
+            #mobileInteractBtn { width:48px !important; height:48px !important; min-height:48px; }
+            #minecraftHotbar { bottom:calc(3px + var(--nvc-safe-bottom)); }
+            .hotbar-slot { width:38px; min-width:38px; height:38px; min-height:38px; }
+        }
     </style>
 </head>
 <body class="relative w-screen h-screen overflow-hidden text-white">
