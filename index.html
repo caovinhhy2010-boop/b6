@@ -520,6 +520,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-700">
+                    <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">👔 Kiểu đồng phục</span><div class="flex items-center justify-between w-full mt-1"><button id="prevUniform" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="uniformLabel" class="text-white text-xs px-1">Sơ mi NVC</span><button id="nextUniform" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
+                    <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">🎒 Balo</span><div class="flex items-center justify-between w-full mt-1"><button id="prevBag" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="bagLabel" class="text-white text-xs px-1">Balo xanh</span><button id="nextBag" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
+                    <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">👟 Giày</span><div class="flex items-center justify-between w-full mt-1"><button id="prevShoe" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="shoeLabel" class="text-white text-xs px-1">Sneaker trắng</span><button id="nextShoe" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
+                </div>
             </div>
 
             <!-- Special Skins ("Skin Khác") Collapsible Section inside Skin Modal -->
@@ -878,6 +883,23 @@
                 { id: 'headphones', name: 'Tai nghe' },
                 { id: 'cap', name: 'Mũ lưỡi trai' },
                 { id: 'sprout', name: 'Mầm cây' }
+            ],
+            uniforms: [
+                { id: 'classic', name: 'Sơ mi NVC' },
+                { id: 'cardigan', name: 'Áo len khoác' },
+                { id: 'varsity', name: 'Áo khoác CLB' },
+                { id: 'sport', name: 'Áo thể thao' }
+            ],
+            bags: [
+                { id: 'none', name: 'Không balo' },
+                { id: 'navy', name: 'Balo xanh' },
+                { id: 'brown', name: 'Balo nâu' },
+                { id: 'pink', name: 'Balo hồng' }
+            ],
+            shoes: [
+                { id: 'white', name: 'Sneaker trắng' },
+                { id: 'black', name: 'Sneaker đen' },
+                { id: 'blue', name: 'Sneaker xanh' }
             ]
         };
 
@@ -908,6 +930,7 @@
             ctx.beginPath();
             ctx.ellipse(0, 17, 9, 3, 0, 0, Math.PI * 2);
             ctx.fill();
+            ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = '#93c5fd'; ctx.beginPath(); ctx.ellipse(-5, 1, 3, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 
             ctx.translate(0, walkBob);
 
@@ -954,16 +977,25 @@
                 fillPx(-7, -12, 14, 5, hairCol.dark);
             }
 
-            // 2. SNEAKERS & TROUSERS
+            // 2. BALÔ + SNEAKERS & TROUSERS
+            const bagType = CUSTOM_OPTIONS.bags[(cfg.bagIdx || 0) % CUSTOM_OPTIONS.bags.length].id;
+            const uniformType = CUSTOM_OPTIONS.uniforms[(cfg.uniformIdx || 0) % CUSTOM_OPTIONS.uniforms.length].id;
+            const shoeType = CUSTOM_OPTIONS.shoes[(cfg.shoeIdx || 0) % CUSTOM_OPTIONS.shoes.length].id;
+            const shoeColor = shoeType === 'black' ? '#334155' : shoeType === 'blue' ? '#60a5fa' : '#f8fafc';
+            if (bagType !== 'none') {
+                const bagColor = bagType === 'brown' ? '#92400e' : bagType === 'pink' ? '#db2777' : '#1d4ed8';
+                fillPx(-10, -7, 4, 13, '#18181b'); fillPx(-9, -6, 3, 11, bagColor);
+                fillPx(-9, -4, 2, 2, '#fcd34d');
+            }
             const lShoeY = 13 + leftLegOffset * 0.5;
             const rShoeY = 13 + rightLegOffset * 0.5;
 
             fillPx(-7, lShoeY, 6, 4, outline);
-            fillPx(-6, lShoeY + 1, 4, 2, '#f8fafc');
-            fillPx(-5, lShoeY + 1, 2, 1, '#cbd5e1');
+            fillPx(-6, lShoeY + 1, 4, 2, shoeColor);
+            fillPx(-5, lShoeY + 1, 2, 1, shoeType === 'black' ? '#94a3b8' : '#cbd5e1');
             fillPx(1, rShoeY, 6, 4, outline);
-            fillPx(2, rShoeY + 1, 4, 2, '#f8fafc');
-            fillPx(3, rShoeY + 1, 2, 1, '#cbd5e1');
+            fillPx(2, rShoeY + 1, 4, 2, shoeColor);
+            fillPx(3, rShoeY + 1, 2, 1, shoeType === 'black' ? '#94a3b8' : '#cbd5e1');
 
             fillPx(-6, 2, 12, 12, outline);
             fillPx(-5, 2, 4.5, 11 + leftLegOffset * 0.4, '#0f172a');
@@ -973,10 +1005,18 @@
             fillPx(-5, 2, 10, 1.5, '#09090b');
 
             // 3. UNIFORM SHIRT & NVC BADGE
+            const shirtMain = uniformType === 'cardigan' ? '#e2e8f0' : uniformType === 'varsity' ? '#dbeafe' : uniformType === 'sport' ? '#0ea5e9' : '#ffffff';
+            const shirtShade = uniformType === 'sport' ? '#0369a1' : uniformType === 'varsity' ? '#1e40af' : '#cbd5e1';
             fillPx(-7, -9, 14, 11, outline);
-            fillPx(-6, -8, 12, 10, '#ffffff');
-            fillPx(-6, -8, 1.5, 10, '#e2e8f0');
-            fillPx(4.5, -8, 1.5, 10, '#e2e8f0');
+            fillPx(-6, -8, 12, 10, shirtMain);
+            fillPx(-6, -8, 1.5, 10, shirtShade);
+            fillPx(4.5, -8, 1.5, 10, shirtShade);
+            if (uniformType === 'cardigan' || uniformType === 'varsity') {
+                fillPx(-8, -8, 3, 10, uniformType === 'varsity' ? '#1e3a8a' : '#94a3b8');
+                fillPx(5, -8, 3, 10, uniformType === 'varsity' ? '#1e3a8a' : '#94a3b8');
+                fillPx(-1, -7, 2, 9, '#64748b');
+            }
+            if (uniformType === 'sport') { fillPx(-5, -7, 10, 1, '#facc15'); fillPx(-5, 0, 10, 1, '#facc15'); }
 
             fillPx(-9, -8, 3, 6, outline);
             fillPx(-8, -7, 2, 4, '#ffffff');
@@ -991,8 +1031,8 @@
             fillPx(2.6, -4.8, 1.8, 0.5, '#ef4444');
 
             if (gender === 'male') {
-                fillPx(-3.5, -8.5, 7, 2.5, '#1e3a8a');
-                fillPx(-1.2, -8, 2.4, 10, '#1e3a8a');
+                fillPx(-3.5, -8.5, 7, 2.5, uniformType === 'sport' ? '#facc15' : '#1e3a8a');
+                fillPx(-1.2, -8, 2.4, 10, uniformType === 'sport' ? '#facc15' : '#1e3a8a');
                 fillPx(-0.4, -5, 0.8, 0.8, '#ffffff');
                 fillPx(-0.4, -2, 0.8, 0.8, '#ffffff');
 
@@ -1158,6 +1198,7 @@
             ctx.beginPath();
             ctx.ellipse(0, 17, 9, 3, 0, 0, Math.PI * 2);
             ctx.fill();
+            ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = '#93c5fd'; ctx.beginPath(); ctx.ellipse(-5, 1, 3, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
 
             ctx.translate(0, walkBob);
             const outline = '#18181b';
@@ -2548,8 +2589,8 @@
             mode: 'MENU',
             selectedSkin: 'male',
             specialSkin: null,
-            customMale: { hairIdx: 0, colorIdx: 0, glassesIdx: 1, accIdx: 0 },
-            customFemale: { hairIdx: 0, colorIdx: 0, glassesIdx: 0, accIdx: 0 },
+            customMale: { hairIdx: 0, colorIdx: 0, glassesIdx: 1, accIdx: 0, uniformIdx: 0, bagIdx: 1, shoeIdx: 0 },
+            customFemale: { hairIdx: 0, colorIdx: 0, glassesIdx: 0, accIdx: 0, uniformIdx: 0, bagIdx: 1, shoeIdx: 0 },
             playerSpeed: 260,
             showLabels: true,
             currentFloor: 1,
@@ -5206,6 +5247,7 @@
             document.getElementById('hairColorLabel').textContent = CUSTOM_OPTIONS.hairColors[obj.colorIdx % CUSTOM_OPTIONS.hairColors.length].name;
             document.getElementById('glassesLabel').textContent = CUSTOM_OPTIONS.glasses[obj.glassesIdx % CUSTOM_OPTIONS.glasses.length].name;
             document.getElementById('accLabel').textContent = CUSTOM_OPTIONS.accessories[obj.accIdx % CUSTOM_OPTIONS.accessories.length].name;
+            ['uniform','bag','shoe'].forEach(k => { const el=document.getElementById(k+'Label'); if(el) el.textContent=CUSTOM_OPTIONS[k==='uniform'?'uniforms':k==='bag'?'bags':'shoes'][(obj[k+'Idx']||0)%CUSTOM_OPTIONS[k==='uniform'?'uniforms':k==='bag'?'bags':'shoes'].length].name; });
         }
 
         function cycleCustomOption(field, delta) {
@@ -5214,7 +5256,10 @@
             const maxLen = field === 'hairIdx' ? hairLen
                 : field === 'colorIdx' ? CUSTOM_OPTIONS.hairColors.length
                 : field === 'glassesIdx' ? CUSTOM_OPTIONS.glasses.length
-                : CUSTOM_OPTIONS.accessories.length;
+                : field === 'accIdx' ? CUSTOM_OPTIONS.accessories.length
+                : field === 'uniformIdx' ? CUSTOM_OPTIONS.uniforms.length
+                : field === 'bagIdx' ? CUSTOM_OPTIONS.bags.length
+                : CUSTOM_OPTIONS.shoes.length;
 
             obj[field] = (obj[field] + delta + maxLen) % maxLen;
             updateCustomizerLabels();
@@ -5229,6 +5274,12 @@
         document.getElementById('nextGlasses').addEventListener('click', () => cycleCustomOption('glassesIdx', 1));
         document.getElementById('prevAcc').addEventListener('click', () => cycleCustomOption('accIdx', -1));
         document.getElementById('nextAcc').addEventListener('click', () => cycleCustomOption('accIdx', 1));
+        document.getElementById('prevUniform').addEventListener('click', () => cycleCustomOption('uniformIdx', -1));
+        document.getElementById('nextUniform').addEventListener('click', () => cycleCustomOption('uniformIdx', 1));
+        document.getElementById('prevBag').addEventListener('click', () => cycleCustomOption('bagIdx', -1));
+        document.getElementById('nextBag').addEventListener('click', () => cycleCustomOption('bagIdx', 1));
+        document.getElementById('prevShoe').addEventListener('click', () => cycleCustomOption('shoeIdx', -1));
+        document.getElementById('nextShoe').addEventListener('click', () => cycleCustomOption('shoeIdx', 1));
 
         document.getElementById('modalCycleHair').addEventListener('click', () => cycleCustomOption('hairIdx', 1));
         document.getElementById('modalCycleColor').addEventListener('click', () => cycleCustomOption('colorIdx', 1));
@@ -5243,6 +5294,9 @@
             obj.colorIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.hairColors.length);
             obj.glassesIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.glasses.length);
             obj.accIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.accessories.length);
+            obj.uniformIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.uniforms.length);
+            obj.bagIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.bags.length);
+            obj.shoeIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.shoes.length);
             updateCustomizerLabels();
             syncSkinSelectionUI();
             audio.playClick();
