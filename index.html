@@ -308,6 +308,50 @@
             .hotbar-slot { width:42px; min-width:42px; height:44px; min-height:44px; }
             #onlineHudBadge { max-width:calc(100vw - 158px); }
         }
+        /* Compact online indicator on phones: never cover the play area. */
+        @media (max-width:700px) {
+            #onlineHudBadge {
+                position:fixed !important;
+                top:calc(7px + var(--nvc-safe-top)) !important;
+                bottom:auto !important;
+                left:auto !important;
+                right:calc(126px + var(--nvc-safe-right, 0px)) !important;
+                width:auto !important;
+                max-width:clamp(74px, 22vw, 104px) !important;
+                min-height:0 !important;
+                padding:4px 6px !important;
+                border-width:1px !important;
+                border-radius:999px !important;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:3px;
+                white-space:nowrap !important;
+                overflow:hidden;
+                line-height:1.1 !important;
+                font-size:9px !important;
+                z-index:24 !important;
+            }
+            #onlineHudBadge .onlineHudLabel,
+            #onlineHudBadge #onlineHudCode { display:none !important; }
+            #onlineHudCount { margin:0 !important; font-size:9px !important; }
+            #onlineMenuPanel {
+                width:100% !important;
+                max-width:340px !important;
+                margin:8px auto 0 !important;
+                padding:8px !important;
+                border-width:1px !important;
+                border-radius:12px !important;
+                box-shadow:0 5px 16px #0008 !important;
+            }
+            #onlineMenuPanel > div:first-child { font-size:9px !important; margin-bottom:5px !important; }
+            #onlineMenuPanel > div:nth-child(2) { padding:7px !important; }
+            #onlineMenuPanel > div:nth-child(2) > div:first-child { font-size:12px !important; line-height:1.2 !important; }
+            #onlineMenuPanel #onlinePlayerCount { font-size:12px !important; margin-top:4px !important; }
+            #onlineMenuPanel #onlineRoomInfo { padding:6px !important; }
+            #onlineMenuPanel #onlineStatus { font-size:11px !important; line-height:1.2 !important; margin-top:5px !important; }
+            #onlineMenuPanel #leaveOnlineBtn { min-height:34px !important; font-size:11px !important; }
+        }
         @media (max-height:520px) and (orientation:landscape) and (max-width:900px) {
             #menuOverlay { gap:6px; padding-top:calc(5px + var(--nvc-safe-top)); padding-bottom:calc(5px + var(--nvc-safe-bottom)); }
             #menuOverlay > div:nth-child(2) { margin:4px 0 !important; max-width:520px; }
@@ -372,7 +416,7 @@
             </div>
 
             <!-- ONLINE MULTIPLAYER -->
-            <div class="mt-4 w-full bg-slate-950/90 border-2 border-cyan-400 rounded-xl p-3 shadow-2xl pointer-events-auto">
+            <div id="onlineMenuPanel" class="mt-4 w-full bg-slate-950/90 border-2 border-cyan-400 rounded-xl p-3 shadow-2xl pointer-events-auto">
                 <div class="pixel-font text-[10px] sm:text-xs text-cyan-300 mb-2">🌐 CHẾ ĐỘ CHƠI ONLINE</div>
                 <input id="onlineName" maxlength="20" value="Học sinh NVC" placeholder="Tên hiển thị" class="hidden">
                 <div class="rounded-lg border border-cyan-700 bg-slate-900/80 p-3 text-center">
@@ -685,7 +729,8 @@
         </div>
     </div>
     <div id="onlineHudBadge" class="hidden fixed bottom-3 left-3 z-30 bg-slate-950/90 border-2 border-cyan-300 rounded-lg px-3 py-2 text-cyan-200 text-sm shadow-xl pointer-events-none">
-        🌐 ONLINE • THẾ GIỚI <span id="onlineHudCode" class="text-amber-300 font-bold tracking-widest"></span>
+        <span class="onlineHudLabel">🌐 ONLINE • THẾ GIỚI</span>
+        <span id="onlineHudCode" class="text-amber-300 font-bold tracking-widest"></span>
         <span id="onlineHudCount" class="text-emerald-300 ml-2">1 người</span>
     </div>
 
