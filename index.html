@@ -220,7 +220,8 @@
         #locketPreview { max-height:min(58vh,520px) !important; }
         #photoViewImage { max-height:min(65vh,620px); }
         #phoneLocketPanel { min-width:0; padding-bottom:12px; }
-        #phoneLocketPanel .rounded-xl.overflow-hidden { display:flex; align-items:center; justify-content:center; min-height:150px; padding:8px; }
+        #phoneLocketPanel .rounded-xl.overflow-hidden { display:flex; align-items:center; justify-content:center; min-height:150px; padding:8px; aspect-ratio:9 / 10; }
+        #phoneLocketPanel #locketPreview { width:100% !important; max-width:100% !important; height:auto !important; max-height:58vh !important; object-fit:contain !important; position:relative; z-index:1; }
         #locketFramePicker { touch-action:pan-y; }
         #locketFramePicker button { min-width:0; touch-action:manipulation; }
         @media (max-width:700px) {
@@ -5974,12 +5975,18 @@ const NVC_LOCKET_FRAME_NAMES={"yearbook": "THƯỚC PHIM KÝ ỨC", "blueSky": "
                 const W=720,H=800,c=document.createElement('canvas');c.width=W;c.height=H;
                 const ctx=c.getContext('2d');
                 const x=rect[0]*W,y=rect[1]*H,rw=rect[2]*W,rh=rect[3]*H;
-                const scale=Math.max(rw/img.naturalWidth,rh/img.naturalHeight);
+                // Keep the captured photo safely inside the frame's inner window.
+                // The inset prevents the photo from covering decorative frame edges.
+                const insetX=Math.max(8,rw*0.045), insetY=Math.max(8,rh*0.045);
+                const innerX=x+insetX, innerY=y+insetY;
+                const innerW=rw-2*insetX, innerH=rh-2*insetY;
+                const scale=Math.max(innerW/img.naturalWidth,innerH/img.naturalHeight);
                 const sw=img.naturalWidth*scale,sh=img.naturalHeight*scale;
                 ctx.fillStyle='#dce5eb';ctx.fillRect(0,0,W,H);
-                ctx.save();ctx.beginPath();ctx.rect(x,y,rw,rh);ctx.clip();
-                ctx.drawImage(img,x+(rw-sw)/2,y+(rh-sh)/2,sw,sh);ctx.restore();
+                ctx.save();ctx.beginPath();ctx.rect(innerX,innerY,innerW,innerH);ctx.clip();
+                ctx.drawImage(img,innerX+(innerW-sw)/2,innerY+(innerH-sh)/2,sw,sh);ctx.restore();
                 const overlay=new Image();overlay.src=NVC_FRAME_ASSETS[frame];await overlay.decode();
+                // Draw the complete transparent frame last so its decorations stay on top.
                 ctx.drawImage(overlay,0,0,W,H);
                 return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('Không ghép được khung ảnh.')),'image/webp',.9));
             }finally{URL.revokeObjectURL(url);}
