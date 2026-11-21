@@ -2217,13 +2217,24 @@
                     fillRect(19, 47, 33, 53, T.GARAGE_FLOOR);
                     halls.push({ x1: 19, y1: 47, x2: 33, y2: 53, label: 'NHÀ XE GV', isZoneLabel: true });
 
-                    // 7. TOP-RIGHT: NHÀ XE HỌC SINH (X = 68 → 85)
-                    fillRect(68, 2, 85, 41, T.GARAGE_FLOOR);
-                    halls.push({ x1: 68, y1: 2, x2: 85, y2: 41, label: 'NHÀ XE', isZoneLabel: true });
+                    // 7. TOP-RIGHT: MỞ RỘNG NHÀ XE HỌC SINH sang toàn bộ vùng nền xám phía Đông.
+                    fillRect(68, 2, 91, 41, T.GARAGE_FLOOR);
+                    halls.push({ x1: 69, y1: 2, x2: 91, y2: 41, label: 'NHÀ XE HỌC SINH', isZoneLabel: true });
 
-                    // Chỉ dựng tường dọc ngăn cách nhà xe với khu cầu thang Đông Bắc.
-                    // Không dựng tường phía sau dãy lớp A1-A6.
+                    // Kéo dài tường ngăn khu nhà xe dọc mép Tây theo vị trí đánh dấu.
                     fillRect(68, 2, 68, 41, T.WALL);
+                    // Tường bao phía Đông nhà xe, giữ lối vào phía dưới mở.
+                    fillRect(92, 2, 92, 41, T.WALL);
+
+                    // 7B. VƯỜN RAU BÁC HỒ: nền đất và nhà kính trong suốt (khu khoanh đỏ).
+                    fillRect(36, 13, 40, 32, T.TURF_GRASS);
+                    halls.push({ x1: 36, y1: 13, x2: 40, y2: 14, label: 'VƯỜN RAU BÁC HỒ', isZoneLabel: true });
+
+                    // 7C. MẢNH ĐẤT CÂY ĐẠI THỤ ở khu sân mở phía Đông Nam.
+                    fillRect(68, 43, 85, 53, T.TURF_GRASS);
+                    fillRect(75, 47, 78, 51, T.PARK_PLAZA);
+                    grid[49][76] = T.BIG_TREE;
+                    halls.push({ x1: 72, y1: 45, x2: 80, y2: 46, label: 'MẢNH ĐẤT CÂY ĐẠI THỤ', isZoneLabel: true });
 
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
                     for (let ty = 43; ty <= 53; ty++) {
@@ -2742,6 +2753,12 @@
                 { id: 'v11', type: 'scooter', x: 79.5 * TILE, y: 18.5 * TILE, dir: 'left' },
                 { id: 'v12', type: 'wheelbarrow', x: 79.5 * TILE, y: 23.5 * TILE, dir: 'left' },
                 { id: 'v13', type: 'kart', x: 79.5 * TILE, y: 28.5 * TILE, dir: 'left' },
+                { id: 'v14', type: 'bike', x: 87.5 * TILE, y: 6.5 * TILE, dir: 'left' },
+                { id: 'v15', type: 'scooter', x: 87.5 * TILE, y: 10.5 * TILE, dir: 'left' },
+                { id: 'v16', type: 'bike', x: 87.5 * TILE, y: 14.5 * TILE, dir: 'left' },
+                { id: 'v17', type: 'scooter', x: 87.5 * TILE, y: 18.5 * TILE, dir: 'left' },
+                { id: 'v18', type: 'bike', x: 87.5 * TILE, y: 23.5 * TILE, dir: 'left' },
+                { id: 'v19', type: 'kart', x: 87.5 * TILE, y: 28.5 * TILE, dir: 'left' },
 
                 { id: 'gv1', type: 'car', x: 22.0 * TILE, y: 49.0 * TILE, dir: 'right' },
                 { id: 'gv2', type: 'car', x: 25.5 * TILE, y: 49.0 * TILE, dir: 'right' },
@@ -4466,6 +4483,23 @@
                 ctx.fillStyle='#f8fafc'; ctx.fillRect(fx + 2, fy + fh/2 - 34, 8, 68); ctx.fillRect(fx + fw - 10, fy + fh/2 - 34, 8, 68);
                 ctx.restore();
                 // Sân cầu lông và Pickleball chỉ xuất hiện bên trong nhà thi đấu.
+            }
+
+            // Vẽ nhà kính trong suốt và các luống rau trong Vườn Rau Bác Hồ.
+            if (floorNum === 1) {
+                const gx = 36*TILE, gy = 16*TILE, gw = 5*TILE, gh = 15*TILE;
+                ctx.save();
+                // Mái kính trong suốt, khung cyan nhẹ.
+                ctx.fillStyle = 'rgba(125,211,252,.20)'; ctx.fillRect(gx,gy,gw,gh);
+                ctx.strokeStyle = 'rgba(34,211,238,.88)'; ctx.lineWidth = 4; ctx.strokeRect(gx+3,gy+3,gw-6,gh-6);
+                ctx.strokeStyle = 'rgba(186,230,253,.7)'; ctx.lineWidth = 2;
+                for(let k=1;k<5;k++){const xx=gx+gw*k/5;ctx.beginPath();ctx.moveTo(xx,gy+4);ctx.lineTo(xx,gy+gh-4);ctx.stroke();}
+                for(let k=1;k<8;k++){const yy=gy+gh*k/8;ctx.beginPath();ctx.moveTo(gx+4,yy);ctx.lineTo(gx+gw-4,yy);ctx.stroke();}
+                // Luống đất và hàng cây rau nhỏ.
+                for(let r=0;r<5;r++){const yy=gy+gh*(r+0.5)/5;ctx.fillStyle='#8b5a2b';ctx.fillRect(gx+8,yy-7,gw-16,14);
+                    for(let c=0;c<9;c++){const xx=gx+18+(gw-36)*c/8;ctx.fillStyle=['#22c55e','#16a34a','#84cc16'][c%3];ctx.fillRect(xx-3,yy-11,7,9);ctx.fillRect(xx-5,yy-3,10,5);}}
+                ctx.fillStyle='rgba(15,23,42,.75)';ctx.font='bold 12px monospace';ctx.fillText('NHÀ KÍNH',gx+8,gy-6);
+                ctx.restore();
             }
 
             // Vẽ tán cây lớn đè lên trên mặt sân
