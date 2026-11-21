@@ -2188,6 +2188,11 @@
                     fillRect(68, 2, 85, 41, T.GARAGE_FLOOR);
                     halls.push({ x1: 68, y1: 2, x2: 85, y2: 41, label: 'NHÀ XE', isZoneLabel: true });
 
+                    // Tường ngăn nhà xe với khu cầu thang Đông Bắc và mặt sau dãy A1-A6.
+                    // Dải tường phía sau lớp A1-A6 chạy ngang, tường phía Tây nhà xe chạy dọc.
+                    fillRect(41, 7, 67, 7, T.WALL);
+                    fillRect(68, 2, 68, 41, T.WALL);
+
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
                     for (let ty = 43; ty <= 53; ty++) {
                         grid[ty][76] = T.TURF_GRASS;
@@ -2759,6 +2764,15 @@
                     tile !== T.BIG_TREE &&
                     tile !== T.OUTSIDE
                 );
+            }
+
+            // Bồn hoa hai bên trạm lấy thẻ xe là vật cản: người chơi phải đi vòng quanh.
+            if (floorNum === 1) {
+                const planterRects = [
+                    { x1: 76.15 * TILE, y1: 44.25 * TILE, x2: 77.30 * TILE, y2: 50.60 * TILE },
+                    { x1: 84.05 * TILE, y1: 44.25 * TILE, x2: 85.20 * TILE, y2: 50.60 * TILE }
+                ];
+                if (planterRects.some(rect => worldX >= rect.x1 && worldX <= rect.x2 && worldY >= rect.y1 && worldY <= rect.y2)) return false;
             }
 
             return (
@@ -3920,21 +3934,18 @@
                     break;
 
                 case T.CARD_BOOTH:
-                    ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#bbf7d0' : '#dcfce7';
+                    // Nền trạm lấy thẻ dùng gạch lát trung tính, bỏ toàn bộ các vạch xanh gây rối mắt.
+                    ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#cbd5e1' : '#dbe2e8';
                     ctx.fillRect(x, y, TILE, TILE);
-                    ctx.strokeStyle = '#16a34a';
-                    ctx.lineWidth = 2;
-                    if (ty === 45) {
-                        ctx.beginPath(); ctx.moveTo(x, y + 2); ctx.lineTo(x + TILE, y + 2); ctx.stroke();
-                    }
-                    if (ty === 49) {
-                        ctx.beginPath(); ctx.moveTo(x, y + TILE - 2); ctx.lineTo(x + TILE, y + TILE - 2); ctx.stroke();
-                    }
+                    ctx.fillStyle = 'rgba(71,85,105,.22)';
+                    ctx.fillRect(x + 2, y + TILE - 3, TILE - 4, 2);
                     if ((tx === 80 || tx === 81) && ty === 47) {
-                        ctx.fillStyle = '#065f46';
+                        ctx.fillStyle = '#334155';
                         ctx.fillRect(x + 6, y + 8, TILE - 12, TILE - 16);
-                        ctx.fillStyle = '#34d399';
-                        ctx.fillRect(x + 10, y + 12, TILE - 20, 12);
+                        ctx.fillStyle = '#fbbf24';
+                        ctx.fillRect(x + 10, y + 12, TILE - 20, 5);
+                        ctx.fillStyle = '#64748b';
+                        ctx.fillRect(x + 10, y + 20, TILE - 20, 6);
                     }
                     break;
 
