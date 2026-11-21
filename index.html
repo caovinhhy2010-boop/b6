@@ -84,6 +84,16 @@
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
             transform: translateY(-2px);
         }
+        /* NVC visual polish: layered glass, soft glow and responsive motion */
+        .pixel-box { backdrop-filter: blur(10px) saturate(1.15); }
+        .skin-card { position:relative; overflow:hidden; transform:translateZ(0); }
+        .skin-card::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:0; background:linear-gradient(120deg,transparent 15%,rgba(255,255,255,.16) 48%,transparent 78%); transform:translateX(-120%); transition:transform .55s ease,opacity .2s ease; }
+        .skin-card:hover::before { opacity:1; transform:translateX(120%); }
+        .skin-card.selected { animation:skinPulse 2.4s ease-in-out infinite; }
+        @keyframes skinPulse { 0%,100% { box-shadow:0 0 12px rgba(251,191,36,.28), inset 0 0 12px rgba(251,191,36,.06); } 50% { box-shadow:0 0 24px rgba(251,191,36,.58), inset 0 0 18px rgba(251,191,36,.12); } }
+        .pixel-btn { transition:transform .12s ease,filter .18s ease,box-shadow .12s ease; }
+        .pixel-btn:hover { filter:brightness(1.12) saturate(1.12); }
+        @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
         canvas#gameCanvas {
             display: block;
             width: 100vw;
@@ -464,7 +474,7 @@
                             <canvas id="previewMale" width="84" height="108" class="w-16 h-20 sm:w-20 sm:h-24"></canvas>
                         </div>
                         <span class="pixel-font text-[10px] sm:text-xs text-sky-300">NAM SINH</span>
-                        <span class="text-slate-300 text-xs mt-0.5 text-center">Đồng phục NVC Nam</span>
+                        <span class="text-slate-300 text-xs mt-0.5 text-center">Nhân vật nam cơ bản</span>
                     </div>
 
                     <div id="selectFemale" class="skin-card rounded-lg p-2 sm:p-2.5 flex flex-col items-center relative">
@@ -473,7 +483,7 @@
                             <canvas id="previewFemale" width="84" height="108" class="w-16 h-20 sm:w-20 sm:h-24"></canvas>
                         </div>
                         <span class="pixel-font text-[10px] sm:text-xs text-pink-300">NỮ SINH</span>
-                        <span class="text-slate-300 text-xs mt-0.5 text-center">Đồng phục NVC Nữ</span>
+                        <span class="text-slate-300 text-xs mt-0.5 text-center">Nhân vật nữ cơ bản</span>
                     </div>
                 </div>
             </div>
@@ -521,7 +531,6 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-700">
-                    <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">👔 Kiểu đồng phục</span><div class="flex items-center justify-between w-full mt-1"><button id="prevUniform" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="uniformLabel" class="text-white text-xs px-1">Sơ mi NVC</span><button id="nextUniform" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
                     <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">🎒 Balo</span><div class="flex items-center justify-between w-full mt-1"><button id="prevBag" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="bagLabel" class="text-white text-xs px-1">Balo xanh</span><button id="nextBag" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
                     <div class="bg-slate-800/90 border border-slate-600 rounded p-1.5 flex flex-col items-center"><span class="text-slate-400 text-xs">👟 Giày</span><div class="flex items-center justify-between w-full mt-1"><button id="prevShoe" class="px-2 bg-slate-700 rounded text-amber-300">◀</button><span id="shoeLabel" class="text-white text-xs px-1">Sneaker trắng</span><button id="nextShoe" class="px-2 bg-slate-700 rounded text-amber-300">▶</button></div></div>
                 </div>
@@ -531,12 +540,12 @@
             <div class="bg-slate-900/95 border-2 border-amber-500/70 rounded-lg p-2.5 mb-3.5">
                 <button id="toggleSpecialSkinsBtn" class="w-full flex items-center justify-between text-left cursor-pointer py-1 px-1">
                     <span class="pixel-font text-[9px] sm:text-[11px] text-amber-300 flex items-center gap-2">
-                        <span>🌟 SKIN KHÁC (NHÂN VẬT ĐẶC BIỆT)</span>
+                        <span>🌟 BỘ SƯU TẬP SKIN ĐẶC BIỆT</span>
                     </span>
                     <span id="specialSkinsArrow" class="text-amber-300 font-bold text-base">▼ Mở rộng</span>
                 </button>
 
-                <div id="specialSkinsGrid" class="hidden grid-cols-2 sm:grid-cols-3 gap-2.5 mt-2.5 pt-2.5 border-t border-slate-700">
+                <div id="specialSkinsGrid" class="hidden grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 mt-2.5 pt-2.5 border-t border-slate-700">
                     <div data-special-skin="spiderman" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
                         <span class="text-2xl mb-0.5">🕷️</span>
                         <span class="pixel-font text-[9px] text-red-400">SPIDER-MAN</span>
@@ -566,6 +575,24 @@
                         <span class="text-2xl mb-0.5">🍥</span>
                         <span class="pixel-font text-[9px] text-amber-400">NARUTO</span>
                         <span class="text-xs text-slate-300 mt-0.5">Ninja Làng Lá</span>
+                    </div>
+                    <div data-special-skin="astronaut" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">🚀</span><span class="pixel-font text-[9px] text-sky-200">NHÀ DU HÀNH</span><span class="text-xs text-slate-300 mt-0.5">Phi hành gia vũ trụ</span>
+                    </div>
+                    <div data-special-skin="galaxy" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">🌌</span><span class="pixel-font text-[9px] text-violet-300">GALAXY</span><span class="text-xs text-slate-300 mt-0.5">Chiến binh ngân hà</span>
+                    </div>
+                    <div data-special-skin="forest" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">🌿</span><span class="pixel-font text-[9px] text-emerald-300">HỘ VỆ RỪNG</span><span class="text-xs text-slate-300 mt-0.5">Linh vật thiên nhiên</span>
+                    </div>
+                    <div data-special-skin="neon" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">💜</span><span class="pixel-font text-[9px] text-fuchsia-300">NEON CYBER</span><span class="text-xs text-slate-300 mt-0.5">Phong cách tương lai</span>
+                    </div>
+                    <div data-special-skin="cloud" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">☁️</span><span class="pixel-font text-[9px] text-cyan-200">MÂY BỒNG BỀNH</span><span class="text-xs text-slate-300 mt-0.5">Bộ đồ mây trời</span>
+                    </div>
+                    <div data-special-skin="lava" class="special-skin-card skin-card rounded-lg p-2 flex flex-col items-center text-center">
+                        <span class="text-2xl mb-0.5">🌋</span><span class="pixel-font text-[9px] text-orange-300">NHAM THẠCH</span><span class="text-xs text-slate-300 mt-0.5">Chiến binh dung nham</span>
                     </div>
                 </div>
             </div>
@@ -1181,7 +1208,13 @@
             pikachu: 'Pikachu',
             goku: 'Son Goku',
             gojo: 'Gojo Satoru',
-            naruto: 'Naruto Uzumaki'
+            naruto: 'Naruto Uzumaki',
+            astronaut: 'Nhà Du Hành Vũ Trụ',
+            galaxy: 'Chiến Binh Ngân Hà',
+            forest: 'Hộ Vệ Rừng Xanh',
+            neon: 'Neon Cyber',
+            cloud: 'Mây Bồng Bềnh',
+            lava: 'Chiến Binh Nham Thạch'
         };
 
         function drawSpecialCharacterSprite(ctx, x, y, scale = 2.6, skinId = 'spiderman', dir = 'down', frame = 0, timeSec = 0) {
@@ -1423,6 +1456,42 @@
                     fillPx(-5.2 + eyeShift, -12.5, 1.8, 0.6, '#78350f');
                     fillPx(3.4 + eyeShift, -12.5, 1.8, 0.6, '#78350f');
                 }
+            } else if (['astronaut','galaxy','forest','neon','cloud','lava'].includes(skinId)) {
+                const palettes = {
+                    astronaut:{suit:'#e2e8f0',shade:'#94a3b8',accent:'#38bdf8',visor:'#0f3b59',shoe:'#334155'},
+                    galaxy:{suit:'#312e81',shade:'#1e1b4b',accent:'#c084fc',visor:'#e9d5ff',shoe:'#111827'},
+                    forest:{suit:'#166534',shade:'#14532d',accent:'#86efac',visor:'#d9f99d',shoe:'#422006'},
+                    neon:{suit:'#701a75',shade:'#3b0764',accent:'#22d3ee',visor:'#f0abfc',shoe:'#111827'},
+                    cloud:{suit:'#bae6fd',shade:'#7dd3fc',accent:'#ffffff',visor:'#e0f2fe',shoe:'#64748b'},
+                    lava:{suit:'#7c2d12',shade:'#431407',accent:'#fb923c',visor:'#fde68a',shoe:'#292524'}
+                };
+                const pal=palettes[skinId];
+                fillPx(-7,lShoeY,6,4,outline); fillPx(-6,lShoeY+1,4,2,pal.shoe);
+                fillPx(1,rShoeY,6,4,outline); fillPx(2,rShoeY+1,4,2,pal.shoe);
+                fillPx(-6,2,12,12,outline);
+                fillPx(-5,2,4.5,11+leftLegOffset*0.4,pal.shade);
+                fillPx(0.5,2,4.5,11+rightLegOffset*0.4,pal.suit);
+                fillPx(-8,-9,16,12,outline); fillPx(-7,-8,14,10,pal.suit);
+                fillPx(-7,-8,2,8,pal.shade); fillPx(5,-8,2,8,pal.shade);
+                fillPx(-8.5,-7,2.5,8,pal.shade); fillPx(6,-7,2.5,8,pal.shade);
+                fillPx(-2,-5,4,3,pal.accent); fillPx(-1,-4,2,1,'#ffffff');
+                fillPx(-8,-21,16,12,outline); fillPx(-7,-20,14,10,pal.suit);
+                fillPx(-6,-18,12,5,pal.visor);
+                if(skinId==='astronaut'){
+                    ctx.strokeStyle=pal.accent;ctx.lineWidth=1.2;ctx.strokeRect(-8,-21,16,12);
+                    fillPx(-10,-17,2,4,pal.shade);fillPx(8,-17,2,4,pal.shade);
+                }else if(skinId==='forest'){
+                    fillPx(-8,-24,5,4,'#15803d');fillPx(3,-25,5,5,'#22c55e');fillPx(-2,-25,4,3,'#a3e635');
+                }else if(skinId==='cloud'){
+                    fillPx(-9,-23,6,3,'#ffffff');fillPx(3,-24,7,4,'#ffffff');
+                }else if(skinId==='lava'){
+                    fillPx(-7,-24,4,4,'#f97316');fillPx(3,-25,4,5,'#facc15');
+                }else{
+                    fillPx(-7,-24,4,4,pal.accent);fillPx(3,-25,5,5,pal.accent);
+                }
+                if(dir!=='up'){fillPx(-4.5+eyeShift,-16,2,2,'#ffffff');fillPx(2.5+eyeShift,-16,2,2,'#ffffff');}
+                ctx.globalAlpha=0.55+Math.sin(timeSec*4)*0.18;
+                fillPx(-6,-7,1,2,pal.accent);fillPx(5,-7,1,2,pal.accent);ctx.globalAlpha=1;
             }
 
             ctx.restore();
@@ -4914,6 +4983,40 @@
             });
         }
 
+        // Subtle animated atmosphere: floating light motes and a soft vignette.
+        // Kept screen-space and lightweight for iPhone/Android performance.
+        const nvcAtmosphere = { motes: [], lastW: 0, lastH: 0 };
+        function drawNVCAtmosphere(timeSec, dt) {
+            const w = canvas.width, h = canvas.height;
+            if (nvcAtmosphere.lastW !== w || nvcAtmosphere.lastH !== h || !nvcAtmosphere.motes.length) {
+                nvcAtmosphere.lastW = w; nvcAtmosphere.lastH = h;
+                const count = Math.min(24, Math.max(10, Math.round(w * h / 65000)));
+                nvcAtmosphere.motes = Array.from({length:count}, (_,i)=>({
+                    x: ((i * 197.31) % w), y: ((i * 113.73) % h),
+                    r: 1 + (i % 3) * .55, speed: 5 + (i % 5) * 2,
+                    drift: Math.sin(i * 2.17) * 5, phase: i * 1.7
+                }));
+            }
+            ctx.save();
+            // Gentle warm/cool light flecks drift through the campus.
+            for (const m of nvcAtmosphere.motes) {
+                m.y -= m.speed * Math.min(dt, .05);
+                m.x += Math.sin(timeSec * .7 + m.phase) * m.drift * Math.min(dt, .05);
+                if (m.y < -8) { m.y = h + 8; m.x = (m.x + w * .37) % w; }
+                const pulse = .35 + (Math.sin(timeSec * 1.8 + m.phase) + 1) * .22;
+                ctx.globalAlpha = pulse;
+                ctx.fillStyle = m.phase % 2 > 1 ? '#fde68a' : '#bfdbfe';
+                ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 7;
+                ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+            // Soft edge shading adds depth without obscuring the play area.
+            const vg = ctx.createRadialGradient(w*.5,h*.46,Math.min(w,h)*.22,w*.5,h*.5,Math.max(w,h)*.72);
+            vg.addColorStop(0,'rgba(2,6,23,0)'); vg.addColorStop(1,'rgba(2,6,23,.20)');
+            ctx.fillStyle = vg; ctx.fillRect(0,0,w,h);
+            ctx.restore();
+        }
+
         function gameLoop(now) {
             const dt = Math.min(0.05, (now - lastTime) / 1000);
             lastTime = now;
@@ -4930,6 +5033,7 @@
                 } else {
                     renderGameWorld(dt, timeSec);
                 }
+                drawNVCAtmosphere(timeSec, dt);
                 renderMinimap(timeSec);
             }
 
@@ -5274,8 +5378,6 @@
         document.getElementById('nextGlasses').addEventListener('click', () => cycleCustomOption('glassesIdx', 1));
         document.getElementById('prevAcc').addEventListener('click', () => cycleCustomOption('accIdx', -1));
         document.getElementById('nextAcc').addEventListener('click', () => cycleCustomOption('accIdx', 1));
-        document.getElementById('prevUniform').addEventListener('click', () => cycleCustomOption('uniformIdx', -1));
-        document.getElementById('nextUniform').addEventListener('click', () => cycleCustomOption('uniformIdx', 1));
         document.getElementById('prevBag').addEventListener('click', () => cycleCustomOption('bagIdx', -1));
         document.getElementById('nextBag').addEventListener('click', () => cycleCustomOption('bagIdx', 1));
         document.getElementById('prevShoe').addEventListener('click', () => cycleCustomOption('shoeIdx', -1));
@@ -5294,7 +5396,6 @@
             obj.colorIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.hairColors.length);
             obj.glassesIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.glasses.length);
             obj.accIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.accessories.length);
-            obj.uniformIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.uniforms.length);
             obj.bagIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.bags.length);
             obj.shoeIdx = Math.floor(Math.random() * CUSTOM_OPTIONS.shoes.length);
             updateCustomizerLabels();
