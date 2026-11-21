@@ -2189,7 +2189,7 @@
                     halls.push({ x1: 68, y1: 2, x2: 85, y2: 41, label: 'NHÀ XE', isZoneLabel: true });
 
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
-                    for (let ty = 43; ty <= 53; ty += 2) {
+                    for (let ty = 43; ty <= 53; ty++) {
                         grid[ty][76] = T.TURF_GRASS;
                         grid[ty][85] = T.TURF_GRASS;
                     }
@@ -4435,12 +4435,12 @@
             }
 
             if (floorNum === 1) {
-                // Hai bồn hoa chạy dọc hai mép trái/phải khu nhà xe học sinh (x=68..85).
-                const bedY = 3.0 * TILE;
-                const bedH = 37.0 * TILE;
-                const bedW = 1.45 * TILE;
-                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 68.22 * TILE, bedY, bedW, bedH, 1) });
-                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 83.33 * TILE, bedY, bedW, bedH, 3) });
+                // Hai bồn hoa ngắn đặt hai bên TRẠM LẤY THẺ XE (x=78..83, y=45..49), không đặt dọc nhà xe.
+                const bedY = 44.25 * TILE;
+                const bedH = 6.35 * TILE;
+                const bedW = 1.15 * TILE;
+                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 76.15 * TILE, bedY, bedW, bedH, 1) });
+                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 84.05 * TILE, bedY, bedW, bedH, 3) });
                 state.vehicles.forEach(veh => {
                     if (state.mountedVehicle === veh) return;
                     entities.push({
@@ -5373,6 +5373,8 @@
             audio.startBgm();
             audio.playClick();
             state.mode = 'PLAYING';
+            const menuAtmosphere = document.getElementById('menuAtmosphere');
+            if (menuAtmosphere) menuAtmosphere.style.display = 'none';
             state.currentFloor = 1;
             state.displayFloor = 1;
             state.floorTransition.active = false;
@@ -5633,6 +5635,8 @@
         document.getElementById('backToMenuBtn').addEventListener('click', () => {
             audio.playClick();
             state.mode = 'MENU';
+            const menuAtmosphere = document.getElementById('menuAtmosphere');
+            if (menuAtmosphere) menuAtmosphere.style.display = 'block';
             // Thoát về menu để đổi skin; lần nhấn Bắt đầu tiếp theo sẽ tự kết nối lại.
             disconnectMultiplayer(true);
             ['TouchUp','TouchDown','TouchLeft','TouchRight'].forEach(k => state.keys[k] = false);
