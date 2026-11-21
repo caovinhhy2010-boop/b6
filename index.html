@@ -84,6 +84,19 @@
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
             transform: translateY(-2px);
         }
+        /* Main menu atmosphere: warm school-morning sunlight */
+        #menuAtmosphere{position:fixed;inset:0;z-index:8;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,rgba(17,38,70,.08),rgba(255,190,92,.08) 55%,rgba(14,35,49,.20));}
+        #menuAtmosphere:before{content:"";position:absolute;width:min(44vw,460px);height:min(44vw,460px);min-width:210px;min-height:210px;right:8%;top:5%;border-radius:50%;background:radial-gradient(circle,rgba(255,250,204,.98) 0%,rgba(255,220,133,.72) 18%,rgba(255,190,93,.22) 43%,transparent 70%);filter:blur(2px);animation:sunBreathe 7s ease-in-out infinite;}
+        #menuAtmosphere:after{content:"";position:absolute;inset:-35% -20%;background:repeating-conic-gradient(from 8deg at 78% 24%,rgba(255,239,180,.11) 0deg,rgba(255,239,180,.11) 3deg,transparent 3deg,transparent 13deg);mask-image:radial-gradient(ellipse at 78% 24%,#000 0%,transparent 58%);animation:sunRays 42s linear infinite;}
+        .menu-cloud{position:absolute;width:170px;height:38px;border-radius:40px;background:rgba(255,255,255,.20);filter:blur(2px);box-shadow:28px -13px 0 2px rgba(255,255,255,.16),65px 1px 0 -3px rgba(255,255,255,.15);animation:cloudDrift 38s linear infinite;}
+        .menu-cloud.one{top:19%;left:-220px}.menu-cloud.two{top:37%;left:-280px;transform:scale(.72);animation-duration:54s;animation-delay:-19s;opacity:.65}
+        .menu-sparkles{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,244,190,.75) 1px,transparent 2px),radial-gradient(circle,rgba(255,255,255,.48) 1px,transparent 2px);background-size:137px 119px,191px 173px;background-position:13px 17px,72px 43px;opacity:.32;animation:sparkleFloat 12s ease-in-out infinite alternate;}
+        @keyframes sunBreathe{0%,100%{transform:scale(.96);opacity:.82}50%{transform:scale(1.06);opacity:1}}
+        @keyframes sunRays{to{transform:rotate(360deg)}}
+        @keyframes cloudDrift{from{translate:0 0}to{translate:calc(100vw + 420px) 0}}
+        @keyframes sparkleFloat{from{transform:translateY(0);opacity:.18}to{transform:translateY(-13px);opacity:.42}}
+        @media(prefers-reduced-motion:reduce){#menuAtmosphere:before,#menuAtmosphere:after,.menu-cloud,.menu-sparkles{animation:none!important}}
+        @media(max-width:600px){#menuAtmosphere:before{right:-8%;top:9%;opacity:.72} .menu-cloud{opacity:.45}}
         /* NVC visual polish: layered glass, soft glow and responsive motion */
         .pixel-box { backdrop-filter: blur(10px) saturate(1.15); }
         .skin-card { position:relative; overflow:hidden; transform:translateZ(0); }
@@ -384,6 +397,8 @@
 
     <!-- Main Fullscreen Game & Menu Background Canvas -->
     <canvas id="gameCanvas"></canvas>
+
+    <div id="menuAtmosphere" aria-hidden="true"><div class="menu-cloud one"></div><div class="menu-cloud two"></div><div class="menu-sparkles"></div></div>
 
     <!-- ================= MAIN MENU OVERLAY ================= -->
     <div id="menuOverlay" class="fixed inset-0 flex flex-col justify-between items-center pointer-events-none p-3 sm:p-5 z-20">
@@ -2019,7 +2034,6 @@
             BENCH: 20,
             BIG_TREE: 21,
             DINING_TABLE: 22,
-            FLOWER_GARDEN: 23,
             ROUND_TABLE: 24,
             GATE: 25,
             CARD_BOOTH: 26,
@@ -2211,10 +2225,6 @@
                     buildRoom(37, 51, 41, 55, 'BẢO VỆ', 'right', 'office', 'Khu Cổng Trường');
                     fillRect(43, 56, 52, 57, T.GATE);
                     halls.push({ x1: 43, y1: 55, x2: 52, y2: 56, label: 'CỔNG TRƯỜNG', isZoneLabel: true });
-
-                    fillRect(49, 44, 55, 52, T.FLOWER_GARDEN);
-                    grid[46][51] = T.BIG_TREE;
-                    grid[50][53] = T.BIG_TREE;
 
                     // Khu tưởng niệm Nguyễn Văn Cừ: bệ tượng và khoảng sân thắp hương.
                     fillRect(58, 46, 62, 51, T.MONUMENT);
@@ -2767,7 +2777,6 @@
                 tile === T.TURF_GRASS ||
                 tile === T.GARAGE_FLOOR ||
                 tile === T.PARK_PLAZA ||
-                tile === T.FLOWER_GARDEN ||
                 tile === T.GATE ||
                 tile === T.CARD_BOOTH
             );
@@ -3934,22 +3943,6 @@
                     ctx.fillRect(x, y, TILE, TILE);
                     break;
 
-                case T.FLOWER_GARDEN:
-                    ctx.fillStyle = ((tx + ty) % 2 === 0) ? '#22c55e' : '#16a34a';
-                    ctx.fillRect(x, y, TILE, TILE);
-                    const flowerColors = ['#f43f5e', '#facc15', '#38bdf8', '#f97316', '#ffffff'];
-                    const fc1 = flowerColors[(tx * 3 + ty) % flowerColors.length];
-                    const fc2 = flowerColors[(tx + ty * 5) % flowerColors.length];
-                    ctx.fillStyle = fc1;
-                    ctx.fillRect(x + 10, y + 12, 5, 5);
-                    ctx.fillStyle = '#fef08a';
-                    ctx.fillRect(x + 11, y + 13, 3, 3);
-                    ctx.fillStyle = fc2;
-                    ctx.fillRect(x + 30, y + 28, 5, 5);
-                    ctx.fillStyle = '#fef08a';
-                    ctx.fillRect(x + 31, y + 29, 3, 3);
-                    break;
-
                 case T.ROUND_TABLE:
                     ctx.fillStyle = '#cbd5e1';
                     ctx.fillRect(x, y, TILE, TILE);
@@ -4100,15 +4093,8 @@
                     break;
 
                 case T.TREE:
-                    ctx.fillStyle = '#9ca3af'; ctx.fillRect(x, y, TILE, TILE);
-                    ctx.fillStyle = 'rgba(15,23,42,.2)'; ctx.beginPath(); ctx.ellipse(x+TILE/2+3,y+TILE-5,18,6,0,0,Math.PI*2); ctx.fill();
-                    ctx.fillStyle = '#713f12'; ctx.fillRect(x + 18, y + 25, 13, 21);
-                    ctx.fillStyle = '#92400e'; ctx.fillRect(x + 20, y + 27, 4, 17);
-                    ctx.fillStyle = '#064e3b'; ctx.fillRect(x + 3, y + 2, TILE - 6, 31);
-                    ctx.fillStyle = '#15803d'; ctx.fillRect(x + 6, y + 4, TILE - 12, 25);
-                    ctx.fillStyle = '#22c55e'; ctx.fillRect(x + 10, y + 7, TILE - 20, 14);
-                    ctx.fillStyle = 'rgba(220,252,231,.55)'; ctx.fillRect(x + 12, y + 8, 7, 4); ctx.fillRect(x + 27, y + 17, 5, 4);
-                    ctx.fillStyle = '#166534'; ctx.fillRect(x + 4, y + 23, 8, 6); ctx.fillRect(x + TILE - 12, y + 22, 8, 7);
+                    // Cây thường dùng cùng phong cách pixel-art tán lá xếp lớp như cây cổ thụ.
+                    drawPixelTree(x + TILE / 2, y + TILE - 2, 0.72, txSeed(x, y));
                     break;
 
                 case T.BIG_TREE:
@@ -4124,25 +4110,89 @@
             }
         }
 
-        function drawBigTreeCanopy(tx, ty) {
-            const x = tx * TILE, y = ty * TILE;
+        function txSeed(x, y) { return (((x + 17) * 73856093) ^ ((y + 31) * 19349663)) >>> 0; }
+
+        // Cây pixel-art lấy cảm hứng từ mẫu: thân nâu đỏ phân nhánh, tán xanh nhiều lớp,
+        // viền lá xanh đen và các mảng sáng nhỏ. Dùng ô vuông để giữ chất pixel rõ nét.
+        function drawPixelTree(cx, baseY, scale, seed) {
+            const unit = Math.max(3, Math.round(6 * scale));
+            const crownW = 184 * scale, crownH = 142 * scale;
+            const crownCx = cx, crownCy = baseY - 100 * scale;
+            const trunkW = 31 * scale, trunkH = 100 * scale;
+            const hash = (n) => { let v = (seed + n * 374761393) >>> 0; v = Math.imul(v ^ (v >>> 13), 1274126177); return ((v ^ (v >>> 16)) >>> 0) / 4294967295; };
             ctx.save();
-            ctx.fillStyle = 'rgba(15,23,42,.24)';
-            ctx.beginPath(); ctx.ellipse(x + TILE/2 + 5, y + TILE/2 + 18, 48, 18, 0, 0, Math.PI*2); ctx.fill();
-            // Tán cây nhiều tầng theo cụm pixel, có viền tối và vùng bắt sáng.
-            ctx.fillStyle = '#064e3b'; ctx.fillRect(x-28,y-30,TILE+56,TILE+58);
-            ctx.fillStyle = '#166534'; ctx.fillRect(x-23,y-26,TILE+46,TILE+48);
-            ctx.fillStyle = '#15803d'; ctx.fillRect(x-16,y-22,TILE+32,TILE+39);
-            ctx.fillStyle = '#22c55e'; ctx.fillRect(x-8,y-17,TILE+16,TILE+27);
-            ctx.fillStyle = '#4ade80'; ctx.fillRect(x-1,y-13,TILE+2,11);
-            const clusters = [[-18,-8],[14,-12],[-24,14],[20,12],[-2,23],[29,-1]];
-            clusters.forEach(([dx,dy],i)=>{
-                ctx.fillStyle = i%2 ? '#16a34a' : '#15803d';
-                ctx.fillRect(x+dx,y+dy,15,12);
-                ctx.fillStyle = 'rgba(187,247,208,.48)';
-                ctx.fillRect(x+dx+3,y+dy+2,5,3);
+            // Bóng cỏ dưới gốc.
+            ctx.fillStyle = 'rgba(5, 20, 17, .34)';
+            ctx.beginPath(); ctx.ellipse(cx, baseY - 1 * scale, 54 * scale, 10 * scale, 0, 0, Math.PI * 2); ctx.fill();
+            // Rễ và thân cây dạng các khối pixel.
+            ctx.fillStyle = '#241b25';
+            ctx.fillRect(cx - trunkW * .78, baseY - trunkH * .42, trunkW * 1.55, trunkH * .43);
+            ctx.fillRect(cx - trunkW * 1.15, baseY - 12 * scale, trunkW * .9, 10 * scale);
+            ctx.fillRect(cx + trunkW * .25, baseY - 10 * scale, trunkW * .95, 8 * scale);
+            ctx.fillStyle = '#71352e';
+            ctx.fillRect(cx - trunkW * .48, baseY - trunkH, trunkW * .96, trunkH);
+            ctx.fillStyle = '#93452f';
+            ctx.fillRect(cx - trunkW * .34, baseY - trunkH + 8 * scale, trunkW * .42, trunkH - 16 * scale);
+            ctx.fillStyle = '#b45b36';
+            ctx.fillRect(cx - trunkW * .22, baseY - trunkH + 20 * scale, 5 * scale, trunkH * .58);
+            ctx.fillRect(cx + trunkW * .08, baseY - trunkH + 56 * scale, 5 * scale, trunkH * .31);
+            ctx.fillStyle = '#542b2d';
+            ctx.fillRect(cx + trunkW * .22, baseY - trunkH + 12 * scale, 7 * scale, trunkH * .7);
+            // Cành lớn vươn ngang vào tán.
+            ctx.fillStyle = '#4b292c';
+            ctx.fillRect(cx - 8 * scale, baseY - trunkH + 18 * scale, 12 * scale, 12 * scale);
+            ctx.fillRect(cx - 66 * scale, baseY - trunkH + 2 * scale, 76 * scale, 10 * scale);
+            ctx.fillRect(cx + 1 * scale, baseY - trunkH + 5 * scale, 70 * scale, 10 * scale);
+            ctx.fillRect(cx - 63 * scale, baseY - trunkH - 14 * scale, 9 * scale, 22 * scale);
+            ctx.fillRect(cx + 54 * scale, baseY - trunkH - 10 * scale, 9 * scale, 19 * scale);
+            ctx.fillStyle = '#9b4931';
+            ctx.fillRect(cx - 57 * scale, baseY - trunkH + 4 * scale, 50 * scale, 4 * scale);
+            ctx.fillRect(cx + 7 * scale, baseY - trunkH + 8 * scale, 48 * scale, 4 * scale);
+
+            // Tán lá dạng ellipse ghép ô vuông, có viền tối răng cưa.
+            const left = crownCx - crownW / 2, top = crownCy - crownH / 2;
+            const cols = Math.ceil(crownW / unit), rows = Math.ceil(crownH / unit);
+            for (let gy = -1; gy <= rows; gy++) {
+                for (let gx = -1; gx <= cols; gx++) {
+                    const px = left + gx * unit, py = top + gy * unit;
+                    const nx = (px + unit / 2 - crownCx) / (crownW * .51);
+                    const ny = (py + unit / 2 - crownCy) / (crownH * .52);
+                    const irregular = (hash(gx * 71 + gy * 131) - .5) * .13;
+                    const edge = nx * nx + ny * ny;
+                    if (edge > 1 + irregular) continue;
+                    // Khoảng trống răng cưa tự nhiên ở mép tán.
+                    if (edge > .84 && hash(gx * 97 + gy * 43) < .24) continue;
+                    const shade = hash(gx * 19 + gy * 37);
+                    ctx.fillStyle = edge > .91 ? '#142b2b' : (shade < .28 ? '#245332' : shade < .68 ? '#397b32' : '#4c8d38');
+                    ctx.fillRect(Math.round(px), Math.round(py), unit + 1, unit + 1);
+                    // Các mảng sáng ngắt quãng ở mặt trên tán.
+                    if (ny < .18 && shade > .58 && hash(gx * 53 + gy * 89) > .45) {
+                        ctx.fillStyle = '#609b3d';
+                        ctx.fillRect(Math.round(px), Math.round(py), Math.max(2, unit * .68), Math.max(2, unit * .52));
+                    }
+                    if (shade < .13 && ny > -.15) {
+                        ctx.fillStyle = '#1d482f';
+                        ctx.fillRect(Math.round(px), Math.round(py + unit * .55), unit, Math.max(2, unit * .45));
+                    }
+                }
+            }
+            // Những cụm lá nổi tạo chiều sâu, tránh tán thành một khối tròn phẳng.
+            const clusters = [[-.34,-.18],[-.08,-.34],[.24,-.27],[.39,.02],[-.38,.19],[.02,.16],[.28,.28],[-.12,.34]];
+            clusters.forEach(([ox, oy], i) => {
+                const px = crownCx + ox * crownW, py = crownCy + oy * crownH;
+                ctx.fillStyle = i % 3 === 0 ? '#2b6332' : '#397b32';
+                ctx.fillRect(px, py, unit * 3, unit * 2);
+                ctx.fillStyle = '#5a963b';
+                ctx.fillRect(px + unit, py, unit * 1.5, unit);
+                ctx.fillStyle = '#1b452e';
+                ctx.fillRect(px + unit * 2, py + unit, unit, unit);
             });
             ctx.restore();
+        }
+
+        function drawBigTreeCanopy(tx, ty) {
+            const x = tx * TILE, y = ty * TILE;
+            drawPixelTree(x + TILE / 2, y + TILE + 2, 1.42, txSeed(tx, ty));
         }
 
         /**
@@ -4284,6 +4334,46 @@
             ctx.restore();
         }
 
+        // Bồn hoa dài hai bên nhà xe học sinh: thành đá pixel và cụm hoa nhiều màu.
+        function drawParkingFlowerBed(ctx, x, y, w, h, seed = 0) {
+            ctx.save();
+            // Bóng đổ và thân bồn đá
+            ctx.fillStyle = 'rgba(15,23,42,0.30)';
+            ctx.fillRect(x + 5, y + 7, w, h);
+            ctx.fillStyle = '#343b4b'; ctx.fillRect(x, y, w, h);
+            ctx.fillStyle = '#647084'; ctx.fillRect(x + 3, y + 2, w - 6, h - 5);
+            ctx.fillStyle = '#aab2bd'; ctx.fillRect(x + 3, y + 2, w - 6, 5);
+            ctx.fillStyle = '#475569'; ctx.fillRect(x + 5, y + 9, w - 10, h - 17);
+            // Các mạch đá ngang tạo cảm giác bồn xây bằng từng khối.
+            for (let yy = y + 28; yy < y + h - 8; yy += 30) {
+                ctx.fillStyle = '#30394a'; ctx.fillRect(x + 3, yy, w - 6, 2);
+                ctx.fillStyle = '#8792a4'; ctx.fillRect(x + 5, yy - 2, w - 10, 1);
+            }
+            // Đất trồng
+            ctx.fillStyle = '#49352e'; ctx.fillRect(x + 8, y + 10, w - 16, h - 22);
+            // Tán lá rậm chạy dọc bồn
+            const innerX = x + 9, innerW = w - 18;
+            for (let yy = y + 13, i = 0; yy < y + h - 15; yy += 13, i++) {
+                const shift = ((i * 17 + seed * 11) % 9) - 4;
+                const xx = innerX + 4 + ((i * 7 + seed * 3) % Math.max(8, innerW - 18));
+                ctx.fillStyle = '#174b32'; ctx.fillRect(xx - 5, yy - 3, 16, 10);
+                ctx.fillStyle = i % 2 ? '#2f7a42' : '#3e9148';
+                ctx.fillRect(xx - 3, yy - 5, 12, 8);
+                ctx.fillStyle = '#70b84c'; ctx.fillRect(xx + 1, yy - 5, 4, 3);
+                ctx.fillStyle = '#245e38'; ctx.fillRect(xx - 7, yy + 3, 7, 4);
+                // Hoa nhỏ rải đều, tránh lặp lại quá máy móc
+                const fx = innerX + 5 + ((i * 19 + seed * 13) % Math.max(8, innerW - 16));
+                const fy = yy + ((i % 3) - 1) * 4;
+                const flower = ['#f7a7c4', '#f6d36b', '#f8f4df', '#d98adf'][i % 4];
+                ctx.fillStyle = '#fff0a8'; ctx.fillRect(fx + 2, fy + 1, 3, 3);
+                ctx.fillStyle = flower; ctx.fillRect(fx, fy, 7, 2); ctx.fillRect(fx + 2, fy - 2, 3, 6);
+            }
+            // Đầu bồn bo chắc chắn
+            ctx.fillStyle = '#c0c7d0'; ctx.fillRect(x + 2, y + 2, w - 4, 4);
+            ctx.fillStyle = '#283244'; ctx.fillRect(x + 2, y + h - 5, w - 4, 4);
+            ctx.restore();
+        }
+
         function renderSingleFloorLayer(floorNum, camX, camY, dt, timeSec, options = {}) {
             const {
                 isAerialLower = false,
@@ -4345,6 +4435,12 @@
             }
 
             if (floorNum === 1) {
+                // Hai bồn hoa chạy dọc hai mép trái/phải khu nhà xe học sinh (x=68..85).
+                const bedY = 3.0 * TILE;
+                const bedH = 37.0 * TILE;
+                const bedW = 1.45 * TILE;
+                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 68.22 * TILE, bedY, bedW, bedH, 1) });
+                entities.push({ y: bedY + bedH, draw: () => drawParkingFlowerBed(ctx, 83.33 * TILE, bedY, bedW, bedH, 3) });
                 state.vehicles.forEach(veh => {
                     if (state.mountedVehicle === veh) return;
                     entities.push({
