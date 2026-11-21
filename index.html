@@ -5236,7 +5236,7 @@
         const multiplayer = {
             client: null, channel: null, role: 'player', roomCode: 'CHUNG',
             remotePlayers: new Map(), playerId: '', lastPacketAt: 0,
-            connected: false, onlineCount: 1
+            connected: false, onlineCount: 1, pendingEnterGame: false
         };
 
         function onlineStatus(message, color = 'text-slate-300') {
@@ -5357,9 +5357,13 @@
                             joinedAt: new Date().toISOString()
                         });
                         showPublicWorldConnected();
-                        onlineStatus('Đã vào thế giới chung NVC! Không cần tạo phòng.', 'text-emerald-300');
+                        onlineStatus('Đã kết nối thế giới chung NVC.', 'text-emerald-300');
                         refreshPresenceCount();
-                        enterGame();
+                        // Chỉ vào bản đồ nếu người chơi vừa chủ động xác nhận nút VÀO TRƯỜNG.
+                        if (multiplayer.pendingEnterGame) {
+                            multiplayer.pendingEnterGame = false;
+                            enterGame();
+                        }
                         // Gửi trạng thái ban đầu để người khác nhìn thấy ngay.
                         await multiplayer.channel.send({
                             type: 'broadcast', event: 'player-state', payload: { player: localPlayerPacket() }
@@ -5389,6 +5393,7 @@
             multiplayer.channel = null;
             multiplayer.client = null;
             multiplayer.connected = false;
+            multiplayer.pendingEnterGame = false;
             multiplayer.remotePlayers.clear();
             multiplayer.onlineCount = 1;
             document.getElementById('onlineRoomInfo').classList.add('hidden');
@@ -5660,8 +5665,10 @@
             // Mỗi lần xác nhận vào game: nếu đã rời thế giới chung thì kết nối lại.
             // connectToPublicWorld() sẽ gọi enterGame() sau khi Supabase báo SUBSCRIBED.
             if (multiplayer.connected && multiplayer.channel) {
+                multiplayer.pendingEnterGame = false;
                 enterGame();
             } else {
+                multiplayer.pendingEnterGame = true;
                 onlineStatus('Đang quay lại thế giới chung NVC...', 'text-amber-300');
                 connectToPublicWorld();
             }
