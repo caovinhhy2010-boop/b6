@@ -2188,9 +2188,8 @@
                     fillRect(68, 2, 85, 41, T.GARAGE_FLOOR);
                     halls.push({ x1: 68, y1: 2, x2: 85, y2: 41, label: 'NHÀ XE', isZoneLabel: true });
 
-                    // Tường ngăn nhà xe với khu cầu thang Đông Bắc và mặt sau dãy A1-A6.
-                    // Dải tường phía sau lớp A1-A6 chạy ngang, tường phía Tây nhà xe chạy dọc.
-                    fillRect(41, 7, 67, 7, T.WALL);
+                    // Chỉ dựng tường dọc ngăn cách nhà xe với khu cầu thang Đông Bắc.
+                    // Không dựng tường phía sau dãy lớp A1-A6.
                     fillRect(68, 2, 68, 41, T.WALL);
 
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
