@@ -213,6 +213,38 @@
             button, .phone-tab, .hotbar-slot { -webkit-touch-callout: none; }
             .pixel-btn:hover { transform: none; }
         }
+        /* LOCKET + PHONE: touch scrolling and contained photo previews */
+        #phoneDeviceShell { min-height:0; }
+        #phoneAppContent { min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior-y:contain; -webkit-overflow-scrolling:touch; }
+        #locketPreview, #photoViewImage { display:block; width:auto !important; max-width:100% !important; height:auto !important; object-fit:contain !important; margin-inline:auto; }
+        #locketPreview { max-height:min(58vh,520px) !important; }
+        #photoViewImage { max-height:min(65vh,620px); }
+        #phoneLocketPanel { min-width:0; padding-bottom:12px; }
+        #phoneLocketPanel .rounded-xl.overflow-hidden { display:flex; align-items:center; justify-content:center; min-height:150px; padding:8px; }
+        #locketFramePicker { touch-action:pan-y; }
+        #locketFramePicker button { min-width:0; touch-action:manipulation; }
+        @media (max-width:700px) {
+            #phoneModal { height:100dvh !important; min-height:0; overflow:hidden !important; }
+            #phoneModal > #phoneDeviceShell { height:100dvh !important; max-height:100dvh !important; min-height:0 !important; }
+            #phoneDeviceShell > .phone-statusbar,
+            #phoneDeviceShell > div:nth-child(2),
+            #phoneDeviceShell > div:nth-child(3),
+            #phoneDeviceShell > .phone-home-area { flex-shrink:0; }
+            #phoneAppContent { flex:1 1 0%; min-height:0; padding:10px !important; touch-action:pan-y; }
+            #phoneLocketPanel { gap:12px; }
+            #phoneLocketPanel > p { font-size:13px; line-height:1.45; }
+            #locketPreview { max-height:42dvh !important; }
+            #locketFramePicker { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+            .locket-frame-option { min-height:124px; padding:7px 5px; }
+            .locket-frame-thumb { height:96px; object-fit:contain; }
+            #phoneAppContent input, #phoneAppContent textarea { max-width:100%; }
+        }
+        @media (max-width:380px) {
+            #phoneAppContent { padding:8px !important; }
+            #phoneLocketPanel .text-xl { font-size:18px; }
+            .locket-frame-option { min-height:112px; font-size:10px; }
+            .locket-frame-thumb { height:84px; }
+        }
 
 
         /* ================= REALISTIC NVC SMARTPHONE SHELL ================= */
@@ -829,7 +861,7 @@
           <button data-phone-tab="messages" class="phone-tab pixel-btn px-2 py-3 rounded-lg text-sm">💬 Tin nhắn</button>
           <button data-phone-tab="locket" class="phone-tab pixel-btn pixel-btn-amber px-2 py-3 rounded-lg text-sm">📸 Locket</button>
         </div>
-        <div class="p-3 overflow-y-auto min-h-0 flex-1">
+        <div id="phoneAppContent" class="p-3 overflow-y-auto min-h-0 flex-1">
           <section id="phoneFriendsPanel" class="space-y-3">
             <div class="text-cyan-200 font-bold text-xl">Hồ sơ học sinh</div>
             <div class="flex gap-2"><input id="phoneDisplayName" maxlength="20" placeholder="Tên hiển thị" class="min-w-0 flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"><button id="savePhoneProfile" class="pixel-btn pixel-btn-green rounded-lg px-3">Lưu tên</button></div>
@@ -5773,7 +5805,12 @@
             bindBtn('mobileDownBtn', () => changeFloor(-1));
 
             document.addEventListener('touchmove', (e) => {
-                if (state.mode === 'PLAYING') e.preventDefault();
+                if (state.mode !== 'PLAYING') return;
+                // Cho phép cuộn các ứng dụng trong điện thoại và các hộp thoại.
+                // Chỉ chặn vuốt trên nền chơi để tránh nhân vật di chuyển ngoài ý muốn.
+                const target = e.target instanceof Element ? e.target : e.target?.parentElement;
+                if (target?.closest('#phoneModal, #nvcCameraModal, #photoViewModal, #studentCardModal, #playerIdentityModal, #skinModal, #settingsModal')) return;
+                e.preventDefault();
             }, { passive: false });
             document.addEventListener('contextmenu', (e) => {
                 if (isTouch) e.preventDefault();
