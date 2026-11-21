@@ -879,7 +879,7 @@
           <section id="phoneLocketPanel" class="hidden space-y-3">
             <div class="text-amber-300 font-bold text-xl">📸 Locket NVC</div>
             <p class="text-sm text-slate-300">Dùng camera thật của điện thoại hoặc máy tính để chụp khoảnh khắc. Ảnh được xem trước rồi đăng công khai lên bản đồ. Tất cả người chơi trong thế giới NVC đều có thể xem, không cần kết bạn.</p>
-            <div class="rounded-xl overflow-hidden border-2 border-slate-600 bg-slate-900"><img id="locketPreview" class="hidden w-full max-h-56 object-contain" alt="Ảnh camera đã chụp"><div id="locketEmpty" class="p-8 text-center text-slate-400">Chưa chụp ảnh</div></div>
+            <div id="locketPreviewStage" class="rounded-xl overflow-hidden border-2 border-slate-600 bg-slate-900"><img id="locketPreview" class="hidden" alt="Ảnh camera đã chụp"><img id="locketFrameOverlay" class="hidden" alt="Lớp khung ảnh" aria-hidden="true"><div id="locketEmpty" class="p-8 text-center text-slate-400">Chưa chụp ảnh</div></div>
             <div class="flex gap-2"><button id="captureGamePhoto" class="pixel-btn pixel-btn-green flex-1 rounded-lg py-3">📷 Mở camera thật</button><button id="retakeGamePhoto" class="hidden pixel-btn rounded-lg px-3">Chụp lại</button></div>
             <textarea id="locketCaption" maxlength="180" rows="2" placeholder="Viết vài dòng về khoảnh khắc này..." class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white"></textarea>
             <section class="rounded-xl border border-pink-300/40 bg-gradient-to-br from-slate-900 to-pink-950/30 p-3 space-y-2">
@@ -5439,8 +5439,8 @@
             if (state.mode === 'PLAYING') document.getElementById('backToMenuBtn').click();
             else disconnectMultiplayer(true);
         });
-        // Tự động tham gia thế giới chung ngay khi mở game.
-        window.addEventListener('load', () => setTimeout(connectToPublicWorld, 700));
+        // Không tự kết nối hoặc đưa người chơi vào thế giới khi vừa mở game.
+        // Chỉ kết nối sau khi người chơi chủ động bấm Bắt đầu và xác nhận thông tin.
 
         /**
          * ============================================================================
@@ -5991,7 +5991,7 @@ const NVC_LOCKET_FRAME_NAMES={"yearbook": "THƯỚC PHIM KÝ ỨC", "blueSky": "
                 return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('Không ghép được khung ảnh.')),'image/webp',.9));
             }finally{URL.revokeObjectURL(url);}
         }
-        async function updateLocketFramedPreview(){if(!phoneApp.capturedBlob)return;try{const framed=await makeLocketFramedBlob(phoneApp.capturedBlob);if(phoneApp.previewFrameUrl)URL.revokeObjectURL(phoneApp.previewFrameUrl);phoneApp.previewFrameUrl=URL.createObjectURL(framed);phoneEl('locketPreview').src=phoneApp.previewFrameUrl;}catch(e){console.warn(e);}}
+        async function updateLocketFramedPreview(){if(!phoneApp.capturedBlob)return;try{const frame=phoneApp.selectedFrame||'yearbook';const framed=await makeLocketFramedBlob(phoneApp.capturedBlob);if(phoneApp.previewFrameUrl)URL.revokeObjectURL(phoneApp.previewFrameUrl);phoneApp.previewFrameUrl=URL.createObjectURL(framed);phoneEl('locketPreview').src=phoneApp.previewFrameUrl;const overlay=phoneEl('locketFrameOverlay');overlay.src=NVC_FRAME_ASSETS[frame]||NVC_FRAME_ASSETS.yearbook;overlay.classList.remove('hidden');}catch(e){console.warn(e);}}
         function chooseLocketFrame(frame){if(!NVC_LOCKET_FRAME_NAMES[frame])return;phoneApp.selectedFrame=frame;document.querySelectorAll('.locket-frame-option').forEach(b=>b.classList.toggle('selected',b.dataset.locketFrame===frame));phoneEl('locketFrameStatus').textContent='Đang chọn: '+NVC_LOCKET_FRAME_NAMES[frame];updateLocketFramedPreview();}
         function captureGamePhoto(){openRealCamera();}
         async function publishGamePhoto(){
