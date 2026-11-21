@@ -2226,15 +2226,18 @@
                     // Tường bao phía Đông nhà xe, giữ lối vào phía dưới mở.
                     fillRect(92, 2, 92, 41, T.WALL);
 
-                    // 7B. VƯỜN RAU BÁC HỒ: nền đất và nhà kính trong suốt (khu khoanh đỏ).
-                    fillRect(36, 13, 40, 32, T.TURF_GRASS);
-                    halls.push({ x1: 36, y1: 13, x2: 40, y2: 14, label: 'VƯỜN RAU BÁC HỒ', isZoneLabel: true });
+                    // 7B. VƯỜN RAU BÁC HỒ: đặt đúng dải đất rộng ở phía Bắc theo ảnh người chơi đánh dấu.
+                    // Mở vùng vườn ra toàn khu đỏ, làm nền cỏ và kính; vách ngăn ở điểm xanh phía Tây.
+                    fillRect(12, 3, 74, 9, T.TURF_GRASS);
+                    fillRect(13, 4, 73, 8, T.PARK_PLAZA);
+                    fillRect(12, 3, 12, 9, T.WALL);
+                    halls.push({ x1: 25, y1: 3, x2: 35, y2: 4, label: 'VƯỜN RAU BÁC HỒ', isZoneLabel: true });
 
-                    // 7C. MẢNH ĐẤT CÂY ĐẠI THỤ ở khu sân mở phía Đông Nam.
-                    fillRect(68, 43, 85, 53, T.TURF_GRASS);
-                    fillRect(75, 47, 78, 51, T.PARK_PLAZA);
-                    grid[49][76] = T.BIG_TREE;
-                    halls.push({ x1: 72, y1: 45, x2: 80, y2: 46, label: 'MẢNH ĐẤT CÂY ĐẠI THỤ', isZoneLabel: true });
+                    // 7C. MẢNH ĐẤT CÂY ĐẠI THỤ: chuyển vào đúng khu đất ở ảnh 1 (khu sân giữa).
+                    fillRect(34, 13, 64, 31, T.TURF_GRASS);
+                    fillRect(35, 14, 63, 43, T.PARK_PLAZA);
+                    grid[25][56] = T.BIG_TREE;
+                    halls.push({ x1: 47, y1: 17, x2: 60, y2: 18, label: 'MẢNH ĐẤT CÂY ĐẠI THỤ', isZoneLabel: true });
 
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
                     for (let ty = 43; ty <= 53; ty++) {
@@ -4485,20 +4488,19 @@
                 // Sân cầu lông và Pickleball chỉ xuất hiện bên trong nhà thi đấu.
             }
 
-            // Vẽ nhà kính trong suốt và các luống rau trong Vườn Rau Bác Hồ.
+            // Nhà vườn rau Bác Hồ: nhà kính lớn phủ kín vùng đánh dấu đỏ, nhiều luống rau rõ ràng.
             if (floorNum === 1) {
-                const gx = 36*TILE, gy = 16*TILE, gw = 5*TILE, gh = 15*TILE;
+                const gx = 13*TILE, gy = 4*TILE, gw = 61*TILE, gh = 5*TILE;
                 ctx.save();
-                // Mái kính trong suốt, khung cyan nhẹ.
-                ctx.fillStyle = 'rgba(125,211,252,.20)'; ctx.fillRect(gx,gy,gw,gh);
-                ctx.strokeStyle = 'rgba(34,211,238,.88)'; ctx.lineWidth = 4; ctx.strokeRect(gx+3,gy+3,gw-6,gh-6);
-                ctx.strokeStyle = 'rgba(186,230,253,.7)'; ctx.lineWidth = 2;
-                for(let k=1;k<5;k++){const xx=gx+gw*k/5;ctx.beginPath();ctx.moveTo(xx,gy+4);ctx.lineTo(xx,gy+gh-4);ctx.stroke();}
-                for(let k=1;k<8;k++){const yy=gy+gh*k/8;ctx.beginPath();ctx.moveTo(gx+4,yy);ctx.lineTo(gx+gw-4,yy);ctx.stroke();}
-                // Luống đất và hàng cây rau nhỏ.
-                for(let r=0;r<5;r++){const yy=gy+gh*(r+0.5)/5;ctx.fillStyle='#8b5a2b';ctx.fillRect(gx+8,yy-7,gw-16,14);
-                    for(let c=0;c<9;c++){const xx=gx+18+(gw-36)*c/8;ctx.fillStyle=['#22c55e','#16a34a','#84cc16'][c%3];ctx.fillRect(xx-3,yy-11,7,9);ctx.fillRect(xx-5,yy-3,10,5);}}
-                ctx.fillStyle='rgba(15,23,42,.75)';ctx.font='bold 12px monospace';ctx.fillText('NHÀ KÍNH',gx+8,gy-6);
+                ctx.fillStyle = 'rgba(125,211,252,.24)'; ctx.fillRect(gx,gy,gw,gh);
+                ctx.strokeStyle = 'rgba(34,211,238,.95)'; ctx.lineWidth = 5; ctx.strokeRect(gx+3,gy+3,gw-6,gh-6);
+                ctx.strokeStyle = 'rgba(186,230,253,.75)'; ctx.lineWidth = 3;
+                for(let k=1;k<12;k++){const xx=gx+gw*k/12;ctx.beginPath();ctx.moveTo(xx,gy+5);ctx.lineTo(xx,gy+gh-5);ctx.stroke();}
+                for(let k=1;k<3;k++){const yy=gy+gh*k/3;ctx.beginPath();ctx.moveTo(gx+5,yy);ctx.lineTo(gx+gw-5,yy);ctx.stroke();}
+                // Ba dải luống rau song song, với các cây rau nhỏ lặp đều bên trong kính.
+                for(let r=0;r<3;r++){const yy=gy+gh*(r+0.5)/3;ctx.fillStyle='#8b5a2b';ctx.fillRect(gx+14,yy-8,gw-28,16);
+                    for(let c=0;c<40;c++){const xx=gx+24+(gw-48)*c/39;ctx.fillStyle=['#22c55e','#16a34a','#84cc16'][c%3];ctx.fillRect(xx-4,yy-12,8,9);ctx.fillRect(xx-6,yy-3,12,6);}}
+                ctx.fillStyle='rgba(15,23,42,.82)';ctx.font='bold 16px monospace';ctx.fillText('NHÀ VƯỜN RAU BÁC HỒ',gx+18,gy-7);
                 ctx.restore();
             }
 
