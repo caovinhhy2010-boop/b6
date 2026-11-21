@@ -220,8 +220,9 @@
         #locketPreview { max-height:min(58vh,520px) !important; }
         #photoViewImage { max-height:min(65vh,620px); }
         #phoneLocketPanel { min-width:0; padding-bottom:12px; }
-        #phoneLocketPanel .rounded-xl.overflow-hidden { display:flex; align-items:center; justify-content:center; min-height:150px; padding:8px; aspect-ratio:9 / 10; }
-        #phoneLocketPanel #locketPreview { width:100% !important; max-width:100% !important; height:auto !important; max-height:58vh !important; object-fit:contain !important; position:relative; z-index:1; }
+        #phoneLocketPanel #locketPreviewStage { position:relative; display:block; width:min(100%,360px); aspect-ratio:9 / 10; min-height:0; margin-inline:auto; padding:0; overflow:hidden; background:#0f172a; }
+        #phoneLocketPanel #locketPreviewStage #locketPreview { position:absolute; inset:0; display:block; width:100% !important; max-width:none !important; height:100% !important; max-height:none !important; object-fit:fill !important; margin:0; z-index:2; }
+        #phoneLocketPanel #locketPreviewStage #locketFrameOverlay { display:none !important; }
         #locketFramePicker { touch-action:pan-y; }
         #locketFramePicker button { min-width:0; touch-action:manipulation; }
         @media (max-width:700px) {
@@ -2073,7 +2074,9 @@
             VOLLEYBALL_COURT: 27,
             TEACHER_SET: 28,
             BADMINTON_COURT: 29,
-            PICKLEBALL_COURT: 30
+            PICKLEBALL_COURT: 30,
+            RED_GATE: 31,
+            RED_BARRIER: 32
         };
 
         const floorsData = {
@@ -2220,10 +2223,13 @@
                     // 7. TOP-RIGHT: NHÀ XE HỌC SINH (X = 68 → 85)
                     fillRect(68, 2, 85, 41, T.GARAGE_FLOOR);
                     halls.push({ x1: 68, y1: 2, x2: 85, y2: 41, label: 'NHÀ XE', isZoneLabel: true });
+                    // Khối chắn đỏ phân luồng, tách khoang đỗ xe bên phải khỏi lối đi chính.
+                    fillRect(80, 8, 81, 35, T.RED_BARRIER);
 
-                    // Chỉ dựng tường dọc ngăn cách nhà xe với khu cầu thang Đông Bắc.
-                    // Không dựng tường phía sau dãy lớp A1-A6.
+                    // Tường dọc ngăn cách nhà xe với khu cầu thang Đông Bắc;
+                    // chừa một cửa ra/vào có cổng đỏ nổi bật ở đoạn giữa.
                     fillRect(68, 2, 68, 41, T.WALL);
+                    fillRect(68, 21, 68, 23, T.RED_GATE);
 
                     // 8. MỞ RỘNG GÓC ĐÔNG NAM
                     for (let ty = 43; ty <= 53; ty++) {
@@ -2282,10 +2288,10 @@
                     halls.push({ x1: 48, y1: 13, x2: 55, y2: 14, label: 'SÂN KHẤU', isStage: true });
                     fillRect(50, 21, 53, 23, T.LOGO_PLAZA);
 
-                    grid[17][43] = T.BIG_TREE;
-                    grid[17][60] = T.BIG_TREE;
-                    grid[27][43] = T.BIG_TREE;
-                    grid[27][60] = T.BIG_TREE;
+                    // Ba cây cổ thụ lớn bố trí dọc một bên sân trong.
+                    grid[16][43] = T.BIG_TREE;
+                    grid[22][43] = T.BIG_TREE;
+                    grid[28][43] = T.BIG_TREE;
                 }
 
                 // Four Corner Stairwell & WC Towers
@@ -2817,6 +2823,7 @@
                 tile === T.CORRIDOR ||
                 tile === T.ROOM_FLOOR ||
                 tile === T.DOOR ||
+                tile === T.RED_GATE ||
                 tile === T.STAIR ||
                 tile === T.WC_FLOOR ||
                 tile === T.CAMPUS_GROUND ||
@@ -4096,6 +4103,22 @@
                     ctx.fillRect(x + 2, y + 2, TILE - 4, 5);
                     break;
 
+                case T.RED_GATE:
+                    ctx.fillStyle = '#7f1d1d'; ctx.fillRect(x, y, TILE, TILE);
+                    ctx.fillStyle = '#ef4444'; ctx.fillRect(x + 4, y + 5, TILE - 8, TILE - 10);
+                    ctx.fillStyle = '#fecaca'; ctx.fillRect(x + 7, y + 8, TILE - 14, 5);
+                    ctx.fillStyle = '#991b1b';
+                    for (let gx = 10; gx < TILE - 5; gx += 10) ctx.fillRect(x + gx, y + 5, 4, TILE - 10);
+                    ctx.fillStyle = '#fde68a'; ctx.fillRect(x + TILE - 15, y + TILE / 2 - 3, 5, 6);
+                    break;
+
+                case T.RED_BARRIER:
+                    ctx.fillStyle = '#991b1b'; ctx.fillRect(x + 3, y + 2, TILE - 6, TILE - 4);
+                    ctx.fillStyle = '#ef4444'; ctx.fillRect(x + 6, y + 5, TILE - 12, TILE - 10);
+                    ctx.fillStyle = '#fecaca'; ctx.fillRect(x + 7, y + 7, TILE - 14, 5);
+                    ctx.fillStyle = '#7f1d1d'; ctx.fillRect(x + 8, y + TILE - 12, TILE - 16, 5);
+                    break;
+
                 case T.HALL_SOLID:
                     ctx.fillStyle = '#0f766e';
                     ctx.fillRect(x, y, TILE, TILE);
@@ -4466,6 +4489,36 @@
                 ctx.fillStyle='#f8fafc'; ctx.fillRect(fx + 2, fy + fh/2 - 34, 8, 68); ctx.fillRect(fx + fw - 10, fy + fh/2 - 34, 8, 68);
                 ctx.restore();
                 // Sân cầu lông và Pickleball chỉ xuất hiện bên trong nhà thi đấu.
+            }
+
+            // Lối dạo sân giữa: hai dải cỏ thẳng, ba cây lớn một bên và lá vàng rơi trên lối đi.
+            if (floorNum === 1) {
+                const left = 42 * TILE, right = 62 * TILE;
+                const grassRows = [14.25, 29.25];
+                ctx.save();
+                grassRows.forEach((row, band) => {
+                    const gy = row * TILE;
+                    ctx.fillStyle = '#245b35'; ctx.fillRect(left, gy, right - left, 22);
+                    ctx.fillStyle = '#3f8b45'; ctx.fillRect(left + 3, gy + 3, right - left - 6, 13);
+                    ctx.fillStyle = '#78b957';
+                    for (let gx = left + 8; gx < right - 8; gx += 28) {
+                        ctx.fillRect(gx, gy + (band ? 5 : 7), 8, 4);
+                        ctx.fillRect(gx + 10, gy + (band ? 11 : 3), 5, 4);
+                    }
+                });
+                // Lá rụng rải tự nhiên trên lối đi giữa hai dải cỏ.
+                const leafColors = ['#d97706', '#eab308', '#b45309', '#f59e0b'];
+                for (let i = 0; i < 58; i++) {
+                    const seed = (i * 7919 + 104729) >>> 0;
+                    const lx = (45 + ((seed % 1700) / 100)) * TILE / 1;
+                    const ly = (17.2 + (((seed * 13) % 950) / 100)) * TILE;
+                    if (lx > 61.5 * TILE || ly > 28.6 * TILE) continue;
+                    ctx.save(); ctx.translate(lx, ly); ctx.rotate(((seed % 7) - 3) * 0.18);
+                    ctx.fillStyle = leafColors[i % leafColors.length];
+                    ctx.fillRect(-3, -2, 7, 4); ctx.fillRect(1, -4, 3, 3);
+                    ctx.restore();
+                }
+                ctx.restore();
             }
 
             // Vẽ tán cây lớn đè lên trên mặt sân
@@ -5998,7 +6051,7 @@ const NVC_LOCKET_FRAME_NAMES={"yearbook": "THƯỚC PHIM KÝ ỨC", "blueSky": "
                 return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('Không ghép được khung ảnh.')),'image/webp',.9));
             }finally{URL.revokeObjectURL(url);}
         }
-        async function updateLocketFramedPreview(){if(!phoneApp.capturedBlob)return;try{const frame=phoneApp.selectedFrame||'yearbook';const framed=await makeLocketFramedBlob(phoneApp.capturedBlob);if(phoneApp.previewFrameUrl)URL.revokeObjectURL(phoneApp.previewFrameUrl);phoneApp.previewFrameUrl=URL.createObjectURL(framed);phoneEl('locketPreview').src=phoneApp.previewFrameUrl;const overlay=phoneEl('locketFrameOverlay');overlay.src=NVC_FRAME_ASSETS[frame]||NVC_FRAME_ASSETS.yearbook;overlay.classList.remove('hidden');}catch(e){console.warn(e);}}
+        async function updateLocketFramedPreview(){if(!phoneApp.capturedBlob)return;try{const framed=await makeLocketFramedBlob(phoneApp.capturedBlob);if(phoneApp.previewFrameUrl)URL.revokeObjectURL(phoneApp.previewFrameUrl);phoneApp.previewFrameUrl=URL.createObjectURL(framed);const preview=phoneEl('locketPreview');preview.src=phoneApp.previewFrameUrl;preview.classList.remove('hidden');phoneEl('locketFrameOverlay').classList.add('hidden');}catch(e){console.warn(e);}}
         function chooseLocketFrame(frame){if(!NVC_LOCKET_FRAME_NAMES[frame])return;phoneApp.selectedFrame=frame;document.querySelectorAll('.locket-frame-option').forEach(b=>b.classList.toggle('selected',b.dataset.locketFrame===frame));phoneEl('locketFrameStatus').textContent='Đang chọn: '+NVC_LOCKET_FRAME_NAMES[frame];updateLocketFramedPreview();}
         function captureGamePhoto(){openRealCamera();}
         async function publishGamePhoto(){
