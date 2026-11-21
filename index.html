@@ -2073,7 +2073,8 @@
             VOLLEYBALL_COURT: 27,
             TEACHER_SET: 28,
             BADMINTON_COURT: 29,
-            PICKLEBALL_COURT: 30
+            PICKLEBALL_COURT: 30,
+            GREENHOUSE_FLOOR: 31
         };
 
         const floorsData = {
@@ -2226,12 +2227,18 @@
                     // Tường bao phía Đông nhà xe, giữ lối vào phía dưới mở.
                     fillRect(92, 2, 92, 41, T.WALL);
 
-                    // 7B. VƯỜN RAU BÁC HỒ: đặt đúng dải đất rộng ở phía Bắc theo ảnh người chơi đánh dấu.
-                    // Mở vùng vườn ra toàn khu đỏ, làm nền cỏ và kính; vách ngăn ở điểm xanh phía Tây.
-                    fillRect(12, 3, 74, 9, T.TURF_GRASS);
-                    fillRect(13, 4, 73, 8, T.PARK_PLAZA);
-                    fillRect(12, 3, 12, 9, T.WALL);
-                    halls.push({ x1: 25, y1: 3, x2: 35, y2: 4, label: 'VƯỜN RAU BÁC HỒ', isZoneLabel: true });
+                    // 7B. VƯỜN RAU BÁC HỒ: chuyển vào đúng khu vực người chơi khoanh đỏ trong ảnh mới.
+                    // Khu vườn cỡ 11 x 11 ô; viền tường kính, tường ngăn ở đầu Tây theo dấu xanh.
+                    fillRect(12, 3, 22, 13, T.TURF_GRASS);
+                    fillRect(13, 4, 21, 12, T.GREENHOUSE_FLOOR);
+                    fillRect(12, 3, 22, 3, T.WALL);
+                    fillRect(12, 13, 22, 13, T.WALL);
+                    fillRect(22, 3, 22, 13, T.WALL);
+                    fillRect(12, 3, 12, 7, T.WALL);
+                    fillRect(12, 9, 12, 13, T.WALL);
+                    // Lối vào kính ở phía Tây; tường ngăn/khung tại vị trí dấu xanh.
+                    grid[8][12] = T.DOOR;
+                    halls.push({ x1: 14, y1: 4, x2: 20, y2: 5, label: 'VƯỜN RAU BÁC HỒ', isZoneLabel: true });
 
                     // 7C. MẢNH ĐẤT CÂY ĐẠI THỤ: chuyển vào đúng khu đất ở ảnh 1 (khu sân giữa).
                     fillRect(34, 13, 64, 31, T.TURF_GRASS);
@@ -3999,6 +4006,23 @@
                         ctx.fillStyle = '#64748b';
                         ctx.fillRect(x + 10, y + 20, TILE - 20, 6);
                     }
+                    break;
+
+                case T.GREENHOUSE_FLOOR:
+                    // Nền nhà kính: gạch sáng và các luống rau xanh song song.
+                    ctx.fillStyle = '#dbeafe';
+                    ctx.fillRect(x, y, TILE, TILE);
+                    ctx.fillStyle = 'rgba(34, 197, 94, 0.72)';
+                    ctx.fillRect(x + 5, y + 7, TILE - 10, 8);
+                    ctx.fillRect(x + 5, y + 25, TILE - 10, 8);
+                    ctx.fillStyle = '#166534';
+                    for (let vx = x + 8; vx < x + TILE - 5; vx += 9) {
+                        ctx.fillRect(vx, y + 5, 3, 12);
+                        ctx.fillRect(vx, y + 23, 3, 12);
+                    }
+                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x + 1, y + 1, TILE - 2, TILE - 2);
                     break;
 
                 case T.PARK_PLAZA:
