@@ -2186,8 +2186,9 @@
                     fillRect(77, 56, 83, 57, T.GATE);
                     halls.push({ x1: 77, y1: 54, x2: 83, y2: 55, label: 'CỔNG PHỤ', isZoneLabel: true });
 
-                    buildRoom(86, 42, 91, 47, 'P. CÂU LẠC BỘ', 'left', 'club_room', 'Khu Đoàn - Hội & CLB');
-                    buildRoom(86, 48, 91, 53, 'PHÒNG ĐOÀN', 'left', 'youth_union', 'Khu Đoàn - Hội & CLB');
+                    // Gộp phòng Câu Lạc Bộ và Phòng Đoàn thành một không gian duy nhất,
+                    // diện tích mặt bằng bằng tổng diện tích hai phòng cũ.
+                    buildRoom(86, 42, 91, 53, 'PHÒNG ĐOÀN - HỘI & CÂU LẠC BỘ', 'left', 'club_union_hub', 'Khu Đoàn - Hội & CLB');
 
                     // 9. BOTTOM-RIGHT: KHUÔN VIÊN TƯỢNG NGUYỄN VĂN CỪ
                     fillRect(57, 43, 74, 55, T.PARK_PLAZA);
@@ -3168,33 +3169,35 @@
                 };
             }
 
-            if (rt === 'club_room' || rt === 'youth_union') {
-                const isClub = (rt === 'club_room');
+            if (rt === 'club_union_hub' || rt === 'club_room' || rt === 'youth_union') {
                 return {
-                    w: 760,
-                    h: 500,
+                    // Phòng mới rộng hơn theo cả hai chiều, thể hiện không gian hợp nhất.
+                    w: 920,
+                    h: 620,
                     doorSide: 'bottom',
-                    doorRect: { x: 330, y: 486, w: 100, h: 14 },
-                    spawn: { x: 380, y: 440, dir: 'up' },
-                    hintText: isClub
-                        ? 'Phòng Câu Lạc Bộ • Nơi sinh hoạt nghệ thuật, truyền thông & học thuật'
-                        : 'Phòng Đoàn TNCS Hồ Chí Minh • Đi ra cửa đôi phía dưới để quay lại sân',
-                    obstacles: isClub ? [
-                        { x: 40, y: 50, w: 120, h: 56, kind: 'grey_cabinet' },
-                        { x: 600, y: 50, w: 120, h: 56, kind: 'grey_cabinet' },
-                        { x: 140, y: 170, w: 480, h: 80, kind: 'wood_table' },
-                        { x: 180, y: 120, w: 46, h: 40, kind: 'dark_chair' },
-                        { x: 355, y: 120, w: 46, h: 40, kind: 'dark_chair' },
-                        { x: 530, y: 120, w: 46, h: 40, kind: 'dark_chair' },
-                        { x: 180, y: 262, w: 46, h: 40, kind: 'dark_chair' },
-                        { x: 355, y: 262, w: 46, h: 40, kind: 'dark_chair' },
-                        { x: 530, y: 262, w: 46, h: 40, kind: 'dark_chair' }
-                    ] : [
-                        { x: 30, y: 50, w: 110, h: 180, kind: 'grey_cabinet' },
-                        { x: 240, y: 145, w: 360, h: 76, kind: 'wood_table' },
-                        { x: 390, y: 82, w: 64, h: 48, kind: 'dark_chair' },
-                        { x: 280, y: 235, w: 54, h: 44, kind: 'dark_chair' },
-                        { x: 500, y: 235, w: 54, h: 44, kind: 'dark_chair' }
+                    doorRect: { x: 390, y: 606, w: 140, h: 14 },
+                    spawn: { x: 460, y: 555, dir: 'up' },
+                    hintText: 'Phòng Đoàn - Hội & Câu Lạc Bộ • Không gian sinh hoạt, họp nhóm, truyền thông và học thuật',
+                    obstacles: [
+                        { x: 42, y: 52, w: 150, h: 170, kind: 'grey_cabinet' },
+                        { x: 728, y: 52, w: 150, h: 170, kind: 'grey_cabinet' },
+                        { x: 270, y: 70, w: 380, h: 28, kind: 'notice_board' },
+                        { x: 250, y: 168, w: 420, h: 86, kind: 'wood_table' },
+                        { x: 292, y: 126, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 426, y: 126, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 560, y: 126, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 292, y: 264, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 426, y: 264, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 560, y: 264, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 78, y: 320, w: 250, h: 66, kind: 'wood_table' },
+                        { x: 105, y: 394, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 252, y: 394, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 592, y: 330, w: 248, h: 66, kind: 'wood_table' },
+                        { x: 622, y: 404, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 762, y: 404, w: 48, h: 38, kind: 'dark_chair' },
+                        { x: 40, y: 470, w: 74, h: 74, kind: 'plant' },
+                        { x: 806, y: 470, w: 74, h: 74, kind: 'plant' },
+                        { x: 382, y: 390, w: 156, h: 56, kind: 'counter' , label: 'ĐOÀN - HỘI' }
                     ],
                     seats: []
                 };
@@ -3734,6 +3737,11 @@
                             ctx.fillRect(b.x, b.y, b.w, b.h);
                             ctx.fillStyle = '#9a4305';
                             ctx.fillRect(b.x + 4, b.y + 4, b.w - 8, 8);
+                            ctx.fillStyle = 'rgba(255,220,160,.38)';
+                            ctx.fillRect(b.x + 10, b.y + 16, b.w - 20, 3);
+                            ctx.fillStyle = '#5b2b12';
+                            ctx.fillRect(b.x + 12, b.y + b.h - 9, 10, 9);
+                            ctx.fillRect(b.x + b.w - 22, b.y + b.h - 9, 10, 9);
                             if (b.kind === 'lab_bench') {
                                 [0.18, 0.45, 0.72, 0.9].forEach((ratio, idx) => {
                                     const gx = b.x + b.w * ratio;
@@ -3743,6 +3751,35 @@
                                     ctx.lineWidth = 1.5;
                                     ctx.strokeRect(gx, b.y + 14, 10, 18);
                                 });
+                            }
+                        } else if (b.kind === 'notice_board') {
+                            ctx.fillStyle = '#78350f';
+                            ctx.fillRect(b.x - 5, b.y - 5, b.w + 10, b.h + 10);
+                            ctx.fillStyle = '#0f766e';
+                            ctx.fillRect(b.x, b.y, b.w, b.h);
+                            ctx.fillStyle = '#fef3c7';
+                            ctx.font = 'bold 14px sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('BẢNG TIN ĐOÀN - HỘI & CÂU LẠC BỘ', b.x + b.w / 2, b.y + 19);
+                            for (let i = 0; i < 5; i++) {
+                                ctx.fillStyle = ['#fde68a','#bfdbfe','#fecdd3','#bbf7d0','#ddd6fe'][i];
+                                ctx.fillRect(b.x + 16 + i * 72, b.y + 24, 56, 3);
+                            }
+                        } else if (b.kind === 'plant') {
+                            ctx.fillStyle = 'rgba(15,23,42,.18)';
+                            ctx.beginPath(); ctx.ellipse(b.x + b.w/2, b.y + b.h - 5, b.w*.42, 9, 0, 0, Math.PI*2); ctx.fill();
+                            ctx.fillStyle = '#b45309';
+                            ctx.fillRect(b.x + 18, b.y + 42, b.w - 36, 26);
+                            ctx.fillStyle = '#d97706';
+                            ctx.fillRect(b.x + 22, b.y + 42, b.w - 44, 6);
+                            const cx = b.x + b.w/2, cy = b.y + 34;
+                            ctx.strokeStyle = '#166534'; ctx.lineWidth = 5;
+                            ctx.beginPath(); ctx.moveTo(cx, cy + 20); ctx.lineTo(cx, cy - 12); ctx.stroke();
+                            for (let i=0;i<7;i++) {
+                                const a = i * Math.PI * 2 / 7;
+                                ctx.fillStyle = i%2 ? '#16a34a' : '#22c55e';
+                                ctx.beginPath(); ctx.ellipse(cx + Math.cos(a)*17, cy - 7 + Math.sin(a)*13, 12, 7, a, 0, Math.PI*2); ctx.fill();
+                                ctx.strokeStyle = 'rgba(220,252,231,.45)'; ctx.lineWidth = 1; ctx.stroke();
                             }
                         } else if (b.kind === 'counter') {
                             ctx.fillStyle = '#0f766e';
@@ -3961,21 +3998,17 @@
                     break;
 
                 case T.BENCH:
-                    ctx.fillStyle = '#cbd5e1';
-                    ctx.fillRect(x, y, TILE, TILE);
-                    ctx.fillStyle = '#64748b';
-                    ctx.fillRect(x + 4, y + 10, TILE - 8, TILE - 16);
-                    ctx.fillStyle = '#f8fafc';
-                    ctx.fillRect(x + 5, y + 8, TILE - 10, 7);
-                    ctx.strokeStyle = '#475569';
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeRect(x + 5, y + 8, TILE - 10, 7);
-                    ctx.fillStyle = '#e2e8f0';
-                    ctx.fillRect(x + 5, y + 16, TILE - 10, 12);
-                    ctx.strokeRect(x + 5, y + 16, TILE - 10, 12);
-                    ctx.fillStyle = '#475569';
-                    ctx.fillRect(x + 8, y + 28, 6, 8);
-                    ctx.fillRect(x + TILE - 14, y + 28, 6, 8);
+                    ctx.fillStyle = '#cbd5e1'; ctx.fillRect(x, y, TILE, TILE);
+                    // Bóng đổ và chân ghế đá
+                    ctx.fillStyle = 'rgba(15,23,42,.22)'; ctx.fillRect(x + 5, y + 31, TILE - 2, 7);
+                    ctx.fillStyle = '#475569'; ctx.fillRect(x + 8, y + 27, 7, 12); ctx.fillRect(x + TILE - 15, y + 27, 7, 12);
+                    // Thân ghế và các nan đá sáng tối
+                    ctx.fillStyle = '#64748b'; ctx.fillRect(x + 3, y + 11, TILE - 6, 17);
+                    ctx.fillStyle = '#f8fafc'; ctx.fillRect(x + 4, y + 7, TILE - 8, 8);
+                    ctx.fillStyle = '#e2e8f0'; ctx.fillRect(x + 5, y + 16, TILE - 10, 10);
+                    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1; ctx.strokeRect(x + 5, y + 16, TILE - 10, 10);
+                    ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.fillRect(x + 8, y + 9, TILE - 16, 2);
+                    ctx.fillStyle = '#64748b'; ctx.fillRect(x + 10, y + 18, 3, 5); ctx.fillRect(x + TILE - 13, y + 18, 3, 5);
                     break;
 
                 case T.STAGE:
@@ -4067,14 +4100,15 @@
                     break;
 
                 case T.TREE:
-                    ctx.fillStyle = '#9ca3af';
-                    ctx.fillRect(x, y, TILE, TILE);
-                    ctx.fillStyle = '#78350f';
-                    ctx.fillRect(x + 18, y + 28, 12, 16);
-                    ctx.fillStyle = '#064e3b';
-                    ctx.fillRect(x + 4, y + 4, TILE - 8, 28);
-                    ctx.fillStyle = '#16a34a';
-                    ctx.fillRect(x + 6, y + 6, TILE - 12, 22);
+                    ctx.fillStyle = '#9ca3af'; ctx.fillRect(x, y, TILE, TILE);
+                    ctx.fillStyle = 'rgba(15,23,42,.2)'; ctx.beginPath(); ctx.ellipse(x+TILE/2+3,y+TILE-5,18,6,0,0,Math.PI*2); ctx.fill();
+                    ctx.fillStyle = '#713f12'; ctx.fillRect(x + 18, y + 25, 13, 21);
+                    ctx.fillStyle = '#92400e'; ctx.fillRect(x + 20, y + 27, 4, 17);
+                    ctx.fillStyle = '#064e3b'; ctx.fillRect(x + 3, y + 2, TILE - 6, 31);
+                    ctx.fillStyle = '#15803d'; ctx.fillRect(x + 6, y + 4, TILE - 12, 25);
+                    ctx.fillStyle = '#22c55e'; ctx.fillRect(x + 10, y + 7, TILE - 20, 14);
+                    ctx.fillStyle = 'rgba(220,252,231,.55)'; ctx.fillRect(x + 12, y + 8, 7, 4); ctx.fillRect(x + 27, y + 17, 5, 4);
+                    ctx.fillStyle = '#166534'; ctx.fillRect(x + 4, y + 23, 8, 6); ctx.fillRect(x + TILE - 12, y + 22, 8, 7);
                     break;
 
                 case T.BIG_TREE:
@@ -4091,14 +4125,24 @@
         }
 
         function drawBigTreeCanopy(tx, ty) {
-            const x = tx * TILE;
-            const y = ty * TILE;
-            ctx.fillStyle = '#14532d';
-            ctx.fillRect(x - 24, y - 28, TILE + 48, TILE + 48);
-            ctx.fillStyle = '#16a34a';
-            ctx.fillRect(x - 18, y - 22, TILE + 36, TILE + 36);
-            ctx.fillStyle = '#22c55e';
-            ctx.fillRect(x - 10, y - 14, TILE + 20, TILE + 20);
+            const x = tx * TILE, y = ty * TILE;
+            ctx.save();
+            ctx.fillStyle = 'rgba(15,23,42,.24)';
+            ctx.beginPath(); ctx.ellipse(x + TILE/2 + 5, y + TILE/2 + 18, 48, 18, 0, 0, Math.PI*2); ctx.fill();
+            // Tán cây nhiều tầng theo cụm pixel, có viền tối và vùng bắt sáng.
+            ctx.fillStyle = '#064e3b'; ctx.fillRect(x-28,y-30,TILE+56,TILE+58);
+            ctx.fillStyle = '#166534'; ctx.fillRect(x-23,y-26,TILE+46,TILE+48);
+            ctx.fillStyle = '#15803d'; ctx.fillRect(x-16,y-22,TILE+32,TILE+39);
+            ctx.fillStyle = '#22c55e'; ctx.fillRect(x-8,y-17,TILE+16,TILE+27);
+            ctx.fillStyle = '#4ade80'; ctx.fillRect(x-1,y-13,TILE+2,11);
+            const clusters = [[-18,-8],[14,-12],[-24,14],[20,12],[-2,23],[29,-1]];
+            clusters.forEach(([dx,dy],i)=>{
+                ctx.fillStyle = i%2 ? '#16a34a' : '#15803d';
+                ctx.fillRect(x+dx,y+dy,15,12);
+                ctx.fillStyle = 'rgba(187,247,208,.48)';
+                ctx.fillRect(x+dx+3,y+dy+2,5,3);
+            });
+            ctx.restore();
         }
 
         /**
@@ -4484,7 +4528,7 @@
                     ctx.globalAlpha = labelAlpha;
                     ctx.font = 'bold 10px "Press Start 2P", monospace';
                     const textW = ctx.measureText(room.label).width;
-                    ctx.fillStyle = (room.roomType === 'club_room' || room.roomType === 'youth_union')
+                    ctx.fillStyle = (room.roomType === 'club_room' || room.roomType === 'youth_union' || room.roomType === 'club_union_hub')
                         ? 'rgba(153, 27, 27, 0.92)'
                         : 'rgba(15, 23, 42, 0.85)';
                     ctx.fillRect(cx - textW / 2 - 5, cy - 9, textW + 10, 18);
